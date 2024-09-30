@@ -106,7 +106,7 @@ var ajaxRequest;  // The variable that makes Ajax possible!
  
 var img = document.com_per_info.source.value;
 hostname = window.location.hostname;
-document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 document.image.height = 200;
 document.image.width = 150;
 
@@ -1388,7 +1388,7 @@ ajaxRequest.onreadystatechange = function(){
 		document.getElementById('fadd').value = personalinfo[12];
 		
 		hostname = window.location.hostname;
-		document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 200;
 		document.image.width = 150;
 	
@@ -2278,7 +2278,7 @@ function com_info_Search1()
 
  var queryString="empid="+empid;
  hostname = window.location.hostname;
- var url = "http://"+hostname+"/erp_time/index.php/emp_info_con/com_info_search1/";
+ var url = "http://"+hostname+"/taget_mh/index.php/emp_info_con/com_info_search1/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -2325,7 +2325,7 @@ ajaxRequest.onreadystatechange = function(){
 		document.cominfo.bgroup.value = otherinfo[16];
 		var img = otherinfo[17];
 		hostname = window.location.hostname;
-		document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 150;
 		document.image.width = 130;
 		
@@ -2679,7 +2679,7 @@ function com_info_next_Search1()
 
  var queryString="id_skill="+id_skill;
  hostname = window.location.hostname;
- var url = "http://"+hostname+"/erp_time/index.php/emp_info_con/com_info_next_Search1/";
+ var url = "http://"+hostname+"/taget_mh/index.php/emp_info_con/com_info_next_Search1/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -2726,7 +2726,7 @@ ajaxRequest.onreadystatechange = function(){
 		document.cominfo.bgroup.value = otherinfo[16];
 		var img = otherinfo[17];
 		hostname = window.location.hostname;
-		document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 150;
 		document.image.width = 130;
 		
@@ -3081,7 +3081,7 @@ function com_info_prev_Search1()
 
  var queryString="id_skill="+id_skill;
  hostname = window.location.hostname;
- var url = "http://"+hostname+"/erp_time/index.php/emp_info_con/com_info_prev_Search1/";
+ var url = "http://"+hostname+"/taget_mh/index.php/emp_info_con/com_info_prev_Search1/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -3128,7 +3128,7 @@ ajaxRequest.onreadystatechange = function(){
 		document.cominfo.bgroup.value = otherinfo[16];
 		var img = otherinfo[17];
 		hostname = window.location.hostname;
-		document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 150;
 		document.image.width = 130;
 		
@@ -6872,7 +6872,7 @@ function attendance_process()
 if(okyes==false) return;
 	  $("#loader").show();
 	hostname = window.location.hostname;
-	url =  "http://"+hostname+"/erp_time/index.php/attn_process_con/attn_process/";
+	url =  "http://"+hostname+"/taget_mh/index.php/attn_process_con/attn_process/";
 
 	var queryString="p_start_date="+p_start_date;
 	
@@ -6914,7 +6914,7 @@ month= document.getElementById('report_month_sal').value;
 year= document.getElementById('report_year_sal').value;
 process_check = i;
 	hostname = window.location.hostname;
-	url =  "http://"+hostname+"/erp_time/index.php/salary_process_con/salary_process/";
+	url =  "http://"+hostname+"/taget_mh/index.php/salary_process_con/salary_process/";
 	var queryString="year="+year+"&month="+month+"&process_check="+process_check;
 	
 	ajaxRequest.open("POST",url, true);
@@ -6957,7 +6957,7 @@ process_check = i;
 //alert(month);
 
 	hostname = window.location.hostname;
-	url =  "http://"+hostname+"/erp_time/index.php/production_process_con/production_salary_process/";
+	url =  "http://"+hostname+"/taget_mh/index.php/production_process_con/production_salary_process/";
 	var queryString="year="+year+"&month="+month+"&process_check="+process_check;
 	
 	ajaxRequest.open("POST",url, true);
@@ -7318,7 +7318,7 @@ var ajaxRequest;  // The variable that makes Ajax possible!
 var queryString="empid_leave="+empid_leave+"&start_leave_date="+start_leave_date+"&end_leave_date="+end_leave_date+"&leave_type="+leave_type;
 
 hostname = window.location.hostname;
-url =  "http://"+hostname+"/erp_time/index.php/entry_system_con/save_leave_co/";
+url =  "http://"+hostname+"/taget_mh/index.php/entry_system_con/save_leave_co/";
  
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -7430,7 +7430,7 @@ function search_year()
 	return;
  }
 hostname = window.location.hostname;
-url =  "http://"+hostname+"/erp_time/index.php/entry_system_con/leave_transaction_co/";
+url =  "http://"+hostname+"/taget_mh/index.php/entry_system_con/leave_transaction_co/";
 
  var queryString="empid="+empid+"&year="+year; 
  ajaxRequest.open("POST", url, true);
@@ -7954,7 +7954,7 @@ var ajaxRequest;  // The variable that makes Ajax possible!
  
 
 hostname = window.location.hostname;
-url =  "http://"+hostname+"/erp_time/index.php/entry_system_con/advance_loan_insert/";
+url =  "http://"+hostname+"/taget_mh/index.php/entry_system_con/advance_loan_insert/";
 var queryString="emp_id="+emp_id+"&loan_amt="+loan_amt+"&pay_amt="+pay_amt+"&loan_date="+loan_date;
 
  ajaxRequest.open("POST",url, true);
@@ -8277,7 +8277,7 @@ function find_style_winding()
   var article_name 	= document.getElementById('article_no').value;
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/winding_con/find_style_name_winding/";
+ url =  "http://"+hostname+"/taget_mh/index.php/winding_con/find_style_name_winding/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8344,7 +8344,7 @@ function find_style_knitting()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/knitting_con/find_style_name_knitting/";
+ url =  "http://"+hostname+"/taget_mh/index.php/knitting_con/find_style_name_knitting/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8394,7 +8394,7 @@ function find_style_linking()
   var queryString="article_name="+article_name;
  //alert(queryString);
  hostname = window.location.hostname;
- url =  "http://"+hostname+"/erp_time/index.php/linking_con/find_style_name_linking/";
+ url =  "http://"+hostname+"/taget_mh/index.php/linking_con/find_style_name_linking/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8443,7 +8443,7 @@ function find_style_trimming()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/trimming_con/find_style_name_trimming/";
+ url =  "http://"+hostname+"/taget_mh/index.php/trimming_con/find_style_name_trimming/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8491,7 +8491,7 @@ function find_style_mending()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/mending_con/find_style_name_mending/";
+ url =  "http://"+hostname+"/taget_mh/index.php/mending_con/find_style_name_mending/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8539,7 +8539,7 @@ function find_style_zipper()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/zipper_con/find_style_name_zipper/";
+ url =  "http://"+hostname+"/taget_mh/index.php/zipper_con/find_style_name_zipper/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8587,7 +8587,7 @@ function find_style_iron()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/iron_con/find_style_name_iron/";
+ url =  "http://"+hostname+"/taget_mh/index.php/iron_con/find_style_name_iron/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8653,7 +8653,7 @@ function price_code_save_winding()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price+"&style_type="+style_type;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/price_code_winding_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/price_code_winding_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8722,7 +8722,7 @@ function price_code_save_mending()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/price_code_mending_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/price_code_mending_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8790,7 +8790,7 @@ function price_code_save_zipper()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/price_code_zipper_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/price_code_zipper_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8853,7 +8853,7 @@ function price_code_save_iron()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/price_code_iron_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/price_code_iron_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8914,7 +8914,7 @@ function price_code_save_trimming()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/trimming_con/price_code_trimming_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/trimming_con/price_code_trimming_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8980,7 +8980,7 @@ function price_code_knitting_save()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/knitting_con/price_code_knitting_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/knitting_con/price_code_knitting_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9037,7 +9037,7 @@ function show_table_winding()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/show_table_winding/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/show_table_winding/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9096,7 +9096,7 @@ function show_table_mending()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/show_table_mending/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/show_table_mending/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9146,7 +9146,7 @@ function show_table_zipper()
 	style_name =   document.getElementById('style_name').value ;
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/show_table_zipper/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/show_table_zipper/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9196,7 +9196,7 @@ function show_table_iron()
 	style_name =   document.getElementById('style_name').value ;
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/show_table_iron/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/show_table_iron/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9254,7 +9254,7 @@ function show_table_trimming()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/trimming_con/show_table_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/trimming_con/show_table_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9315,7 +9315,7 @@ function show_table_knitting()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/knitting_con/show_table_knitting/" ;
+    url="http://"+hostname+"/taget_mh/index.php/knitting_con/show_table_knitting/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9363,7 +9363,7 @@ function price_code_edit_mending(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/style_type_price_edit_mending/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/style_type_price_edit_mending/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9406,7 +9406,7 @@ function price_code_edit_winding(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/style_type_perice_edit_winding/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/style_type_perice_edit_winding/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9452,7 +9452,7 @@ function price_code_edit_zipper(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/style_type_price_edit_zipper/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/style_type_price_edit_zipper/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9496,7 +9496,7 @@ function price_code_edit_iron(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/style_type_price_edit_iron/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/style_type_price_edit_iron/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9540,7 +9540,7 @@ function price_code_edit_trimming(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/product_con/style_type_perice_edit_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/product_con/style_type_perice_edit_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9590,7 +9590,7 @@ function price_code_edit_knitting(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/knitting_con/style_type_price_edit_knitting/" ;
+    url="http://"+hostname+"/taget_mh/index.php/knitting_con/style_type_price_edit_knitting/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9633,7 +9633,7 @@ function price_code_edit_trimming(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/trimming_con/style_type_price_edit_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/trimming_con/style_type_price_edit_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9681,7 +9681,7 @@ function price_code_delete_mending(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/price_code_delete_mending/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/price_code_delete_mending/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9728,7 +9728,7 @@ function price_code_delete_winding(i)
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
  
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/price_code_delete_winding/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/price_code_delete_winding/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9775,7 +9775,7 @@ function price_code_delete_zipper(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/price_code_delete_zipper/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/price_code_delete_zipper/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9822,7 +9822,7 @@ function price_code_delete_iron(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/price_code_delete_iron/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/price_code_delete_iron/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9871,7 +9871,7 @@ function price_code_delete_trimming(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/product_con/style_type_perice_delete_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/product_con/style_type_perice_delete_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9916,7 +9916,7 @@ function price_code_delete_knitting(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name ;
 
-	url="http://"+hostname+"/erp_time/index.php/knitting_con/price_code_delete_knitting/" ;
+	url="http://"+hostname+"/taget_mh/index.php/knitting_con/price_code_delete_knitting/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9960,7 +9960,7 @@ function price_code_delete_trimming(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name ;
 
-	url="http://"+hostname+"/erp_time/index.php/trimming_con/price_code_delete_trimming/" ;
+	url="http://"+hostname+"/taget_mh/index.php/trimming_con/price_code_delete_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10006,7 +10006,7 @@ function price_code_update_mending(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/price_code_update_mending/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/price_code_update_mending/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10054,7 +10054,7 @@ function price_code_update_winding(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/price_code_update_winding/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/price_code_update_winding/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10104,7 +10104,7 @@ function price_code_update_zipper(i)
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/price_code_update_zipper/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/price_code_update_zipper/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10154,7 +10154,7 @@ function price_code_update_iron(i)
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/price_code_update_iron/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/price_code_update_iron/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10200,7 +10200,7 @@ function price_code_update_trimming(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/product_con/style_type_perice_update_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/product_con/style_type_perice_update_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10252,7 +10252,7 @@ function price_code_update_knitting(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/knitting_con/price_code_update_knitting/" ;
+    url="http://"+hostname+"/taget_mh/index.php/knitting_con/price_code_update_knitting/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10300,7 +10300,7 @@ function price_code_update_trimming(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/trimming_con/price_code_update_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/trimming_con/price_code_update_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10362,7 +10362,7 @@ function price_code_save_linking()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/linking_con/price_code_linking_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/linking_con/price_code_linking_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10407,7 +10407,7 @@ function price_code_linking_edit(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/linking_con/style_type_price_linking_edit/" ;
+    url="http://"+hostname+"/taget_mh/index.php/linking_con/style_type_price_linking_edit/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10457,7 +10457,7 @@ function price_code_linking_update(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/linking_con/style_type_price_linking_update/" ;
+    url="http://"+hostname+"/taget_mh/index.php/linking_con/style_type_price_linking_update/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10503,7 +10503,7 @@ function price_code_linking_delete(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/product_con/style_type_perice_linking_delete/" ;
+    url="http://"+hostname+"/taget_mh/index.php/product_con/style_type_perice_linking_delete/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10563,7 +10563,7 @@ function show_table_linking()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/linking_con/show_table_linking_co/" ;
+    url="http://"+hostname+"/taget_mh/index.php/linking_con/show_table_linking_co/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10630,7 +10630,7 @@ var ajaxRequest;  // The variable that makes Ajax possible!
  var queryString="article_no="+article_no+"&style_no="+style_no+"&buyername="+buyername+"&style_dept="+style_dept+"&gauge="+gauge+"&sending_date="+sending_date+"&comment_date="+comment_date+"&making_by="+making_by+"&in_house_date="+in_house_date+"&status="+status+"&type_of_sample="+type_of_sample;
  //alert(queryString);
  hostname = window.location.hostname;
-	url =  "http://"+hostname+"/erp_time/index.php/product_con/bdt_save_co/";
+	url =  "http://"+hostname+"/taget_mh/index.php/product_con/bdt_save_co/";
 	ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -10678,7 +10678,7 @@ function com_incre_prom_search()
 
  var queryString="empid="+empid;
  hostname = window.location.hostname;
- var url = "http://"+hostname+"/erp_time/index.php/emp_increment_con/com_incre_prom_search/";
+ var url = "http://"+hostname+"/taget_mh/index.php/emp_increment_con/com_incre_prom_search/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);

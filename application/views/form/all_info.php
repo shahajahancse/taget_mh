@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Company Info</title>
+<title>Employee Information</title>
 
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>css/calendar.css" />
 
@@ -11,8 +11,11 @@
 <script src="<?php echo base_url(); ?>js/calendar_eu.js" type="text/javascript"></script>
 
 <style type="text/css">
+	tr td {
+		padding: 4px;
+	}
 .cominfo td{
-font-weight:bold;
+/* font-weight:bold; */
 
 }
 .cominfo select{
@@ -34,8 +37,8 @@ button {outline:solid 1px  #408080; resize:none; margin-right:10px; padding:2px;
 </head>
 
 <body bgcolor="#ECE9D8">
-<div align="center" style=" width:900px; overflow:hidden;" >
-<div  style="width:900px;">
+<div align="left" style=" width:; overflow:hidden;" >
+<div  style="width:;">
 <div id="error_id" style="display:none; color:red;">
 <?php echo $validation_errors =  validation_errors(); ?>
 </div>
@@ -46,22 +49,19 @@ if($validation_errors != '')
 }
 ?>
 <form name='cominfo' class="cominfo"  enctype="multipart/form-data" method="post" action="<?php echo base_url();?>index.php/emp_info_con/personal_info_view1" >
+	
 <fieldset style="background:#F2F2E6;">
-<table cellpadding="0" cellspacing="1" width='900px' border='0' align='center'>
+<table cellpadding="0" cellspacing="1" width='' border='0' align=''>
 <tr>
-  <td>Emp Id </td>
-  <td><input name="empid" type='text' id='empid' style="width:170px;"  value="<?php echo set_value('empid'); ?>"/></td>
-  <td>Punch Card No.</td>
-  <td><input name="idcard" type='text' id='idcard' style="width:170px;"  value="<?php echo set_value('idcard'); ?>"/></td>
-  
-  <td width="20%" rowspan="8"><img id='img'  name='image' alt=''><div id='emp_status' style='font-size:14px;color:blue;'></div></td>
+	<td colspan="4" style="text-align:left"><h3><b>Personal Information</b></h3></td>
 </tr>
+
 
 <tr>
   <td>Name(English)</td>
   <td><input  type='text' style="width:170px;" id='name' name="name" value="<?php echo set_value('name'); ?>"></td>
-<td>Name(Bangla)</td>
-<td><input  style="width:170px;"  type='text' id='bname' name="bname" value="<?php echo set_value('bname'); ?>"></td>
+  <td>Name(Bangla)</td>
+ <td><input  style="width:170px;"  type='text' id='bname' name="bname" value="<?php echo set_value('bname'); ?>"></td>
 </tr>
 
 <tr><td>Mother's Name</td>
@@ -74,13 +74,13 @@ if($validation_errors != '')
 <td>No.of Children</td>
 <td><input type='text' style="width:170px;" id='no_child' name="no_child" value="<?php echo set_value('no_child'); ?>"></td>
 </tr>
-<tr><td>Present Add.</td>
+<!-- <tr><td>Present Add.</td>
 <td><input type='text' style="width:170px;" id='padd' name='padd' value="<?php echo set_value('padd'); ?>"></td>
 <td>Permanent Add.</td>
 <td><input type='text' style="width:170px;" id='fadd' name='fadd' value="<?php echo set_value('fadd'); ?>"></td>
-</tr>
+</tr> -->
 <tr><td>Date Of Birth</td>
-<td><input type='text' size='25px' id='dob' name="dob"  value="<?php echo set_value('dob'); ?>" />
+<td><input type='text' size='21px' id='dob' name="dob"  value="<?php echo set_value('dob'); ?>" />
   <script language="JavaScript">
 	var o_cal = new tcal ({
 		// form name
@@ -154,22 +154,69 @@ if($validation_errors != '')
 	</select>
 </td>
 </tr>
-<tr><td>Salary Withdraw</td><td>
-      <select style="width:174px;" id='saldraw' name='saldraw' >
-          <?php $salary_withdraw_name = $this->processdb->get_salary_withdraw_name();
-          foreach($salary_withdraw_name->result() as $rows) { 
-              if($this->input->post('saldraw') == $rows->sal_withdraw_id) {?>
-                  <option value="<?php echo $rows->sal_withdraw_id; ?>" selected="selected"><?php echo $rows->sal_withdraw_name; ?></option>
-              <?php } else { ?>	
-                  <option value="<?php echo $rows->sal_withdraw_id; ?>"><?php echo $rows->sal_withdraw_name; ?></option>	
-              <?php } ?>	
-              
-          <?php } ?>	    	
-      </select>
-  </td> 
-  <td width="135px">Department</td>
-  <td>
-  	<select style="width:174px;" id='dept' name='dept'>
+<tr>
+	<td>Education</td>
+  	<td><input  type='text' style="width:170px;" id='education' name="education" value="<?php echo set_value('education'); ?>"></td>
+</tr>
+
+<tr>
+	<td colspan="4" style="text-align:left"><h3>Present Address</h3></td>
+</tr>
+
+<tr>
+  <td>Village</td>
+  <td><input  type='text' style="width:170px;" id='pre_vill' name="pre_vill" value="<?php echo set_value('pre_vill'); ?>"></td>
+  <td>Upazila</td>
+ <td><input  style="width:170px;"  type='text' id='pre_upazila' name="pre_upazila" value="<?php echo set_value('pre_upazila'); ?>"></td>
+</tr>
+
+<tr>
+  <td>Post Office</td>
+  <td><input  type='text' style="width:170px;" id='pre_post' name="pre_post" value="<?php echo set_value('pre_post'); ?>"></td>
+  <td>District</td>
+ <td><input  style="width:170px;"  type='text' id='pre_district' name="pre_district" value="<?php echo set_value('pre_district'); ?>"></td>
+</tr>
+
+
+
+
+<tr>
+	<td colspan="4" style="text-align:left"><h3>Permanent Address</h3></td>
+</tr>
+<tr>
+  <td>Village</td>
+  <td><input  type='text' style="width:170px;" id='per_vill' name="per_vill" value="<?php echo set_value('per_vill'); ?>"></td>
+  <td>Upazila</td>
+ <td><input  style="width:170px;"  type='text' id='per_upazila' name="per_upazila" value="<?php echo set_value('per_upazila'); ?>"></td>
+</tr>
+
+<tr>
+  <td>Post Office</td>
+  <td><input  type='text' style="width:170px;" id='per_post' name="per_post" value="<?php echo set_value('per_post'); ?>"></td>
+  <td>District</td>
+ <td><input  style="width:170px;"  type='text' id='per_district' name="per_district" value="<?php echo set_value('per_district'); ?>"></td>
+</tr>
+
+
+
+<tr>
+	<td colspan="4" style="text-align:left"><h3>Official Information</h3></td>
+</tr>
+
+
+<tr>
+  <td>Emp Id </td>
+  <td><input name="emp_id" type='text' id='emp_id' style="width:170px;"  value="<?php echo set_value('emp_id'); ?>"/></td>
+  <td>Punch Card No.</td>
+  <td><input name="id_card" type='text' id='id_card' style="width:170px;"  value="<?php echo set_value('id_card'); ?>"/></td>
+  
+  <td width="20%" rowspan="8"><img id='img_source'  name='img_source' alt=''><div id='emp_status' style='font-size:14px;color:blue;'></div></td>
+</tr>
+
+<tr>
+    <td width="135px">Department</td>
+	<td>
+	<select style="width:174px;" id='dept' name='dept'>
 		<?php $department_name = $this->processdb->get_department_name();
 		foreach($department_name->result() as $rows) { 
 			if($this->input->post('dept') == $rows->dept_id) {?>
@@ -180,7 +227,21 @@ if($validation_errors != '')
 			
 		<?php } ?>
 	</select>
-  </td>
+	</td>
+
+	<td>Salary Withdraw</td><td>
+      <select style="width:174px;" id='saldraw' name='saldraw' >
+          <?php $salary_withdraw_name = $this->processdb->get_salary_withdraw_name();
+          foreach($salary_withdraw_name->result() as $rows) { 
+              if($this->input->post('saldraw') == $rows->sal_withdraw_id) {?>
+                  <option value="<?php echo $rows->sal_withdraw_id; ?>" selected="selected"><?php echo $rows->sal_withdraw_name; ?></option>
+              <?php } else { ?>	
+                  <option value="<?php echo $rows->sal_withdraw_id; ?>"><?php echo $rows->sal_withdraw_name; ?></option>	
+              <?php } ?>	
+          <?php } ?>	    	
+      </select>
+	</td> 
+
 </tr>
 <tr><td>Section</td>
 <td>
@@ -308,7 +369,7 @@ if($validation_errors != '')
 		<?php } ?>		
 	</select>
 </td>
-  <td>Lunch Entitle</td>
+  <td>Friday Entitle</td>
 <td>
 	<select style="width:174px;" id='lunch' name='lunch' >
 		<?php $lunch_name = $this->processdb->get_yes_no_desc();
@@ -339,7 +400,7 @@ if($validation_errors != '')
 	</select>
 </td>
   <td>Emp join date</td>
-  <td><input  type='text' size='25px' id='ejd' name="ejd" value="<?php echo set_value('ejd'); ?>"  required/>
+  <td><input  type='text' size='21px' id='ejd' name="ejd" value="<?php echo set_value('ejd'); ?>"  required/>
       <script language="JavaScript" type="text/javascript">
 	var o_cal = new tcal ({
 		// form name
@@ -382,33 +443,81 @@ if($validation_errors != '')
 </td>
 </tr>
 
-<tr><td width="135px">Emp Last Dgree</td>
-  <td width="250px"><input name="text2" type='text' id='emp_last_dg' style="width:170px;"  value="<?php echo set_value('text2'); ?>"/></td>
+<!-- <tr><td width="135px">Emp Last Dgree</td>
+  <td width="250px"><input name="text2" type='text' id='emp_last_dg' style="width:170px;"  value="< ?php echo set_value('text2'); ?>"/></td>
   <td width="135px">Passing year</td>
-  <td><input name="text3" type='text' id='pass_year' style="width:170px;"  value="<?php echo set_value('text3'); ?>"/></td></tr>
+  <td><input name="text3" type='text' id='pass_year' style="width:170px;"  value="< ?php echo set_value('text3'); ?>"/></td></tr>
 <tr><td>Passing Institute</td>
-<td><input name="text4" type='text' id='edu_insti' style="width:170px;"  value="<?php echo set_value('text4'); ?>"/></td>
+<td><input name="text4" type='text' id='edu_insti' style="width:170px;"  value="< ?php echo set_value('text4'); ?>"/></td>
 <td>Emp skill dept.</td>
-<td><input name="text5" type='text' id='skill_dept' style="width:170px;"  value="<?php echo set_value('text5'); ?>"/></td></tr>
+<td><input name="text5" type='text' id='skill_dept' style="width:170px;"  value="< ?php echo set_value('text5'); ?>"/></td></tr>
 <tr><td>Year of Skill</td>
-<td><input name="text6" type='text' id='skill_year' style="width:170px;"  value="<?php echo set_value('text6'); ?>"/></td>
+<td><input name="text6" type='text' id='skill_year' style="width:170px;"  value=" ?php echo set_value('text6'); ?>"/></td>
 <td>Company Name</td>
-<td><input name="text7" type='text' id='skill_com_na' style="width:170px;"  value="<?php echo set_value('text7'); ?>"/></td></tr>
+<td><input name="text7" type='text' id='skill_com_na' style="width:170px;"  value="< ?php echo set_value('text7'); ?>"/></td></tr> -->
 
  
       <tr>
         <td  width="92px">Gross</td>
         <td width="250px"><input name="text8" type='text' id='gsal'  onchange='basic_sal_cal()' style="width:170px;"  value="<?php echo set_value('text8'); ?>" required/></td>
         <td width="135px">Basic</td>
-        <td  style="background-color:#ECE9D8"><input name="text8" type='text' disabled='disabled' id='bsal'  style="width:170px;" /></td>
+        <td ><input name="text8" type='text' disabled='disabled' id='bsal'  style="width:170px;" /></td>
       </tr>
       <tr>
         <td>House</td>
         <td><input name="text8" type='text' disabled='disabled' id='hrent'  style="width:170px;" /></td>
         <td>Medical</td>
-        <td style="background-color:#ECE9D8"><input name="text8" type='text' disabled='disabled' id='mallow' style="width:170px;" /></td>
+        <td ><input name="text8" type='text' disabled='disabled' id='mallow' style="width:170px;" /></td>
       </tr>
-  
+
+		<tr>
+        <td  width="92px"><b>Salary</b></td>
+        <td width="250px"><input name="text8" type='text' id='gsal'  onchange='basic_sal_cal()' style="width:170px;"  value="<?php echo set_value('text8'); ?>" required/></td>
+        <td width="135px"><b>Basic</b></td>
+        <td ><input name="text8" type='text' disabled='disabled' id='bsal'  style="width:170px;" /></td>
+      </tr>
+      <tr>
+        <td><b>House</b></td>
+        <td><input name="text8" type='text' disabled='disabled' id='hrent'  style="width:170px;" /></td>
+        <td><b>Medical</b></td>
+        <td ><input name="text8" type='text' disabled='disabled' id='mallow' style="width:170px;" /></td>
+      </tr>
+<tr>
+	<td colspan="4" style="text-align:left"><h3><b>Nominee Information</b></h3></td>
+</tr>
+    <tr>
+        <td  width="92px">Nominee Name</td>
+        <td width="250px"><input name="tnomi_nameext8" type='text' id='nomi_name' style="width:170px;"  value="<?php echo set_value('nomi_name'); ?>" required/></td>
+        <td width="135px">Rel. with Nominee</td>
+        <td ><input name="nomi_relation" type='text' id='nomi_relation'  style="width:170px;"  value="<?php echo set_value('nomi_relation'); ?>"/></td>
+    </tr>
+    <tr>
+        <td>Village</td>
+        <td><input name="nomi_vill" type='text'  id='nomi_vill'  style="width:170px;"  value="<?php echo set_value('nomi_vill'); ?>"/></td>
+        <td>Upazilla</td>
+        <td ><input name="nomi_upazila" type='text'  id='nomi_upazila' style="width:170px;"  value="<?php echo set_value('nomi_upazila'); ?>"/></td>
+    </tr>
+	<tr>
+        <td>Post Office</td>
+        <td><input name="nomi_post" type='text'  id='nomi_post' style="width:170px;"  value="<?php echo set_value('nomi_post'); ?>"/></></td>
+        <td>District</td>
+        <td><input name="nomi_district" type='text'  id='nomi_district' style="width:170px;"  value="<?php echo set_value('nomi_district'); ?>"/></td>
+    </tr>
+
+ <tr>
+	<td colspan="4" style="text-align:left"><h3><b>Employee Experience</b></h3></td>
+</tr>
+    <tr>
+        <td  width="92px">Exp. Factory Name</td>
+        <td width="250px"><input name="exp_factory" type='text' id='exp_factory' style="width:170px;"  value="<?php echo set_value('exp_factory'); ?>" required/></td>
+        <td width="135px">Duration</td>
+        <td ><input name="duration" type='text' id='duration'  style="width:170px;"  value="<?php echo set_value('factory'); ?>"/></td>
+    </tr>
+    <tr>
+        <td>Designation</td>
+        <td><input name="exp_designation" type='text'  id='exp_designation'  style="width:170px;" value="<?php echo set_value('exp_designation'); ?>"/></td>
+    </tr>
+
 </table>
 </fieldset>
 <div style="width:900px; height:30px; background:#9DA2A6; margin-top:2px">
@@ -422,3 +531,4 @@ if($validation_errors != '')
  
 </body>
 </html>
+
