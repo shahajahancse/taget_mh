@@ -206,11 +206,10 @@ if($validation_errors != '')
 
 <tr>
   <td>Emp Id </td>
-  <td><input name="emp_id" type='text' id='emp_id' style="width:170px;"  value="<?php echo set_value('emp_id'); ?>"/></td>
+  <td><input name="empid" type='text' id='empid' style="width:170px;"  value="<?php echo set_value('empid'); ?>"/></td>
   <td>Punch Card No.</td>
-  <td><input name="id_card" type='text' id='id_card' style="width:170px;"  value="<?php echo set_value('id_card'); ?>"/></td>
-  
-  <td width="20%" rowspan="8"><img id='img_source'  name='img_source' alt=''><div id='emp_status' style='font-size:14px;color:blue;'></div></td>
+  <td><input name="idcard" type='text' id='idcard' style="width:170px;"  value="<?php echo set_value('idcard'); ?>"/></td>
+  <td width="20%" rowspan="8"><img id='img'  name='image' alt=''><div id='emp_status' style='font-size:14px;color:blue;'></div></td>
 </tr>
 
 <tr>
@@ -531,4 +530,3 @@ if($validation_errors != '')
  
 </body>
 </html>
-

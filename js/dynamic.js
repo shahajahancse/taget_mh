@@ -2302,42 +2302,43 @@ ajaxRequest.onreadystatechange = function(){
 		alldata = resp.split("-*-");
 		//alert(alldata);
 		otherinfo= alldata[0].split("=*=") ;
+		console.log(otherinfo);
 		//alert(otherinfo);
 		//alert(otherinfo[1]);
 		document.cominfo.empid.value = otherinfo[0];
-		document.cominfo.padd.value = otherinfo[1];
-		document.cominfo.fadd.value = otherinfo[2];
+		document.cominfo.idcard.value = otherinfo[1];
+		// document.cominfo.fadd.value = otherinfo[2];
 		//alert(otherinfo[3]);
-		document.cominfo.emp_last_dg.value = otherinfo[3];
-		document.cominfo.pass_year.value = otherinfo[4];
-		document.cominfo.edu_insti.value = otherinfo[5];
-		document.cominfo.skill_dept.value = otherinfo[6];
-		document.cominfo.skill_year.value = otherinfo[7];
-		document.cominfo.skill_com_na.value = otherinfo[8];
-		document.cominfo.name.value = otherinfo[9];
-		document.cominfo.fname.value = otherinfo[10];
-		document.cominfo.mname.value = otherinfo[11];
-		document.cominfo.dob.value = otherinfo[12];
+		// document.cominfo.emp_last_dg.value = otherinfo[3];
+		// document.cominfo.pass_year.value = otherinfo[4];
+		// document.cominfo.edu_insti.value = otherinfo[5];
+		// document.cominfo.skill_dept.value = otherinfo[6];
+		// document.cominfo.skill_year.value = otherinfo[7];
+		// document.cominfo.skill_com_na.value = otherinfo[8];
+		document.cominfo.name.value = otherinfo[10];
+		document.cominfo.fname.value = otherinfo[11];
+		document.cominfo.mname.value = otherinfo[12];
+		// document.cominfo.dob.value = otherinfo[12];
 		//alert(otherinfo[13]);
-		document.cominfo.reli.value = otherinfo[13];
+		// document.cominfo.reli.value = otherinfo[13];
 		document.cominfo.sex.value = otherinfo[14];
 		document.cominfo.ms.value = otherinfo[15];
 		document.cominfo.bgroup.value = otherinfo[16];
-		var img = otherinfo[17];
+		var img = otherinfo[19];
 		hostname = window.location.hostname;
 		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 150;
 		document.image.width = 130;
 		
-		document.cominfo.bname.value = otherinfo[18];
-		document.cominfo.id_skill.value    = otherinfo[19];
+		document.cominfo.bname.value = otherinfo[20];
+		// document.cominfo.id_skill.value    = otherinfo[19];
 	
 		
 				
 		com_info = alldata[1].split("=*=");
 		//alert(com_info);
 		
-		
+		console.log(com_info);
 		document.cominfo.idcard.value = com_info[1];
 		
 		//document.cominfo.section.value = com_info[];

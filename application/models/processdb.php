@@ -1473,10 +1473,10 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 		
 		//$emp_id = $this->input->post('empid');
 
-		$this->db->select('pr_emp_com_info.emp_id as emp_id,pr_id_proxi.proxi_id as proxi_id,pr_dept.dept_name as dept_name,pr_section.sec_name as sec_name,pr_line_num.line_name as line_name,pr_designation.desig_name as desig_name, pr_emp_operation.ope_name as ope_name, pr_emp_position.posi_name as posi_name, pr_grade.gr_name as gr_name,pr_emp_status.stat_type as stat_type, pr_emp_com_info.gross_sal as gross_sal, pr_emp_com_info.emp_join_date as emp_join_date,pr_emp_com_info.ot_entitle as ot_entitle,pr_emp_com_info.transport as transport,pr_emp_com_info.lunch as lunch,pr_emp_com_info.att_bonus as att_bonus, pr_emp_com_info.salary_draw as salary_draw, pr_emp_com_info.salary_type as salary_type, pr_emp_shift.shift_name as shift_name');
+		$this->db->select('pr_emp_com_info.emp_id as emp_id,pr_emp_com_info.proxi_id as proxi_id,pr_dept.dept_name as dept_name,pr_section.sec_name as sec_name,pr_line_num.line_name as line_name,pr_designation.desig_name as desig_name, pr_emp_operation.ope_name as ope_name, pr_emp_position.posi_name as posi_name, pr_grade.gr_name as gr_name,pr_emp_status.stat_type as stat_type, pr_emp_com_info.gross_sal as gross_sal, pr_emp_com_info.emp_join_date as emp_join_date,pr_emp_com_info.ot_entitle as ot_entitle,pr_emp_com_info.transport as transport,pr_emp_com_info.lunch as lunch,pr_emp_com_info.att_bonus as att_bonus, pr_emp_com_info.salary_draw as salary_draw, pr_emp_com_info.salary_type as salary_type, pr_emp_shift.shift_name as shift_name');
 		//$this->db->select('pr_emp_com_info.emp_id as emp_id,pr_id_proxi.proxi_id as proxi_id,pr_dept.dept_name as dept_name,pr_section.sec_name as sec_name,pr_line_num.line_name as line_name,pr_designation.desig_name as desig_name');
 		$this->db->from('pr_emp_com_info');
-		$this->db->from('pr_id_proxi');
+		// $this->db->from('pr_id_proxi');
 		$this->db->from('pr_dept');
 		$this->db->from('pr_section');
 		$this->db->from('pr_line_num');
@@ -1486,13 +1486,13 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 		$this->db->from('pr_grade');
 		$this->db->from('pr_emp_status');
 		$this->db->from('pr_emp_shift');
-		$where = "pr_emp_com_info.emp_id = '$emp_id'  and pr_emp_com_info.emp_id = pr_id_proxi.emp_id and pr_emp_com_info.emp_dept_id = pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and pr_emp_com_info.emp_desi_id = pr_designation.desig_id and pr_emp_com_info.emp_operation_id = pr_emp_operation.ope_id and pr_emp_com_info.emp_position_id = pr_emp_position.posi_id and pr_emp_com_info.emp_sal_gra_id = pr_grade.gr_id and pr_emp_com_info.emp_cat_id = pr_emp_status.stat_id and pr_emp_shift.shift_id = pr_emp_com_info.emp_shift";
+		$where = "pr_emp_com_info.emp_id = '$emp_id' and pr_emp_com_info.emp_dept_id = pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and pr_emp_com_info.emp_desi_id = pr_designation.desig_id and pr_emp_com_info.emp_operation_id = pr_emp_operation.ope_id and pr_emp_com_info.emp_position_id = pr_emp_position.posi_id and pr_emp_com_info.emp_sal_gra_id = pr_grade.gr_id and pr_emp_com_info.emp_cat_id = pr_emp_status.stat_id and pr_emp_shift.shift_id = pr_emp_com_info.emp_shift";
 	//$where = "pr_emp_com_info.emp_id = '$emp_id'  and pr_emp_com_info.emp_id = pr_id_proxi.emp_id and pr_emp_com_info.emp_dept_id = pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and pr_emp_com_info.emp_desi_id = pr_designation.desig_id";	
 		$this->db->where($where);
 		$query = $this->db->get();
 		
 		//echo $this->db->last_query();
-		//print_r($query->result());
+		// echo "<pte>";print_r($query->result());exit;
 		$this->db->select('*');
 		$this->db->where('emp_id',$emp_id);
 		$query1 = $this->db->get('pr_emp_com_info');
@@ -1502,6 +1502,7 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 		{
 			foreach ($query->result() as $row)
 			{
+				// dd($row);
 				$ejd = $row->emp_join_date;
 				$ejd = date("d-m-Y", strtotime($ejd)); 
 				
@@ -1544,7 +1545,7 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 			
 			//echo $com_info;
 			
-			$this->db->select('pr_emp_com_info.emp_id as empid,pr_emp_add.*,pr_emp_edu.* ,pr_emp_per_info.*,pr_emp_skill.*');
+			$this->db->select('pr_emp_com_info.emp_id as empid,pr_emp_com_info.proxi_id as proxi_id,pr_emp_add.*,pr_emp_edu.* ,pr_emp_per_info.*,pr_emp_skill.*');
 			$this->db->from('pr_emp_com_info');
 			$this->db->from('pr_emp_add');
 			$this->db->from('pr_emp_edu');
@@ -1561,6 +1562,7 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 				
 				$data2 = array(
 						'emp_id'				=> $row->emp_id,
+						'proxi_id'				=> $row->proxi_id,
 						'emp_pre_add'  			=> $row->emp_pre_add,
 						'emp_par_add'  			=> $row->emp_par_add,
 						
@@ -1575,6 +1577,7 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 						
 						
 						'emp_full_name'  		=> $row->emp_full_name,
+						'bangla_nam'  		    => $row->bangla_nam,
 						'emp_fname'  			=> $row->emp_fname,
 						'emp_mname'  			=> $row->emp_mname,
 						'emp_dob'  				=> $emp_dob,
@@ -1591,7 +1594,7 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 			}
 			
 			$other_info = implode('=*=', $data2);
-		//print_r($data2);
+		// echo "<pre>"; print_r($data2);exit;
 				
 			$dept_id_name = $this->dept();	
 			$sec_id_name = $this->dept_search($dept_id);
