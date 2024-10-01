@@ -52,6 +52,11 @@ function empty_pi(){
 	document.getElementById('mallow').value = "";
 	document.getElementById('ejd').value = "";
 
+	document.getElementById('cgsal').value = "";
+	document.getElementById('cbsal').value = "";
+	document.getElementById('chrent').value = "";
+	document.getElementById('cmallow').value = "";
+
 }
  
  function empty_edu_skill(){
@@ -1827,6 +1832,7 @@ function com_info_insert(){
 	var empstat = document.getElementById('empstat').value;
 	var empshift = document.getElementById('empshift').value;
 	var gsal = document.getElementById('gsal').value;
+	var cgsal = document.getElementById('cgsal').value;
 	var otentitle = document.getElementById('otentitle').value;
 	var transport = document.getElementById('transport').value;
 	var lunch = document.getElementById('lunch').value;
@@ -1913,7 +1919,7 @@ if(saltype=='Select' || saltype==''){
 	
 	
 	 
-	var queryString="com_empid="+com_empid+"&idcard="+idcard+"&dept="+dept+"&sec="+sec+"&line="+line+"&desig="+desig+"&operation="+operation+"&position="+position+"&salg="+salg+"&empstat="+empstat+"&empshift="+empshift+"&gsal="+gsal+"&otentitle="+otentitle+"&transport="+transport+"&lunch="+lunch+"&attbonus="+attbonus+"&ejd="+ejd+"&saldraw="+saldraw+"&saltype="+saltype;
+	var queryString="com_empid="+com_empid+"&idcard="+idcard+"&dept="+dept+"&sec="+sec+"&line="+line+"&desig="+desig+"&operation="+operation+"&position="+position+"&salg="+salg+"&empstat="+empstat+"&empshift="+empshift+"&gsal="+gsal+"&cgsal="+cgsal+"&otentitle="+otentitle+"&transport="+transport+"&lunch="+lunch+"&attbonus="+attbonus+"&ejd="+ejd+"&saldraw="+saldraw+"&saltype="+saltype;
 	//alert(desig);
 	ajaxRequest.open("POST", "com_info_insert/", true);
  	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -1980,6 +1986,7 @@ function com_info_edit(){
 	var empstat = document.getElementById('empstat').value;
 	var empshift = document.getElementById('empshift').value;
 	var gsal = document.getElementById('gsal').value;
+	var cgsal = document.getElementById('cgsal').value;
 	var otentitle = document.getElementById('otentitle').value;
 	var transport = document.getElementById('transport').value;
 	var lunch = document.getElementById('lunch').value;
@@ -2063,7 +2070,7 @@ if(saltype=='Select' || saltype==''){
 	 return;
 	}
 	
-	var queryString="com_empid="+com_empid+"&idcard="+idcard+"&dept="+dept+"&sec="+sec+"&line="+line+"&desig="+desig+"&operation="+operation+"&position="+position+"&salg="+salg+"&empstat="+empstat+"&empshift="+empshift+"&gsal="+gsal+"&otentitle="+otentitle+"&transport="+transport+"&lunch="+lunch+"&attbonus="+attbonus+"&ejd="+ejd+"&saldraw="+saldraw+"&saltype="+saltype;
+	var queryString="com_empid="+com_empid+"&idcard="+idcard+"&dept="+dept+"&sec="+sec+"&line="+line+"&desig="+desig+"&operation="+operation+"&position="+position+"&salg="+salg+"&empstat="+empstat+"&empshift="+empshift+"&gsal="+gsal+"&cgsal="+cgsal+"&otentitle="+otentitle+"&transport="+transport+"&lunch="+lunch+"&attbonus="+attbonus+"&ejd="+ejd+"&saldraw="+saldraw+"&saltype="+saltype;
 	//alert(queryString);
 	ajaxRequest.open("POST", "com_info_edit/", true);
  	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -2175,15 +2182,72 @@ function basic_sal_cal(){
 		//==================================LOCAL Salary Rule===================================
 		
 		//==================================New Salary Rule===================================
-		var mallow = 600;
+		var mallow = 750;
 		document.getElementById('mallow').value = mallow;
 		
-		var bsal = Math.round((gsal - 1850) / 1.5);
+		var bsal = Math.round((gsal - 2450) / 1.5);
 		document.getElementById('bsal').value = bsal;
 			
-		var hrent = Math.round((gsal - 1850) - bsal);
+		var hrent = Math.round((gsal - 2450) - bsal);
 		//alert(hrent)
 		document.getElementById('hrent').value = hrent;
+		//==================================New Salary Rule===================================
+}
+
+function basic_sal_call(){
+ var ajaxRequest;  // The variable that makes Ajax possible!
+	
+ try{
+   // Opera 8.0+, Firefox, Safari
+   ajaxRequest = new XMLHttpRequest();
+ }catch (e){
+   // Internet Explorer Browsers
+   try{
+      ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+   }catch (e) {
+      try{
+         ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+      }catch (e){
+         // Something went wrong
+         alert("Your browser broke!");
+         return false;
+      }
+   }
+ }
+ 	var cgsal = document.getElementById('cgsal').value;
+ 
+	//==================================BGMEA Salary Rule===================================
+		/*var bsal = (gsal * 60) / 100;
+		document.getElementById('bsal').value = bsal;
+			
+		var hrent = (gsal * 30) / 100;
+		document.getElementById('hrent').value = hrent;
+		
+		var mallow = (gsal * 10) / 100;
+		document.getElementById('mallow').value = mallow;*/
+		//==================================BGMEA Salary Rule===================================
+		
+		//==================================LOCAL Salary Rule===================================
+		/*var mallow = 200;
+		document.getElementById('mallow').value = mallow;
+		
+		var bsal = Math.round((gsal - mallow) / 140 * 100);
+		document.getElementById('bsal').value = bsal;
+			
+		var hrent = Math.round((bsal * 40) / 100);
+		document.getElementById('hrent').value = hrent;*/
+		//==================================LOCAL Salary Rule===================================
+		
+		//==================================New Salary Rule===================================
+		var cmallow = 750;
+		document.getElementById('cmallow').value = cmallow;
+		
+		var cbsal = Math.round((cgsal - 2450) / 1.5);
+		document.getElementById('cbsal').value = cbsal;
+			
+		var chrent = Math.round((cgsal - 2450) - cbsal);
+		//alert(hrent)
+		document.getElementById('chrent').value = chrent;
 		//==================================New Salary Rule===================================
 }
 
@@ -2303,54 +2367,52 @@ ajaxRequest.onreadystatechange = function(){
 		//alert(alldata);
 		otherinfo= alldata[0].split("=*=") ;
 		console.log(otherinfo);
-		//alert(otherinfo);
-		//alert(otherinfo[1]);
-		document.cominfo.empid.value = otherinfo[0];
-		document.cominfo.idcard.value = otherinfo[1];
-		// document.cominfo.fadd.value = otherinfo[2];
-		//alert(otherinfo[3]);
-		// document.cominfo.emp_last_dg.value = otherinfo[3];
-		// document.cominfo.pass_year.value = otherinfo[4];
-		// document.cominfo.edu_insti.value = otherinfo[5];
-		// document.cominfo.skill_dept.value = otherinfo[6];
-		// document.cominfo.skill_year.value = otherinfo[7];
-		// document.cominfo.skill_com_na.value = otherinfo[8];
-		document.cominfo.name.value = otherinfo[10];
-		document.cominfo.fname.value = otherinfo[11];
-		document.cominfo.mname.value = otherinfo[12];
-		// document.cominfo.dob.value = otherinfo[12];
-		//alert(otherinfo[13]);
-		// document.cominfo.reli.value = otherinfo[13];
-		document.cominfo.sex.value = otherinfo[14];
-		document.cominfo.ms.value = otherinfo[15];
-		document.cominfo.bgroup.value = otherinfo[16];
-		var img = otherinfo[19];
+		document.cominfo.name.value = otherinfo[0];
+		document.cominfo.bname.value = otherinfo[1];
+
+		document.cominfo.mname.value = otherinfo[2];
+		document.cominfo.fname.value = otherinfo[3];
+		document.cominfo.spouse_name.value = otherinfo[4];
+		document.cominfo.no_child.value = otherinfo[5];
+		document.cominfo.dob.value = otherinfo[6];
+		var img = otherinfo[7];
 		hostname = window.location.hostname;
 		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 150;
 		document.image.width = 130;
-		
-		document.cominfo.bname.value = otherinfo[20];
-		// document.cominfo.id_skill.value    = otherinfo[19];
-	
-		
-				
+		document.cominfo.reli.value 			= otherinfo[8];
+		document.cominfo.sex.value 				= otherinfo[9];
+		document.cominfo.ms.value 				= otherinfo[10];
+		document.cominfo.bgroup.value 			= otherinfo[11];
+		document.cominfo.education.value 		= otherinfo[12];
+		document.cominfo.exp_factory.value 		= otherinfo[13];
+		document.cominfo.duration.value 		= otherinfo[14];
+		document.cominfo.exp_designation.value  = otherinfo[15];
+		document.cominfo.pre_vill.value 		= otherinfo[18];
+		document.cominfo.pre_district.value 	= otherinfo[19];
+		document.cominfo.pre_upazila.value 		= otherinfo[20];
+		document.cominfo.pre_post.value 		= otherinfo[21];
+		document.cominfo.per_vill.value 		= otherinfo[22];
+		document.cominfo.per_district.value 	= otherinfo[23];
+		document.cominfo.per_upazila.value 		= otherinfo[24];
+		document.cominfo.per_post.value 		= otherinfo[25];
+		document.cominfo.nomi_vill.value 		= otherinfo[26];
+		document.cominfo.nomi_district.value 	= otherinfo[27];
+		document.cominfo.nomi_upazila.value	 	= otherinfo[28];
+		document.cominfo.nomi_post.value 		= otherinfo[29];
+		document.cominfo.nomi_name.value 		= otherinfo[30];
+		document.cominfo.nomi_relation.value 	= otherinfo[31];
+		document.cominfo.nid.value 	= otherinfo[32];
+		document.cominfo.personal_phone.value 	= otherinfo[33];
+		document.cominfo.emergency_phone.value 	= otherinfo[34];
+
 		com_info = alldata[1].split("=*=");
-		//alert(com_info);
-		
+
 		console.log(com_info);
+		document.cominfo.empid.value = com_info[0];
 		document.cominfo.idcard.value = com_info[1];
-		
-		//document.cominfo.section.value = com_info[];
-		
-		//dept_id_name = alldata[2].split("===");
-		//dept_id = dept_id_name[0].split("=*=");
-		//dept_name = dept_id_name[1].split("=*=");
-		//document.cominfo.dept.options.length=0;
-		//for (i=0; i<dept_id.length; i++){
-		//	document.cominfo.dept.options[i]=new Option(dept_name[i],dept_id[i], false, true);
-		//	}
-		
+		document.cominfo.cgsal.value = com_info[12];
+		document.cominfo.account.value = com_info[13];
 		
 		
 		dept_id_name = alldata[2].split("===");
@@ -2366,7 +2428,6 @@ ajaxRequest.onreadystatechange = function(){
 			document.cominfo.dept.options[i]=new Option(dept_name[i],dept_id[i], false, false);
 		}
 		
-		//alert(com_info[3]);
 		
 		
 		sec_id_name = alldata[3].split("===");
@@ -2614,6 +2675,9 @@ ajaxRequest.onreadystatechange = function(){
 		//alert(com_info[11]) ;
 		document.getElementById('gsal').value = com_info[11];
 		var gsal = com_info[11];
+		document.getElementById('cgsal').value = com_info[12];
+		var cgsal = com_info[12];
+
 		//alert(com_info[11]);
 		//==================================BGMEA Salary Rule===================================
 		/*var bsal = (gsal * 60) / 100;
@@ -2627,14 +2691,23 @@ ajaxRequest.onreadystatechange = function(){
 		//==================================BGMEA Salary Rule===================================
 		
 		//==================================LOCAL Salary Rule===================================
-		var mallow = 650;
+		var mallow = 750;
 		document.getElementById('mallow').value = mallow;
+
+		var cmallow = 750;
+		document.getElementById('cmallow').value = cmallow;
 		
 		var bsal = Math.round((gsal - mallow) / 150 * 100);
 		document.getElementById('bsal').value = bsal;
+
+		var cbsal = Math.round((cgsal - mallow) / 150 * 100);
+		document.getElementById('cbsal').value = cbsal;
 			
 		var hrent = Math.round((bsal * 50) / 100);
 		document.getElementById('hrent').value = hrent;
+
+		var chrent = Math.round((cbsal * 50) / 100);
+		document.getElementById('chrent').value = chrent;
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{
@@ -3028,7 +3101,7 @@ ajaxRequest.onreadystatechange = function(){
 		//==================================BGMEA Salary Rule===================================
 		
 		//==================================LOCAL Salary Rule===================================
-		var mallow = 650;
+		var mallow = 750;
 		document.getElementById('mallow').value = mallow;
 		
 		var bsal = Math.round((gsal - mallow) / 150 * 100);
@@ -3036,6 +3109,16 @@ ajaxRequest.onreadystatechange = function(){
 			
 		var hrent = Math.round((bsal * 50) / 100);
 		document.getElementById('hrent').value = hrent;
+
+
+		var cmallow = 750;
+		document.getElementById('cmallow').value = cmallow;
+		
+		var cbsal = Math.round((cgsal - cmallow) / 150 * 100);
+		document.getElementById('cbsal').value = cbsal;
+			
+		var chrent = Math.round((cbsal * 50) / 100);
+		document.getElementById('chrent').value = chrent;
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{
@@ -3417,6 +3500,8 @@ ajaxRequest.onreadystatechange = function(){
 		//alert(com_info[11]) ;
 		document.getElementById('gsal').value = com_info[11];
 		var gsal = com_info[11];
+		document.getElementById('cgsal').value = com_info[12];
+		var cgsal = com_info[12];
 		//alert(com_info[11]);
 		//==================================BGMEA Salary Rule===================================
 		/*var bsal = (gsal * 60) / 100;
@@ -3430,7 +3515,7 @@ ajaxRequest.onreadystatechange = function(){
 		//==================================BGMEA Salary Rule===================================
 		
 		//==================================LOCAL Salary Rule===================================
-		var mallow = 650;
+		var mallow = 750;
 		document.getElementById('mallow').value = mallow;
 		
 		var bsal = Math.round((gsal - mallow) / 150 * 100);
@@ -3438,6 +3523,17 @@ ajaxRequest.onreadystatechange = function(){
 			
 		var hrent = Math.round((bsal * 50) / 100);
 		document.getElementById('hrent').value = hrent;
+
+
+
+		var cmallow = 750;
+		document.getElementById('cmallow').value = cmallow;
+		
+		var cbsal = Math.round((cgsal - cmallow) / 150 * 100);
+		document.getElementById('cbsal').value = cbsal;
+			
+		var chrent = Math.round((cbsal * 50) / 100);
+		document.getElementById('chrent').value = chrent;
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{

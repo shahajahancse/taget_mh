@@ -1394,19 +1394,36 @@ class Grid_model extends CI_Model{
 	
 	function grid_id_card($grid_emp_id)
 	{
-		$this->db->select('pr_emp_com_info.emp_id,pr_emp_per_info.bangla_nam,pr_emp_per_info.img_source, pr_designation.desig_bangla, pr_emp_com_info.emp_join_date, pr_dept.dept_name, pr_section.sec_bangla');
+		$this->db->select('
+		pr_emp_com_info.*,
+		pr_emp_per_info.*,
+		pr_designation.desig_bangla, 
+		pr_dept.dept_name, 
+		pr_section.sec_bangla,
+		emp_districts.name_en as emp_districts_name,
+		emp_upazilas.name_en as emp_upazilas_name,
+		emp_post_offices.name_en as emp_post_offices_name');
 		$this->db->from('pr_emp_per_info');
 		$this->db->from('pr_emp_com_info');
 		$this->db->from('pr_designation');
 		$this->db->from('pr_dept');
 		$this->db->from('pr_section');
+
+		$this->db->from('emp_districts ');
+		$this->db->from('emp_upazilas');
+		$this->db->from('emp_post_offices');
+
 		$this->db->or_where_in("pr_emp_com_info.emp_id", $grid_emp_id);
 		$this->db->where('pr_emp_per_info.emp_id = pr_emp_com_info.emp_id');
 		$this->db->where('pr_emp_com_info.emp_desi_id = pr_designation.desig_id');
 		$this->db->where('pr_emp_com_info.emp_dept_id = pr_dept.dept_id');
 		$this->db->where('pr_emp_com_info.emp_sec_id = pr_section.sec_id');
+		$this->db->where('pr_emp_per_info.pre_district = emp_districts.id');
+		$this->db->where('pr_emp_per_info.pre_upazila = emp_upazilas.id');
+		$this->db->where('pr_emp_per_info.pre_post = emp_post_offices.id');
 		$this->db->order_by("pr_emp_com_info.emp_id");
 		$query = $this->db->get();
+		// dd($query->result());
 		
 		if($query->num_rows() == 0)
 		{
@@ -1415,7 +1432,7 @@ class Grid_model extends CI_Model{
 		}
 		else
 		{
-			return $query;	
+			return $query->result();	
 		}
 		//print_r($query->result_array());
 	}

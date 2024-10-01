@@ -157,6 +157,14 @@ if($validation_errors != '')
 <tr>
 	<td>Education</td>
   	<td><input  type='text' style="width:170px;" id='education' name="education" value="<?php echo set_value('education'); ?>"></td>
+	<td>NID</td>
+  	<td><input  type='text' style="width:170px;" id='nid' name="nid" value="<?php echo set_value('nid'); ?>"></td>
+</tr>
+<tr>
+	<td>Personal Phone</td>
+  	<td><input  type='text' style="width:170px;" id='personal_phone' name="personal_phone" value="<?php echo set_value('personal_phone'); ?>"></td>
+	<td>Emergency Phone</td>
+  	<td><input  type='text' style="width:170px;" id='emergency_phone' name="emergency_phone" value="<?php echo set_value('emergency_phone'); ?>"></td>
 </tr>
 
 <tr>
@@ -166,15 +174,60 @@ if($validation_errors != '')
 <tr>
   <td>Village</td>
   <td><input  type='text' style="width:170px;" id='pre_vill' name="pre_vill" value="<?php echo set_value('pre_vill'); ?>"></td>
-  <td>Upazila</td>
- <td><input  style="width:170px;"  type='text' id='pre_upazila' name="pre_upazila" value="<?php echo set_value('pre_upazila'); ?>"></td>
+  
+ <td>District</td>
+ <td>
+	<select  id='pre_district' name="pre_district" style="width:175px;">
+		<option value="">Select Distict</option>	
+		<?php $pre_district = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_districts');
+		foreach($pre_district->result() as $rows) { 
+			if($this->input->post('pre_district') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>
+			
+		<?php } ?>	
+	</select>
+
+ </td>
 </tr>
 
 <tr>
+	 <td>Upazila</td>
+	<td>
+		<select class="pre_upazilaa" id='pre_upazila' name="pre_upazila" style="width:175px;">
+		<option value="">Select Upazila</option>	
+		<?php $pre_upazila = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_upazilas');
+		foreach($pre_upazila->result() as $rows) { 
+			if($this->input->post('pre_upazila') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>	
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>	
+			
+		<?php } ?>	
+	</select>
+
+	</td>
+
   <td>Post Office</td>
-  <td><input  type='text' style="width:170px;" id='pre_post' name="pre_post" value="<?php echo set_value('pre_post'); ?>"></td>
-  <td>District</td>
- <td><input  style="width:170px;"  type='text' id='pre_district' name="pre_district" value="<?php echo set_value('pre_district'); ?>"></td>
+  	<td>
+		<select class='pre_postt' id='pre_post' name="pre_post" style="width:175px;">
+		<option value="">Select Post Office</option>	
+		<?php $pre_post = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_post_offices');
+		foreach($pre_post->result() as $rows) { 
+			if($this->input->post('pre_post') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>	
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>	
+			
+		<?php } ?>	
+	</select>
+	</td>
+
+
 </tr>
 
 
@@ -183,19 +236,65 @@ if($validation_errors != '')
 <tr>
 	<td colspan="4" style="text-align:left"><h3>Permanent Address</h3></td>
 </tr>
+
 <tr>
   <td>Village</td>
   <td><input  type='text' style="width:170px;" id='per_vill' name="per_vill" value="<?php echo set_value('per_vill'); ?>"></td>
-  <td>Upazila</td>
- <td><input  style="width:170px;"  type='text' id='per_upazila' name="per_upazila" value="<?php echo set_value('per_upazila'); ?>"></td>
+  
+ <td>District</td>
+ <td>
+	<select  id='per_district' name="per_district" style="width:175px;">
+		<option value="">Select Distict</option>	
+		<?php $per_district = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_districts');
+		foreach($per_district->result() as $rows) { 
+			if($this->input->post('per_district') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>
+			
+		<?php } ?>	
+	</select>
+
+ </td>
 </tr>
 
 <tr>
+	 <td>Upazila</td>
+	<td>
+		<select class="per_upazilaa" id='per_upazila' name="per_upazila" style="width:175px;">
+		<option value="">Select Upazila</option>	
+		<?php $per_upazila = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_upazilas');
+		foreach($per_upazila->result() as $rows) { 
+			if($this->input->post('per_upazila') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>	
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>	
+			
+		<?php } ?>	
+	</select>
+
+	</td>
+
   <td>Post Office</td>
-  <td><input  type='text' style="width:170px;" id='per_post' name="per_post" value="<?php echo set_value('per_post'); ?>"></td>
-  <td>District</td>
- <td><input  style="width:170px;"  type='text' id='per_district' name="per_district" value="<?php echo set_value('per_district'); ?>"></td>
+  	<td>
+		<select class='per_postt' id='per_post' name="per_post" style="width:175px;">
+		<option value="">Select Post Office</option>	
+		<?php $per_post = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_post_offices');
+		foreach($per_post->result() as $rows) { 
+			if($this->input->post('per_post') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>	
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>	
+			
+		<?php } ?>	
+	</select>
+	</td>
 </tr>
+
+
 
 
 
@@ -441,6 +540,10 @@ if($validation_errors != '')
   	</select>
 </td>
 </tr>
+<tr>
+	<td width="135px">Accounnt Number</td>
+  	<td width="250px"><input name="account" type='text' id='account' style="width:170px;"  value="<?php echo set_value('account'); ?>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" /></td>
+</tr>
 
 <!-- <tr><td width="135px">Emp Last Dgree</td>
   <td width="250px"><input name="text2" type='text' id='emp_last_dg' style="width:170px;"  value="< ?php echo set_value('text2'); ?>"/></td>
@@ -471,37 +574,82 @@ if($validation_errors != '')
 
 		<tr>
         <td  width="92px"><b>Salary</b></td>
-        <td width="250px"><input name="text8" type='text' id='gsal'  onchange='basic_sal_cal()' style="width:170px;"  value="<?php echo set_value('text8'); ?>" required/></td>
+        <td width="250px"><input name="com_gross_sal" type='text' id='cgsal'  onchange='basic_sal_call()' style="width:170px;"  value="<?php echo set_value('com_gross_sal'); ?>" required/></td>
         <td width="135px"><b>Basic</b></td>
-        <td ><input name="text8" type='text' disabled='disabled' id='bsal'  style="width:170px;" /></td>
+        <td ><input name="text8" type='text' disabled='disabled' id='cbsal'  style="width:170px;" /></td>
       </tr>
       <tr>
         <td><b>House</b></td>
-        <td><input name="text8" type='text' disabled='disabled' id='hrent'  style="width:170px;" /></td>
+        <td><input name="text8" type='text' disabled='disabled' id='chrent'  style="width:170px;" /></td>
         <td><b>Medical</b></td>
-        <td ><input name="text8" type='text' disabled='disabled' id='mallow' style="width:170px;" /></td>
+        <td ><input name="text8" type='text' disabled='disabled' id='cmallow' style="width:170px;" /></td>
       </tr>
 <tr>
 	<td colspan="4" style="text-align:left"><h3><b>Nominee Information</b></h3></td>
 </tr>
     <tr>
         <td  width="92px">Nominee Name</td>
-        <td width="250px"><input name="tnomi_nameext8" type='text' id='nomi_name' style="width:170px;"  value="<?php echo set_value('nomi_name'); ?>" required/></td>
+        <td width="250px"><input name="nomi_name" type='text' id='nomi_name' style="width:170px;"  value="<?php echo set_value('nomi_name'); ?>" required/></td>
         <td width="135px">Rel. with Nominee</td>
         <td ><input name="nomi_relation" type='text' id='nomi_relation'  style="width:170px;"  value="<?php echo set_value('nomi_relation'); ?>"/></td>
     </tr>
-    <tr>
-        <td>Village</td>
-        <td><input name="nomi_vill" type='text'  id='nomi_vill'  style="width:170px;"  value="<?php echo set_value('nomi_vill'); ?>"/></td>
-        <td>Upazilla</td>
-        <td ><input name="nomi_upazila" type='text'  id='nomi_upazila' style="width:170px;"  value="<?php echo set_value('nomi_upazila'); ?>"/></td>
-    </tr>
-	<tr>
-        <td>Post Office</td>
-        <td><input name="nomi_post" type='text'  id='nomi_post' style="width:170px;"  value="<?php echo set_value('nomi_post'); ?>"/></></td>
-        <td>District</td>
-        <td><input name="nomi_district" type='text'  id='nomi_district' style="width:170px;"  value="<?php echo set_value('nomi_district'); ?>"/></td>
-    </tr>
+	
+<tr>
+  <td>Village</td>
+  <td><input  type='text' style="width:170px;" id='nomi_vill' name="nomi_vill" value="<?php echo set_value('nomi_vill'); ?>"></td>
+  
+ <td>District</td>
+ <td>
+	<select  id='nomi_district' name="nomi_district" style="width:175px;">
+		<option value="">Select Distict</option>	
+		<?php $nomi_district = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_districts');
+		foreach($nomi_district->result() as $rows) { 
+			if($this->input->post('nomi_district') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>
+			
+		<?php } ?>	
+	</select>
+
+ </td>
+</tr>
+
+<tr>
+	 <td>Upazila</td>
+	<td>
+		<select class="nomi_upazilaa" id='nomi_upazila' name="nomi_upazila" style="width:175px;">
+		<option value="">Select Upazila</option>	
+		<?php $nomi_upazila = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_upazilas');
+		foreach($nomi_upazila->result() as $rows) { 
+			if($this->input->post('nomi_upazila') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>	
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>	
+			
+		<?php } ?>	
+	</select>
+
+	</td>
+
+  <td>Post Office</td>
+  	<td>
+		<select class='nomi_postt' id='nomi_post' name="nomi_post" style="width:175px;">
+		<option value="">Select Post Office</option>	
+		<?php $nomi_post = $this->db->select('*')->order_by('name_bn', 'asc')->get('emp_post_offices');
+		foreach($nomi_post->result() as $rows) { 
+			if($this->input->post('nomi_post') == $rows->id) {?>
+				<option value="<?php echo $rows->id; ?>" selected="selected"><?php echo $rows->name_bn; ?></option>
+			<?php } else { ?>	
+				<option value="<?php echo $rows->id; ?>"><?php echo $rows->name_bn; ?></option>	
+			<?php } ?>	
+			
+		<?php } ?>	
+	</select>
+	</td>
+</tr>
 
  <tr>
 	<td colspan="4" style="text-align:left"><h3><b>Employee Experience</b></h3></td>
@@ -527,6 +675,144 @@ if($validation_errors != '')
   </div>
 </div>
 <?php if($this->input->post('pi_edit')) {echo "<SCRIPT LANGUAGE=\"JavaScript\">document.cominfo.pi_edit.disabled = false; document.cominfo.pi_save.disabled = true;</SCRIPT>";} ?>
+
+    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
+     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+
+
+   
+
+    //nominee Upazila dropdown
+    $('#nomi_district').change(function() {
+        $('.nomi_upazilaa').addClass('form-control input-sm');
+        $(".nomi_upazilaa > option").remove();
+        $(".nomi_postt > option").remove();
+        var id = $('#nomi_district').val();
+        $.ajax({
+            type: "POST",
+            url:  "ajax_upazila_by_dis/" + id,
+            success: function(func_data) {
+                $('.nomi_upazilaa').append("<option value=''>-- Select District --</option>");
+                $.each(func_data, function(id, name) {
+                    var opt = $('<option />');
+                    opt.val(id);
+                    opt.text(name);
+                    $('.nomi_upazilaa').append(opt);
+                });
+            }
+        });
+    });
+
+    //nominee post office dropdown
+    $('#nomi_upazila').change(function() {
+        $('.nomi_postt').addClass('form-control input-sm');
+        $(".nomi_postt > option").remove();
+        var id = $('#nomi_upazila').val();
+        $.ajax({
+            type: "POST",
+            url:  "ajax_post_office_by_upa_id/" + id,
+            success: function(func_data) {
+                $('.nomi_postt').append("<option value=''>-- Select District --</option>");
+                $.each(func_data, function(id, name) {
+                    var opt = $('<option />');
+                    opt.val(id);
+                    opt.text(name);
+                    $('.nomi_postt').append(opt);
+                });
+            }
+        });
+    });
+
+
+    
+
+
+    //Upazila dropdown
+    $('#pre_district').change(function() {
+        $('.pre_upazilaa').addClass('form-control input-sm');
+        $(".pre_upazilaa > option").remove();
+        $(".pre_post > option").remove();
+        var id = $('#pre_district').val();
+        $.ajax({
+            type: "POST",
+            url: "ajax_upazila_by_dis/" + id,
+            success: function(func_data) {
+                $('.pre_upazilaa').append("<option value=''>-- Select District --</option>");
+                $.each(func_data, function(id, name) {
+                    var opt = $('<option />');
+                    opt.val(id);
+                    opt.text(name);
+                    $('.pre_upazilaa').append(opt);
+                });
+            }
+        });
+    });
+
+    //Post Office dropdown
+    $('#pre_upazila').change(function() {
+        $('.pre_postt').addClass('form-control input-sm');
+        $(".pre_postt > option").remove();
+        var id = $('#pre_upazila').val();
+        $.ajax({
+            type: "POST",
+            url:  "ajax_post_office_by_upa_id/" + id,
+            success: function(upazilaThanas) {
+                $('.pre_postt').append("<option value=''>-- Select Upazila --</option>");
+                $.each(upazilaThanas, function(id, ut_name) {
+                    var opt = $('<option />');
+                    opt.val(id);
+                    opt.text(ut_name);
+                    $('.pre_postt').append(opt);
+                });
+            }
+        });
+    });
+
+    //Upazila dropdown
+    $('#per_district').change(function() {
+        $('.per_upazilaa').addClass('form-control input-sm');
+        $(".per_upazilaa > option").remove();
+        $(".per_postt > option").remove();
+        var id = $('#per_district').val();
+        $.ajax({
+            type: "POST",
+            url:  "ajax_upazila_by_dis/" + id,
+            success: function(func_data) {
+                $('.per_upazilaa').append("<option value=''>-- Select District --</option>");
+                $.each(func_data, function(id, name) {
+                    var opt = $('<option />');
+                    opt.val(id);
+                    opt.text(name);
+                    $('.per_upazilaa').append(opt);
+                });
+            }
+        });
+    });
+
+    //Post Office dropdown
+    $('#per_upazila').change(function() {
+        $('.per_postt').addClass('form-control input-sm');
+        $(".per_postt > option").remove();
+        var id = $('#per_upazila').val();
+        $.ajax({
+            type: "POST",
+            url: "ajax_post_office_by_upa_id/" + id,
+            success: function(upazilaThanas) {
+                $('.per_postt').append("<option value=''>-- Select Upazila --</option>");
+                $.each(upazilaThanas, function(id, ut_name) {
+                    var opt = $('<option />');
+                    opt.val(id);
+                    opt.text(ut_name);
+                    $('.per_postt').append(opt);
+                });
+            }
+        });
+    });
+});
+</script>
  
 </body>
 </html>

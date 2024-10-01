@@ -33,16 +33,16 @@ class Emp_info_con extends CI_Controller {
 		$this->form_validation->set_rules('bname', 'Employee Bangla Name', 'trim');
 		$this->form_validation->set_rules('mname', 'Employee Mother\'s Name', 'trim');
 		$this->form_validation->set_rules('fname', 'Employee Father\'s Name', 'trim');
-		$this->form_validation->set_rules('padd', 'Present Address', 'trim');
-		$this->form_validation->set_rules('fadd', 'Parmanent Address', 'trim');
+		// $this->form_validation->set_rules('padd', 'Present Address', 'trim');
+		// $this->form_validation->set_rules('fadd', 'Parmanent Address', 'trim');
 		$this->form_validation->set_rules('dob', 'Date of Birth', 'trim');
 		$this->form_validation->set_rules('ejd', 'Date of Joining', 'trim|required');
-		$this->form_validation->set_rules('text2', 'Last Degree', 'trim');
-		$this->form_validation->set_rules('text3', 'Passing Year', 'trim');
-		$this->form_validation->set_rules('text4', 'Institute Name', 'trim');
-		$this->form_validation->set_rules('text5', 'Skill Department', 'trim');
-		$this->form_validation->set_rules('text6', 'Year(s) of Skill', 'trim');
-		$this->form_validation->set_rules('text7', 'Company Name', 'trim');
+		// $this->form_validation->set_rules('text2', 'Last Degree', 'trim');
+		// $this->form_validation->set_rules('text3', 'Passing Year', 'trim');
+		// $this->form_validation->set_rules('text4', 'Institute Name', 'trim');
+		// $this->form_validation->set_rules('text5', 'Skill Department', 'trim');
+		// $this->form_validation->set_rules('text6', 'Year(s) of Skill', 'trim');
+		// $this->form_validation->set_rules('text7', 'Company Name', 'trim');
 		$this->form_validation->set_rules('text8', 'Gross Salary', 'trim|required');
 			
 		if($this->input->post('pi_save') != '')
@@ -233,5 +233,42 @@ class Emp_info_con extends CI_Controller {
 		$result = $this->processdb->com_all_info();
 		echo $result;
 	}
+
+
+	   function ajax_upazila_by_dis($id){
+
+        $data = array();
+        $this->db->select('id, name_bn');
+        $this->db->from('emp_upazilas');
+        $this->db->where('dis_id', $id);
+        $this->db->order_by('name_bn', 'ASC');
+        $query = $this->db->get()->result();
+
+        foreach ($query as $row) {
+            $data[$row->id] = $row->name_bn;
+        }
+
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo json_encode($data);
+        exit;
+    }
+
+	    function ajax_post_office_by_upa_id($id){
+
+        $data = array();
+        $this->db->select('id, name_bn');
+        $this->db->from('emp_post_offices');
+        $this->db->where('up_zil_id', $id);
+        $this->db->order_by('name_bn', 'ASC');
+        $query = $this->db->get()->result();
+
+        foreach ($query as $row) {
+            $data[$row->id] = $row->name_bn;
+        }
+
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo json_encode($data);
+        exit;
+    }
 }
 
