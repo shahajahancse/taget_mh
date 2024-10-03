@@ -214,7 +214,7 @@ class Attn_process_model extends CI_Model{
 						}
 						//===========================OT CALCULATION=============================================
 						//echo $emp_id."=>";
-						$ot_hour_calcultation = $this->ot_hour_calcultation($emp_id, $att_date);
+						$ot_hour_calcultation = $this->ot_hour_calcultation($emp_id, $att_date,$proxi_id);
 
 						//echo "<br>";
 						if($ot_hour_calcultation["ot_hour"] !='')
@@ -1340,12 +1340,12 @@ class Attn_process_model extends CI_Model{
 		$present_check = $this->present_check($date, $emp_id);
 		if( $present_check == true)
 		{
-			$in_time  = $this->time_check_in($date, $start_time, $end_time, $table);
+			$in_time  = $this->time_check_in($date, $start_time, $end_time, $table,$proxi_id);
 
 			$out_start_time = "$in_date $out_start_time";
 			$out_end_time = "$out_date $out_end_time";
 
-			$out_time = $this->time_check_out2($out_start_time, $out_end_time, $table);
+			$out_time = $this->time_check_out2($date,$out_start_time, $out_end_time, $table,$proxi_id);
 			/*if($emp_id =='FI0428')
 			{
 				echo "IN:$in_time# OS:$out_start_time# OE:$out_end_time# OUT:$out_time";
@@ -1655,11 +1655,12 @@ class Attn_process_model extends CI_Model{
 		}
 	}
 
-	function time_check_in($date, $start_time, $end_time, $table)
+	function time_check_in($date, $start_time, $end_time, $table,$proxi_id)
 	{
 		// exit($table);
 		$this->db->select("date_time");
 		$this->db->where("trim(substr(date_time,1,10)) = '$date'");
+		$this->db->where("proxi_id",$proxi_id);
 		$this->db->where("trim(substr(date_time,11,19)) BETWEEN '$start_time' and '$end_time'");
 		$this->db->order_by("date_time","ASC");
 		$this->db->limit("1");
@@ -1690,10 +1691,11 @@ class Attn_process_model extends CI_Model{
 		return $time;
 	}
 
-	function time_check_out2($start_time, $end_time, $table)
+	function time_check_out2($date, $start_time, $end_time, $table,$proxi_id)
 	{
 		$this->db->select("date_time");
-		//$this->db->where("trim(substr(date_time,1,10)) = '$date'");
+		$this->db->where("trim(substr(date_time,1,10)) = '$date'");
+		$this->db->where("proxi_id",$proxi_id);
 		$this->db->where("date_time BETWEEN '$start_time' and '$end_time'");
 		$this->db->order_by("date_time","DESC");
 		$this->db->limit("1");
@@ -2066,7 +2068,7 @@ class Attn_process_model extends CI_Model{
 		$this->db->from('pr_emp_com_info');
 		$this->db->from('pr_designation');
 		$this->db->from('pr_emp_shift');
-		// $this->db->where("pr_emp_per_info.emp_id",'A003');
+		$this->db->where("pr_emp_per_info.emp_id",'A005');
 		$this->db->where("pr_emp_per_info.emp_id = pr_emp_com_info.emp_id");
 		$this->db->where("pr_emp_com_info.emp_desi_id = pr_designation.desig_id");
 		$this->db->where("pr_emp_com_info.emp_shift = pr_emp_shift.shift_id");

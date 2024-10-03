@@ -127,7 +127,7 @@ class File_process_model extends CI_Model{
 					$date = $log[1];
 					$time = $log[2];
 					$format = $log[3];
-					// $device_id = $log[4];
+					$device_id = 0;
 
 					if(in_array($prox_no, $proxi)){
 						
