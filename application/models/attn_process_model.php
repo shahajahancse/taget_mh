@@ -12,8 +12,16 @@ class Attn_process_model extends CI_Model{
 
 	function attn_process($process_date)
 	{
+		// check roster shift and auto chage this (if true this)
+		$date = date("Y-m-d",strtotime($process_date));
+		$change_shift = $this->db->where('start_date',$date)->where('status',1)->get('pr_emp_roster_shift')->row();
+		if (!empty($change_shift)) {
+			$this->change_shift_roster($change_shift);
+		}
+		// $this->change_shift_roster($change_shift);
+
 		//DECLARE ARRAY FOR DATABASE INSERT/UPDATE
-		$result 	= array();
+		$result = array();
 
 		//MAKE YEAR,MONTH,DAY FROM INPUT DATE
 		$first_y	= date('Y', strtotime($process_date));
@@ -155,7 +163,6 @@ class Attn_process_model extends CI_Model{
 						$this->db->where("att_month",$year_month);
 						$this->db->update("pr_attn_monthly",$aaa);
 					}
-
 					} else {
 						if ($process_date == $weekend){
 							$result[$emp_id] = "W";
@@ -170,9 +177,7 @@ class Attn_process_model extends CI_Model{
 							$this->db->where("emp_id",$emp_id);
 							$this->db->where("att_month",$year_month);
 							$this->db->update("pr_attn_monthly",$hhh);
-						}
-						else
-						{
+						} else {
 							$this->db->select("leave_type");
 							$this->db->where("emp_id",$emp_id);
 							$this->db->where("start_date",$process_date);
@@ -240,281 +245,337 @@ class Attn_process_model extends CI_Model{
 						$insert_deduction_hour = $this->deduction_hour_process($emp_id,$att_date);
 						//===========================OT CALCULATION=============================================
 					}
-				}
 			}
 		}
 		return $result;
 	}
 
-		function get_no_work_day($emp_id,$att_date)
+	// check roster shift and chage it
+	function change_shift_roster($roster = null)
+	{
+		if (empty($roster)) {
+			return false;
+		}
+        $id = $roster->id;
+        $duration = $roster->duration;
+        $start_date = $roster->start_date;
+        $shift_id = explode(',', $roster->shift_id);
+		$day_shift = $shift_id[0];
+		$night_shift = $shift_id[1];
+
+	    $shift_start_date = date('Y-m-d', strtotime($start_date ." + $duration days"));
+		$days 	= $this->get_roster_shift_emp($day_shift);
+		$nights  = $this->get_roster_shift_emp($night_shift);
+
+		if (!empty($days)) {
+			$this->auto_change_roster_shift($days, $night_shift);
+		}
+		if (!empty($nights)) {
+			$this->auto_change_roster_shift($nights, $day_shift);
+		}
+		// end auto employee shift change
+
+		// update auto roster shift
+		$shift_end_date   = date('Y-m-d', strtotime($end_date ." + $duration days"));
+		$data = array(
+			'start_date' => $shift_start_date,
+		);
+		return true;
+	}
+	// end roster shift change
+
+
+	function get_roster_shift_emp($emp_shift)
+	{
+		$rs=$this->db->select('emp_id')->where('emp_shift',$emp_shift)->get('pr_emp_com_info');
+		$result = $rs->result_array();
+		$output = array();
+		array_walk($result, function($entry) use (&$output) {
+		    $output[] = $entry["emp_id"];
+		});
+		return $output;
+	}
+	function auto_change_roster_shift($emp_array, $emp_shift)
+	{
+		$data = array(
+			'emp_shift' => $emp_shift
+		);
+
+		$this->db->where_in('emp_id', $emp_array)->where('unit_id', $unit_id)->update('pr_emp_com_info', $data);
+		return true;
+	}
+	// end roster shift
+
+
+	function get_no_work_day($emp_id,$att_date)
+	{
+		$no_work_day = $this->db->where('emp_id',$emp_id)->where('date',$att_date)->get('pd_production_logs')->num_rows();
+		if($no_work_day == 0)
 		{
-			$no_work_day = $this->db->where('emp_id',$emp_id)->where('date',$att_date)->get('pd_production_logs')->num_rows();
-			if($no_work_day == 0)
+			$no_work_day_status = 1;
+		}
+		else
+		{
+			$no_work_day_status = 0;
+		}
+		$data = array(
+		"pd_no_work_check" => $no_work_day_status
+		);
+		$this->db->where("emp_id", $emp_id);
+		$this->db->where("shift_log_date", $att_date);
+		$this->db->update("pr_emp_shift_log", $data);
+		return;
+	}
+	function resig_or_left_date($emp_id)
+	{
+		$this->db->select("left_date");
+		$this->db->where('emp_id',$emp_id);
+		$query = $this->db->get("pr_emp_left_history");
+		$row = $query->row();
+		if($query->num_rows() > 0)
+		{
+			return true;
+		}
+
+
+		$this->db->select("resign_date");
+		$this->db->where('emp_id',$emp_id);
+		$query = $this->db->get("pr_emp_resign_history");
+		$row = $query->row();
+		if($query->num_rows() > 0)
+		{
+			return true;
+		}
+	}
+
+	function insert_extra_ot_hour($emp_id, $att_date, $extra_ot_hour)
+	{
+		$eot_leasure_hour = $this->get_setup_attributes(2);
+
+		/*if($emp_id =='AD0084')
+		{
+			echo "$emp_id => leasure: $eot_leasure_hour, EOT: $extra_ot_hour ========";
+		}*/
+		$this->db->select('shift_id,in_time,out_time');
+		$this->db->where("emp_id", $emp_id);
+		$this->db->where("shift_log_date", $att_date);
+		$query = $this->db->get("pr_emp_shift_log");
+		//echo $this->db->last_query();
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row();
+			$in_time = $row->in_time;
+			$out_time = $row->out_time;
+			$shift_id = $row->shift_id;
+			//$ot_start = $this->get_shift_out_time($shift_id);
+
+			$emp_shift = $this->emp_shift_check_process($emp_id, $att_date);
+			$schedule = $this->schedule_check($emp_shift);
+
+			$ot_start				=  $schedule[0]["ot_start"];
+			$ot_minute_to_one_hour	=  $schedule[0]["ot_minute_to_one_hour"];
+
+			$in_time = $ot_start;
+
+			$new_in_time = date("h:i:s A", strtotime($in_time));
+			$date_in_time = $att_date." ".$new_in_time;
+			//echo $new_shift_out_time;
+			$mdm_new_in_time = date("A", strtotime($new_in_time));
+
+
+			$new_out_time = date("h:i:s A", strtotime($out_time));
+
+			$mdm_new_out_time = date("A", strtotime($new_out_time));
+
+
+			if($mdm_new_in_time == $mdm_new_out_time)
 			{
-				$no_work_day_status = 1;
+				$date_out_time = $att_date." ".$new_out_time;
+
 			}
 			else
 			{
-				$no_work_day_status = 0;
+				$att_date_new = strtotime(date("Y-m-d", strtotime($att_date)) . " +1 day");
+				$newdate = date ('Y-m-d' , $att_date_new );
+				$date_out_time = $newdate." ".$new_out_time;
 			}
+
+			$date1 = new DateTime($date_out_time);
+			$date2 = new DateTime($date_in_time);
+			$interval = $date1->diff($date2);
+			$hour    =  $interval->h;
+			$minutes =  $interval->i;
+
+			if($ot_minute_to_one_hour <= $minutes)
+			{
+				$hour = $hour + 1;
+			}
+
+			if($hour >= $eot_leasure_hour)
+			{
+				$extra_ot_hour = $extra_ot_hour - 1;
+			}
+			else
+			{
+				$extra_ot_hour = $extra_ot_hour;
+			}
+
+			//echo $extra_ot_hour;
+
 			$data = array(
-			"pd_no_work_check" => $no_work_day_status
-			);
+						"extra_ot_hour" => $extra_ot_hour
+						);
 			$this->db->where("emp_id", $emp_id);
 			$this->db->where("shift_log_date", $att_date);
 			$this->db->update("pr_emp_shift_log", $data);
-			return;
-		}
-		function resig_or_left_date($emp_id)
-		{
-			$this->db->select("left_date");
-			$this->db->where('emp_id',$emp_id);
-			$query = $this->db->get("pr_emp_left_history");
-			$row = $query->row();
-			if($query->num_rows() > 0)
-			{
-				return true;
-			}
-
-
-			$this->db->select("resign_date");
-			$this->db->where('emp_id',$emp_id);
-			$query = $this->db->get("pr_emp_resign_history");
-			$row = $query->row();
-			if($query->num_rows() > 0)
-			{
-				return true;
-			}
-		}
-
-		function insert_extra_ot_hour($emp_id, $att_date, $extra_ot_hour)
-		{
-			$eot_leasure_hour = $this->get_setup_attributes(2);
-
-			/*if($emp_id =='AD0084')
-			{
-				echo "$emp_id => leasure: $eot_leasure_hour, EOT: $extra_ot_hour ========";
-			}*/
-			$this->db->select('shift_id,in_time,out_time');
-			$this->db->where("emp_id", $emp_id);
-			$this->db->where("shift_log_date", $att_date);
-			$query = $this->db->get("pr_emp_shift_log");
 			//echo $this->db->last_query();
-			if($query->num_rows() > 0)
-			{
-				$row = $query->row();
-				$in_time = $row->in_time;
-				$out_time = $row->out_time;
-				$shift_id = $row->shift_id;
-				//$ot_start = $this->get_shift_out_time($shift_id);
-
-				$emp_shift = $this->emp_shift_check_process($emp_id, $att_date);
-				$schedule = $this->schedule_check($emp_shift);
-
-				$ot_start				=  $schedule[0]["ot_start"];
-				$ot_minute_to_one_hour	=  $schedule[0]["ot_minute_to_one_hour"];
-
-				$in_time = $ot_start;
-
-				$new_in_time = date("h:i:s A", strtotime($in_time));
-				$date_in_time = $att_date." ".$new_in_time;
-				//echo $new_shift_out_time;
-				$mdm_new_in_time = date("A", strtotime($new_in_time));
-
-
-				$new_out_time = date("h:i:s A", strtotime($out_time));
-
-				$mdm_new_out_time = date("A", strtotime($new_out_time));
-
-
-				if($mdm_new_in_time == $mdm_new_out_time)
-				{
-					$date_out_time = $att_date." ".$new_out_time;
-
-				}
-				else
-				{
-					$att_date_new = strtotime(date("Y-m-d", strtotime($att_date)) . " +1 day");
-					$newdate = date ('Y-m-d' , $att_date_new );
-					$date_out_time = $newdate." ".$new_out_time;
-				}
-
-				$date1 = new DateTime($date_out_time);
-				$date2 = new DateTime($date_in_time);
-				$interval = $date1->diff($date2);
-				$hour    =  $interval->h;
-				$minutes =  $interval->i;
-
-				if($ot_minute_to_one_hour <= $minutes)
-				{
-					$hour = $hour + 1;
-				}
-
-				if($hour >= $eot_leasure_hour)
-				{
-					$extra_ot_hour = $extra_ot_hour - 1;
-				}
-				else
-				{
-					$extra_ot_hour = $extra_ot_hour;
-				}
-
-				//echo $extra_ot_hour;
-
-				$data = array(
-							"extra_ot_hour" => $extra_ot_hour
-							);
-				$this->db->where("emp_id", $emp_id);
-				$this->db->where("shift_log_date", $att_date);
-				$this->db->update("pr_emp_shift_log", $data);
-				//echo $this->db->last_query();
-			}
 		}
+	}
 
-		function weekend_holday_eot_calculation($emp_id, $date){
-			$holiday_allowance_check = 0;
-			$table = "att_".date('Y_m',strtotime($date));
-			$table = strtolower($table);
-			$present_count = 0;
-			$absent_count = 0;
-			$leave_count = 0;
-			$ot_count = 0;
-			$late_count = 0;
-			$this->db->select("pr_emp_com_info.ot_entitle");
-			$this->db->from("pr_emp_com_info");
-			$this->db->where("pr_emp_com_info.emp_id = '$emp_id'");
-			$query1 = $this->db->get();
-			$row1 = $query1->row();
-			$ot_status  = $row1->ot_entitle;
+	function weekend_holday_eot_calculation($emp_id, $date){
+		$holiday_allowance_check = 0;
+		$table = "att_".date('Y_m',strtotime($date));
+		$table = strtolower($table);
+		$present_count = 0;
+		$absent_count = 0;
+		$leave_count = 0;
+		$ot_count = 0;
+		$late_count = 0;
+		$this->db->select("pr_emp_com_info.ot_entitle");
+		$this->db->from("pr_emp_com_info");
+		$this->db->where("pr_emp_com_info.emp_id = '$emp_id'");
+		$query1 = $this->db->get();
+		$row1 = $query1->row();
+		$ot_status  = $row1->ot_entitle;
 
-			$in_time = '';
-			$out_time = '';
+		$in_time = '';
+		$out_time = '';
 
-			$emp_shift = $this->emp_shift_check($emp_id, $date);
+		$emp_shift = $this->emp_shift_check($emp_id, $date);
 
-			$this->db->select("shift_id");
-			$this->db->from("pr_emp_shift_schedule");
-			$this->db->where("sh_type", $emp_shift);
-			$query = $this->db->get();
-			$row = $query->row();
-			$shift_id = $row->shift_id;
+		$this->db->select("shift_id");
+		$this->db->from("pr_emp_shift_schedule");
+		$this->db->where("sh_type", $emp_shift);
+		$query = $this->db->get();
+		$row = $query->row();
+		$shift_id = $row->shift_id;
 
-			$this->db->select("shift_id");
-			$this->db->from("pr_emp_shift");
-			$this->db->where("shift_duty", $shift_id);
-			$query = $this->db->get();
-			$row = $query->row();
-			$shift_duty = $row->shift_id;
-			$schedule = $this->schedule_check($emp_shift);
-			$start_time		=  $schedule[0]["in_start"];
-			$late_time 		=  $schedule[0]["late_start"];
-			$end_time   	=  $schedule[0]["in_end"];
-			$out_start_time	=  $schedule[0]["out_start"];
-			$ot_start_time	=  $schedule[0]["ot_start"];
-			$out_end_time	=  $schedule[0]["out_end"];
+		$this->db->select("shift_id");
+		$this->db->from("pr_emp_shift");
+		$this->db->where("shift_duty", $shift_id);
+		$query = $this->db->get();
+		$row = $query->row();
+		$shift_duty = $row->shift_id;
+		$schedule = $this->schedule_check($emp_shift);
+		$start_time		=  $schedule[0]["in_start"];
+		$late_time 		=  $schedule[0]["late_start"];
+		$end_time   	=  $schedule[0]["in_end"];
+		$out_start_time	=  $schedule[0]["out_start"];
+		$ot_start_time	=  $schedule[0]["ot_start"];
+		$out_end_time	=  $schedule[0]["out_end"];
 
-			$hour = trim(substr($out_start_time,0,2));
-			$minute = trim(substr($out_start_time,3,2));
-			$sec = trim(substr($out_start_time,6,2));
+		$hour = trim(substr($out_start_time,0,2));
+		$minute = trim(substr($out_start_time,3,2));
+		$sec = trim(substr($out_start_time,6,2));
 
-			$am_pm = date("A", mktime($hour, $minute, $sec, 0, 0, 0));
+		$am_pm = date("A", mktime($hour, $minute, $sec, 0, 0, 0));
+		$in_date = $date;
+		$ot_start_time = "$in_date $ot_start_time";
+		if($am_pm == "AM"){
+			$now = strtotime($in_date);
+			$datestr = strtotime("+1 day",$now);
+			$in_date = date("Y-m-d", $datestr);
+			$in_date = $in_date;
+		}else{
 			$in_date = $date;
-			$ot_start_time = "$in_date $ot_start_time";
-			if($am_pm == "AM"){
-				$now = strtotime($in_date);
-				$datestr = strtotime("+1 day",$now);
-				$in_date = date("Y-m-d", $datestr);
-				$in_date = $in_date;
-			}else{
-				$in_date = $date;
-			}
-
-			$hour = trim(substr($out_end_time,0,2));
-			$minute = trim(substr($out_end_time,3,2));
-			$sec = trim(substr($out_end_time,6,2));
-			$am_pm = date("A", mktime($hour, $minute, $sec, 0, 0, 0));
-
-			$out_date = $date;
-			if($am_pm == "AM"){
-				$now = strtotime($out_date);
-				$datestr = strtotime("+1 day",$now);
-				$out_date = date("Y-m-d", $datestr);
-				$out_date = $out_date;
-			}
-			else{
-				$out_date = $date;
-			}
-
-
-				$in_time  = $this->time_check_in($date, $start_time, $end_time, $table);
-				$in_time_date=  $date." ".$in_time;
-				$out_start_time = "$in_date $out_start_time";
-				$out_end_time = "$out_date $out_end_time";
-
-				$out_time_date = $this->time_check_out2($out_start_time, $out_end_time, $table);
-				$workoff_eot_out_date = trim(substr($out_time_date,0,10));
-				$out_time = trim(substr($out_time_date,11,19));
-
-			if($in_time == '' or $out_time == '')
-			{
-				$weekend_holiday_eot_hour = 0;
-			}
-			else
-			{
-				$weekend_holiday_eot_hour = $this->hour_difference($in_time_date, $out_time_date, $emp_id, $date);
-				$workoff_eot_lunch_deduct_time 	= $this->get_setup_attributes(7);
-				$workoff_eot_lunch_deduct_time 	= "$in_date $workoff_eot_lunch_deduct_time";
-				$workoff_eot_out_time 			= "$workoff_eot_out_date $out_time";
-
-				if($workoff_eot_lunch_deduct_time <= $workoff_eot_out_time){
-					$weekend_holiday_eot_hour = $weekend_holiday_eot_hour - 1;
-				}else{
-					$weekend_holiday_eot_hour = $weekend_holiday_eot_hour;
-				}
-				//====================================Holiday Aloowance============================
-				$holiday_allowance_check = 1;
-			}
-
-			if($ot_status == 1)	{ $weekend_holiday_eot_hour = 0;}
-
-			$this->db->select();
-			$this->db->where("emp_id", $emp_id);
-			$this->db->where("shift_log_date", $date);
-			$query = $this->db->get("pr_emp_shift_log");
-
-			if($query->num_rows() > 0){
-				$data = array(
-							'in_time' => $in_time,
-							'out_time' => $out_time,
-							'ot_hour' => 0,
-							'extra_ot_hour' => $weekend_holiday_eot_hour,
-							'deduction_hour' => 0,
-							'late_status' => 0,
-							'holiday_allowance'=>$holiday_allowance_check
-							);
-				$this->db->where('shift_log_date', $date);
-				$this->db->where('emp_id', $emp_id);
-				$this->db->update('pr_emp_shift_log', $data);
-				//echo $this->db->last_query();
-			}
-			else
-			{
-
-				$data = array(
-							'emp_id' => $emp_id,
-							'in_time' => $in_time,
-							'out_time' => $out_time,
-							'shift_id' => $shift_id,
-							'shift_duty' => $shift_duty,
-							'shift_log_date' => $date,
-							'ot_hour' => 0,
-							'extra_ot_hour' => $weekend_holiday_eot_hour,
-							'holiday_allowanc'=>$holiday_allowance_check
-							);
-				$this->db->insert("pr_emp_shift_log", $data);
-			}
-			return true;
 		}
+
+		$hour = trim(substr($out_end_time,0,2));
+		$minute = trim(substr($out_end_time,3,2));
+		$sec = trim(substr($out_end_time,6,2));
+		$am_pm = date("A", mktime($hour, $minute, $sec, 0, 0, 0));
+
+		$out_date = $date;
+		if($am_pm == "AM"){
+			$now = strtotime($out_date);
+			$datestr = strtotime("+1 day",$now);
+			$out_date = date("Y-m-d", $datestr);
+			$out_date = $out_date;
+		}
+		else{
+			$out_date = $date;
+		}
+
+
+			$in_time  = $this->time_check_in($date, $start_time, $end_time, $table);
+			$in_time_date=  $date." ".$in_time;
+			$out_start_time = "$in_date $out_start_time";
+			$out_end_time = "$out_date $out_end_time";
+
+			$out_time_date = $this->time_check_out2($out_start_time, $out_end_time, $table);
+			$workoff_eot_out_date = trim(substr($out_time_date,0,10));
+			$out_time = trim(substr($out_time_date,11,19));
+
+		if($in_time == '' or $out_time == '')
+		{
+			$weekend_holiday_eot_hour = 0;
+		}
+		else
+		{
+			$weekend_holiday_eot_hour = $this->hour_difference($in_time_date, $out_time_date, $emp_id, $date);
+			$workoff_eot_lunch_deduct_time 	= $this->get_setup_attributes(7);
+			$workoff_eot_lunch_deduct_time 	= "$in_date $workoff_eot_lunch_deduct_time";
+			$workoff_eot_out_time 			= "$workoff_eot_out_date $out_time";
+
+			if($workoff_eot_lunch_deduct_time <= $workoff_eot_out_time){
+				$weekend_holiday_eot_hour = $weekend_holiday_eot_hour - 1;
+			}else{
+				$weekend_holiday_eot_hour = $weekend_holiday_eot_hour;
+			}
+			//====================================Holiday Aloowance============================
+			$holiday_allowance_check = 1;
+		}
+
+		if($ot_status == 1)	{ $weekend_holiday_eot_hour = 0;}
+
+		$this->db->select();
+		$this->db->where("emp_id", $emp_id);
+		$this->db->where("shift_log_date", $date);
+		$query = $this->db->get("pr_emp_shift_log");
+
+		if($query->num_rows() > 0){
+			$data = array(
+						'in_time' => $in_time,
+						'out_time' => $out_time,
+						'ot_hour' => 0,
+						'extra_ot_hour' => $weekend_holiday_eot_hour,
+						'deduction_hour' => 0,
+						'late_status' => 0,
+						'holiday_allowance'=>$holiday_allowance_check
+						);
+			$this->db->where('shift_log_date', $date);
+			$this->db->where('emp_id', $emp_id);
+			$this->db->update('pr_emp_shift_log', $data);
+			//echo $this->db->last_query();
+		}
+		else
+		{
+
+			$data = array(
+						'emp_id' => $emp_id,
+						'in_time' => $in_time,
+						'out_time' => $out_time,
+						'shift_id' => $shift_id,
+						'shift_duty' => $shift_duty,
+						'shift_log_date' => $date,
+						'ot_hour' => 0,
+						'extra_ot_hour' => $weekend_holiday_eot_hour,
+						'holiday_allowanc'=>$holiday_allowance_check
+						);
+			$this->db->insert("pr_emp_shift_log", $data);
+		}
+		return true;
+	}
 
 	function extra_ot_calculation($emp_id,$process_date,$schedule)
 	{
@@ -1491,7 +1552,6 @@ class Attn_process_model extends CI_Model{
 			$this->db->where("pr_emp_com_info.emp_id", $emp_id);
 			$this->db->where("pr_emp_shift.shift_id = pr_emp_com_info.emp_shift");
 			$query2 = $this->db->get();
-			//echo $this->db->last_query();
 			foreach($query2->result() as $rows)
 			{
 				$shift_id = $rows->shift_id;

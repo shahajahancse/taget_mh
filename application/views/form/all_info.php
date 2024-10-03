@@ -64,13 +64,22 @@ if($validation_errors != '')
  <td><input  style="width:170px;"  type='text' id='bname' name="bname" value="<?php echo set_value('bname'); ?>"></td>
 </tr>
 
-<tr><td>Mother's Name</td>
+<tr><td>Mother's Name(English)</td>
 <td><input type='text' style="width:170px;" id='mname' name="mname" value="<?php echo set_value('mname'); ?>"></td>
-<td>Father's Name</td>
-<td><input type='text' style="width:170px;" id='fname' name="fname" value="<?php echo set_value('fname'); ?>"></td>
+<td>Mother's Name(Bangla)</td>
+<td><input type='text' style="width:170px;font-family:SutonnyMJ" id='m_name_bn' name="m_name_bn" value="<?php echo set_value('m_name_bn'); ?>"></td>
 </tr>
-<tr><td>Spouse Name</td>
+<tr><td>Father's Name(English)</td>
+<td><input type='text' style="width:170px;" id='fname' name="fname" value="<?php echo set_value('fname'); ?>"></td>
+<td>Father's Name(Bangla)</td>
+<td><input type='text' style="width:170px;" id='f_name_bn' name="f_name_bn" value="<?php echo set_value('f_name_bn'); ?>"></td>
+</tr>
+<tr><td>Spouse Name(English)</td>
 <td><input type='text' style="width:170px;" id='spouse_name' name="spouse_name" value="<?php echo set_value('spouse_name'); ?>"></td>
+<td>Spouse Name(Bangla)</td>
+<td><input type='text' style="width:170px;" id='spouse_name_bn' name="spouse_name_bn" value="<?php echo set_value('spouse_name_bn'); ?>"></td>
+</tr>
+<tr>
 <td>No.of Children</td>
 <td><input type='text' style="width:170px;" id='no_child' name="no_child" value="<?php echo set_value('no_child'); ?>"></td>
 </tr>
@@ -571,6 +580,12 @@ if($validation_errors != '')
         <td>Medical</td>
         <td ><input name="text8" type='text' disabled='disabled' id='mallow' style="width:170px;" /></td>
       </tr>
+	<tr>
+        <td>Food</td>
+        <td><input name="text8" type='text' disabled='disabled' id='food'  style="width:170px;" /></td>
+        <td>Convence</td>
+        <td ><input name="text8" type='text' disabled='disabled' id='convence' style="width:170px;" /></td>
+    </tr>
 
 		<tr>
         <td  width="92px"><b>Salary</b></td>
@@ -584,6 +599,12 @@ if($validation_errors != '')
         <td><b>Medical</b></td>
         <td ><input name="text8" type='text' disabled='disabled' id='cmallow' style="width:170px;" /></td>
       </tr>
+	  	<tr>
+        <td><b>Food</b></td>
+        <td><input name="text8" type='text' disabled='disabled' id='cfood'  style="width:170px;" /></td>
+        <td><b>Convence</b></td>
+        <td ><input name="text8" type='text' disabled='disabled' id='cconvence' style="width:170px;" /></td>
+    </tr>
 <tr>
 	<td colspan="4" style="text-align:left"><h3><b>Nominee Information</b></h3></td>
 </tr>
@@ -593,7 +614,6 @@ if($validation_errors != '')
         <td width="135px">Rel. with Nominee</td>
         <td ><input name="nomi_relation" type='text' id='nomi_relation'  style="width:170px;"  value="<?php echo set_value('nomi_relation'); ?>"/></td>
     </tr>
-	
 <tr>
   <td>Village</td>
   <td><input  type='text' style="width:170px;" id='nomi_vill' name="nomi_vill" value="<?php echo set_value('nomi_vill'); ?>"></td>

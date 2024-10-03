@@ -45,3 +45,9 @@ Select Date :
 <div id="loader"  align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;"><img src="<?php echo base_url();?>/images/ajax-loader.gif" /></div>
 </body>
 </html>
+
+<script>
+	document.ready({
+		grid_get_all_data();
+	});
+</script>

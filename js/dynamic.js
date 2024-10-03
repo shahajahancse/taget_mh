@@ -2158,6 +2158,7 @@ function basic_sal_cal(){
    }
  }
  	var gsal = document.getElementById('gsal').value;
+
  
 	//==================================BGMEA Salary Rule===================================
 		/*var bsal = (gsal * 60) / 100;
@@ -2191,6 +2192,10 @@ function basic_sal_cal(){
 		var hrent = Math.round((gsal - 2450) - bsal);
 		//alert(hrent)
 		document.getElementById('hrent').value = hrent;
+ 		var food = 1250;
+		document.getElementById('food').value = food;
+		var transport = 450;
+		document.getElementById('convence').value = transport;
 		//==================================New Salary Rule===================================
 }
 
@@ -2248,6 +2253,11 @@ function basic_sal_call(){
 		var chrent = Math.round((cgsal - 2450) - cbsal);
 		//alert(hrent)
 		document.getElementById('chrent').value = chrent;
+
+		var food = 1250;
+		document.getElementById('cfood').value = food;
+		var transport = 450;
+		document.getElementById('cconvence').value = transport;
 		//==================================New Salary Rule===================================
 }
 
@@ -2708,6 +2718,21 @@ ajaxRequest.onreadystatechange = function(){
 
 		var chrent = Math.round((cbsal * 50) / 100);
 		document.getElementById('chrent').value = chrent;
+
+
+		var food = 1250;
+		document.getElementById('food').value = food;
+		var transport = 450;
+		document.getElementById('convence').value = transport;
+
+ 		var cfood = 1250;
+		document.getElementById('cfood').value = cfood;
+		var transport = 450;
+		document.getElementById('cconvence').value = transport;
+
+
+
+
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{
@@ -3119,6 +3144,17 @@ ajaxRequest.onreadystatechange = function(){
 			
 		var chrent = Math.round((cbsal * 50) / 100);
 		document.getElementById('chrent').value = chrent;
+
+
+		var food = 1250;
+		document.getElementById('food').value = food;
+		var transport = 450;
+		document.getElementById('convence').value = transport;
+
+ 		var cfood = 1250;
+		document.getElementById('cfood').value = cfood;
+		var transport = 450;
+		document.getElementById('cconvence').value = transport;
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{
@@ -3534,6 +3570,17 @@ ajaxRequest.onreadystatechange = function(){
 			
 		var chrent = Math.round((cbsal * 50) / 100);
 		document.getElementById('chrent').value = chrent;
+
+
+				var food = 1250;
+		document.getElementById('food').value = food;
+		var transport = 450;
+		document.getElementById('convence').value = transport;
+
+ 		var cfood = 1250;
+		document.getElementById('cfood').value = cfood;
+		var transport = 450;
+		document.getElementById('cconvence').value = transport;
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{
@@ -10962,5 +11009,48 @@ function clear_data_incre_prom(){
 	document.getElementById('hrent').value = "";
 	document.getElementById('mallow').value = "";
 	
+}
+
+
+function fetch_data(){
+	var ajaxRequest;  
+	try{
+		ajaxRequest = new XMLHttpRequest();
+	}catch (e){
+		try{
+			ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+		}catch (e) {
+			try{
+				ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+			}catch (e){
+				return false;
+			}
+		}
+	}
+ 	p_start_date= document.getElementById('p_start_date').value;
+	if(p_start_date ==''){
+		alert('Please select date');
+		return ;
+	}
+ 
+ 	// var okyes;
+ 	// okyes=confirm('Are you want to fetch data?');
+	// if(okyes==false) return;
+	$("#loader").show();
+	hostname = window.location.hostname;
+	url =  "http://"+hostname+"/taget_mh/index.php/attn_process_con/fetch_data/";
+
+	var queryString="p_start_date="+p_start_date;
+	
+	ajaxRequest.open("POST", url, true);
+	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	ajaxRequest.send(queryString);
+	ajaxRequest.onreadystatechange = function(){
+		if(ajaxRequest.readyState == 4){
+			var resp = ajaxRequest.responseText;
+			$("#loader").hide();
+			alert(resp);
+		}
+	}
 }
 

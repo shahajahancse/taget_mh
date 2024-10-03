@@ -623,8 +623,7 @@ class Processdb extends CI_Model{
 		}
 	}
 	//---------------------------------
-	function insertdb1()
-	{
+	function insertdb1(){
 		
 		if($this->input->post('empid') =='')
 		{
@@ -1594,7 +1593,7 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 		$this->db->from('pr_emp_status');
 		$this->db->from('pr_emp_shift');
 		$where = "pr_emp_com_info.emp_id = '$emp_id' and pr_emp_com_info.emp_dept_id = pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and pr_emp_com_info.emp_desi_id = pr_designation.desig_id and pr_emp_com_info.emp_operation_id = pr_emp_operation.ope_id and pr_emp_com_info.emp_position_id = pr_emp_position.posi_id and pr_emp_com_info.emp_sal_gra_id = pr_grade.gr_id and pr_emp_com_info.emp_cat_id = pr_emp_status.stat_id and pr_emp_shift.shift_id = pr_emp_com_info.emp_shift";
-	//$where = "pr_emp_com_info.emp_id = '$emp_id'  and pr_emp_com_info.emp_id = pr_id_proxi.emp_id and pr_emp_com_info.emp_dept_id = pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and pr_emp_com_info.emp_desi_id = pr_designation.desig_id";	
+		//$where = "pr_emp_com_info.emp_id = '$emp_id'  and pr_emp_com_info.emp_id = pr_id_proxi.emp_id and pr_emp_com_info.emp_dept_id = 	pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and 	pr_emp_com_info.emp_desi_id = pr_designation.desig_id";	
 		$this->db->where($where);
 		$query = $this->db->get();
 		

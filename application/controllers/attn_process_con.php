@@ -92,6 +92,7 @@ class Attn_process_con extends CI_Controller {
 		$date2 = date('Y-m-d');
 		echo $days = $this->attn_process_model->get_date_to_date_day_differance($date1,$date2);	
 	}
+
 	
 }
 
