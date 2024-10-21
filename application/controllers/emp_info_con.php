@@ -37,25 +37,23 @@ class Emp_info_con extends CI_Controller {
 		$this->form_validation->set_rules('fadd', 'Parmanent Address', 'trim');
 		$this->form_validation->set_rules('dob', 'Date of Birth', 'trim');
 		$this->form_validation->set_rules('ejd', 'Date of Joining', 'trim|required');
-		$this->form_validation->set_rules('text2', 'Last Degree', 'trim');
-		$this->form_validation->set_rules('text3', 'Passing Year', 'trim');
-		$this->form_validation->set_rules('text4', 'Institute Name', 'trim');
-		$this->form_validation->set_rules('text5', 'Skill Department', 'trim');
-		$this->form_validation->set_rules('text6', 'Year(s) of Skill', 'trim');
-		$this->form_validation->set_rules('text7', 'Company Name', 'trim');
+		// $this->form_validation->set_rules('text2', 'Last Degree', 'trim');
+		// $this->form_validation->set_rules('text3', 'Passing Year', 'trim');
+		// $this->form_validation->set_rules('text4', 'Institute Name', 'trim');
+		// $this->form_validation->set_rules('text5', 'Skill Department', 'trim');
+		// $this->form_validation->set_rules('text6', 'Year(s) of Skill', 'trim');
+		// $this->form_validation->set_rules('text7', 'Company Name', 'trim');
 		$this->form_validation->set_rules('text8', 'Gross Salary', 'trim|required');
 			
-		if($this->input->post('pi_save') != '')
-		{
+		if($this->input->post('pi_save') != ''){
 			$this->form_validation->set_rules('idcard', 'Punch Card No.', 'trim|callback_proxi_id_check_for_save');
 			$this->form_validation->set_rules('empid', 'Employee ID', 'trim|required|alpha_numeric|callback_emp_id_existance_check');
 		}
-		elseif($this->input->post('pi_edit') != '')
-		{
-			$this->form_validation->set_rules('idcard', 'Punch Card No.', 'trim|callback_proxi_id_check_for_edit');
-		}
-		else
-		{
+		// elseif($this->input->post('pi_edit') != '')
+		// {
+		// 	$this->form_validation->set_rules('idcard', 'Punch Card No.', 'trim|callback_proxi_id_check_for_edit');
+		// }
+		else{
 			$this->form_validation->set_rules('idcard', 'Punch Card No.', 'trim');
 		}
 		
@@ -233,5 +231,42 @@ class Emp_info_con extends CI_Controller {
 		$result = $this->processdb->com_all_info();
 		echo $result;
 	}
+
+
+	function ajax_upazila_by_dis($id){
+
+        $data = array();
+        $this->db->select('id, name_bn');
+        $this->db->from('emp_upazilas');
+        $this->db->where('dis_id', $id);
+        $this->db->order_by('name_bn', 'ASC');
+        $query = $this->db->get()->result();
+
+        foreach ($query as $row) {
+            $data[$row->id] = $row->name_bn;
+        }
+
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo json_encode($data);
+        exit;
+    }
+
+	    function ajax_post_office_by_upa_id($id){
+
+        $data = array();
+        $this->db->select('id, name_bn');
+        $this->db->from('emp_post_offices');
+        $this->db->where('up_zil_id', $id);
+        $this->db->order_by('name_bn', 'ASC');
+        $query = $this->db->get()->result();
+
+        foreach ($query as $row) {
+            $data[$row->id] = $row->name_bn;
+        }
+
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo json_encode($data);
+        exit;
+    }
 }
 

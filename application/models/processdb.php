@@ -40,51 +40,120 @@ class Processdb extends CI_Model{
 					$error = array('error' => $this->upload->display_errors());
 					$img_error =  $error["error"];
 					echo "<SCRIPT LANGUAGE=\"JavaScript\">alert($img_error);</SCRIPT>";
-					$data = array(
-							'emp_full_name' 	=> $this->input->post('name'),
-							'bangla_nam' 		=> $this->input->post('bname'),
-							'emp_mname' 		=> $this->input->post('mname'),
-							'emp_fname' 		=> $this->input->post('fname'),
-							'emp_dob'  			=> $dob,
-							'emp_religion'  	=> $this->input->post('reli'),
-							'emp_sex'  			=> $this->input->post('sex'),
-							'emp_marital_status'=> $this->input->post('ms'),
-							'emp_blood'			=> $this->input->post('bgroup')
-						);
-					
+					exit;
 				}
-				else
-				{
+				else{
 					$data_up = array('upload_data' => $this->upload->data());
 					//print_r($data);
 					$img = $data_up["upload_data"]["file_name"];
 				
 					$data = array(
-							'emp_full_name' 	=> $this->input->post('name'),
-							'bangla_nam' 		=> $this->input->post('bname'),
-							'emp_mname' 		=> $this->input->post('mname'),
-							'emp_fname' 		=> $this->input->post('fname'),
-							'emp_dob'  			=> $dob,
-							'emp_religion'  	=> $this->input->post('reli'),
-							'emp_sex'  			=> $this->input->post('sex'),
-							'emp_marital_status'=> $this->input->post('ms'),
-							'emp_blood'			=> $this->input->post('bgroup'),
-							'img_source'		=> $img
+						'emp_id'		=> $this->input->post('empid'),
+						'emp_full_name' => $this->input->post('name'),
+						'bangla_nam' 	=> $this->input->post('bname'),
+						'emp_mname' 	=> $this->input->post('mname'),
+						'emp_fname' 	=> $this->input->post('fname'),
+						'emp_dob'  		=> $dob,
+						'emp_religion'  => $this->input->post('reli'),
+						'emp_sex'  		=> $this->input->post('sex'),
+						'emp_marital_status'  	=> $this->input->post('ms'),
+						'img_source'	=> $img,
+						'emp_blood'		=> $this->input->post('bgroup'),
+						'no_child'		=> $this->input->post('no_child'),
+						'education'		=> $this->input->post('education'),
+						'spouse_name'		=> $this->input->post('spouse_name'),
+
+						'pre_vill'		=> $this->input->post('pre_vill'),
+						'pre_district'	=> $this->input->post('pre_district'),
+						'pre_upazila'	=> $this->input->post('pre_upazila'),
+						'pre_post'		=> $this->input->post('pre_post'),
+						'per_vill'		=> $this->input->post('per_vill'),
+						'per_district'	=> $this->input->post('per_district'),
+						'per_upazila'	=> $this->input->post('per_upazila'),
+						'per_post'		=> $this->input->post('per_post'),
+						'nomi_name'		=> $this->input->post('nomi_name'),
+						'nomi_vill'		=> $this->input->post('nomi_vill'),
+						'nomi_district'	=> $this->input->post('nomi_district'),
+						'nomi_upazila'	=> $this->input->post('nomi_upazila'),
+						'nomi_post'		=> $this->input->post('nomi_post'),
+						'nomi_relation'	=> $this->input->post('nomi_relation'),
+						'exp_factory'	=> $this->input->post('exp_factory'),
+						'duration'	=> $this->input->post('duration'),
+						'exp_designation'	=> $this->input->post('exp_designation'),
+						'nid'			=> $this->input->post('nid'),
+						'personal_phone'	=> $this->input->post('personal_phone'),
+						'emergency_phone'	=> $this->input->post('emergency_phone'),
+
+
+						'm_name_bn'		 => $this->input->post('m_name_bn'),
+						'f_name_bn'		 => $this->input->post('f_name_bn'),
+						'spouse_name_bn' => $this->input->post('spouse_name_bn'),
+						'edu_bn'		 => $this->input->post('edu_bn'),
+						'pre_vill_bn'	 => $this->input->post('pre_vill_bn'),
+						'per_vill_bn'	 => $this->input->post('per_vill_bn'),
+						'nomi_name_bn'	 => $this->input->post('nomi_name_bn'),
+						'nomi_vill_bn'	 => $this->input->post('nomi_vill_bn'),
+
+
+						'm_name_bn'		 => $this->input->post('m_name_bn'),
+						'f_name_bn'		 => $this->input->post('f_name_bn'),
+						'spouse_name_bn' => $this->input->post('spouse_name_bn'),
+						'edu_bn'		 => $this->input->post('edu_bn'),
+						'pre_vill_bn'	 => $this->input->post('pre_vill_bn'),
+						'per_vill_bn'	 => $this->input->post('per_vill_bn'),
+						'nomi_name_bn'	 => $this->input->post('nomi_name_bn'),
+						'nomi_vill_bn'	 => $this->input->post('nomi_vill_bn'),
+
 						);
 				}
 			}
 			else
 			{
 				$data = array(
-						'emp_full_name'  		=> $this->input->post('name'),
-						'bangla_nam' 		=> $this->input->post('bname'),
-						'emp_mname' 			=> $this->input->post('mname'),
-						'emp_fname' 			=> $this->input->post('fname'),
-						'emp_dob'  				=> $dob,
-						'emp_religion'  		=> $this->input->post('reli'),
-						'emp_sex'  				=> $this->input->post('sex'),
-						'emp_marital_status'	=> $this->input->post('ms'),
-						'emp_blood'				=> $this->input->post('bgroup')
+						'emp_id'		=> $this->input->post('empid'),
+						'emp_full_name' => $this->input->post('name'),
+						'bangla_nam' 	=> $this->input->post('bname'),
+						'emp_mname' 	=> $this->input->post('mname'),
+						'emp_fname' 	=> $this->input->post('fname'),
+						'emp_dob'  		=> $dob,
+						'emp_religion'  => $this->input->post('reli'),
+						'emp_sex'  		=> $this->input->post('sex'),
+						'emp_marital_status'  	=> $this->input->post('ms'),
+						// 'img_source'	=> $img,
+						'emp_blood'		=> $this->input->post('bgroup'),
+						'no_child'		=> $this->input->post('no_child'),
+						'education'		=> $this->input->post('education'),
+						'spouse_name'		=> $this->input->post('spouse_name'),
+
+						'pre_vill'		=> $this->input->post('pre_vill'),
+						'pre_district'	=> $this->input->post('pre_district'),
+						'pre_upazila'	=> $this->input->post('pre_upazila'),
+						'pre_post'		=> $this->input->post('pre_post'),
+						'per_vill'		=> $this->input->post('per_vill'),
+						'per_district'	=> $this->input->post('per_district'),
+						'per_upazila'	=> $this->input->post('per_upazila'),
+						'per_post'		=> $this->input->post('per_post'),
+						'nomi_name'		=> $this->input->post('nomi_name'),
+						'nomi_vill'		=> $this->input->post('nomi_vill'),
+						'nomi_district'	=> $this->input->post('nomi_district'),
+						'nomi_upazila'	=> $this->input->post('nomi_upazila'),
+						'nomi_post'		=> $this->input->post('nomi_post'),
+						'nomi_relation'	=> $this->input->post('nomi_relation'),
+						'exp_factory'	=> $this->input->post('exp_factory'),
+						'duration'	=> $this->input->post('duration'),
+						'exp_designation'	=> $this->input->post('exp_designation'),
+						'nid'			=> $this->input->post('nid'),
+						'personal_phone'	=> $this->input->post('personal_phone'),
+						'emergency_phone'	=> $this->input->post('emergency_phone'),
+
+						'm_name_bn'		 => $this->input->post('m_name_bn'),
+						'f_name_bn'		 => $this->input->post('f_name_bn'),
+						'spouse_name_bn' => $this->input->post('spouse_name_bn'),
+						'edu_bn'		 => $this->input->post('edu_bn'),
+						'pre_vill_bn'	 => $this->input->post('pre_vill_bn'),
+						'per_vill_bn'	 => $this->input->post('per_vill_bn'),
+						'nomi_name_bn'	 => $this->input->post('nomi_name_bn'),
+						'nomi_vill_bn'	 => $this->input->post('nomi_vill_bn'),
 					);
 			}
 			//print_r(data);
@@ -92,19 +161,20 @@ class Processdb extends CI_Model{
 			$v1 = $this->db->update('pr_emp_per_info', $data);
 				
 				
-			$adddata = array(
-				'emp_pre_add' 	=> $this->input->post('padd'),
-				'emp_par_add'	=> $this->input->post('fadd')
-						);
-			//print_r(adddata);
-			$this->db->where('emp_id',$id);
-			$v2 = $this->db->update('pr_emp_add', $adddata);
+			// $adddata = array(
+			// 	'emp_pre_add' 	=> $this->input->post('padd'),
+			// 	'emp_par_add'	=> $this->input->post('fadd')
+			// 			);
+			// //print_r(adddata);
+			// $this->db->where('emp_id',$id);
+			// $v2 = $this->db->update('pr_emp_add', $adddata);
 			
 			
 			
 											
 			$data2 = array(
 					'emp_dept_id'  		=> $this->input->post('dept'),
+					'proxi_id'  		=> $this->input->post('idcard'),
 					'emp_sec_id' 		=> $this->input->post('sec'),
 					'emp_line_id' 		=> $this->input->post('line'),
 					'emp_desi_id'  		=> $this->input->post('desig'),
@@ -114,6 +184,9 @@ class Processdb extends CI_Model{
 					//'emp_cat_id'  		=> $this->input->post('empstat'),
 					'emp_shift'  		=> $this->input->post('empshift'),
 					'gross_sal'  		=> $this->input->post('text8'),
+					'com_gross_sal'  		=> $this->input->post('com_gross_sal'),
+					'account'  			=> $this->input->post('account'),
+					'work_type'  			=> $this->input->post('work_type'),
 					'ot_entitle'  		=> $this->input->post('otentitle'),
 					'transport'  		=> $this->input->post('transport'),
 					'lunch'  			=> $this->input->post('lunch'),
@@ -126,30 +199,30 @@ class Processdb extends CI_Model{
 			$this->db->where('emp_id',$id);
 			$v3 = $this->db->update('pr_emp_com_info', $data2);
 			
-			$data_edu = array(
-					'emp_degree'  => $this->input->post('text2'),
-					'emp_pass_yr' => $this->input->post('text3'),
-					'emp_ins' => $this->input->post('text4')
-					);
+			// $data_edu = array(
+			// 		'emp_degree'  => $this->input->post('text2'),
+			// 		'emp_pass_yr' => $this->input->post('text3'),
+			// 		'emp_ins' => $this->input->post('text4')
+			// 		);
 			
-			$this->db->where('emp_id',$id);
-			$v4 =$this->db->update('pr_emp_edu', $data_edu);
+			// $this->db->where('emp_id',$id);
+			// $v4 =$this->db->update('pr_emp_edu', $data_edu);
 							
 			//print_r(data_edu);				
 							
 							
-			$data_skill = array(
-					'emp_skill'  => $this->input->post('text5'),
-					'emp_yr_skill' => $this->input->post('text6'),
-					'emp_com_name' => $this->input->post('text7')
-				);
-			//print_r(data_skill);
-			$this->db->where('emp_id',$id);
-			$v5= $this->db->update('pr_emp_skill', $data_skill);
+			// $data_skill = array(
+			// 		'emp_skill'  => $this->input->post('text5'),
+			// 		'emp_yr_skill' => $this->input->post('text6'),
+			// 		'emp_com_name' => $this->input->post('text7')
+			// 	);
+			// //print_r(data_skill);
+			// $this->db->where('emp_id',$id);
+			// $v5= $this->db->update('pr_emp_skill', $data_skill);
 			
-			$pr_id_proxi = array('proxi_id'  => $this->input->post('idcard'));
-			$this->db->where('emp_id',$id);
-			$v6 = $this->db->update('pr_id_proxi', $pr_id_proxi);
+			// $pr_id_proxi = array('proxi_id'  => $this->input->post('idcard'));
+			// $this->db->where('emp_id',$id);
+			// $v6 = $this->db->update('pr_id_proxi', $pr_id_proxi);
 			
 			if( $v1 or $v2 or $v3 or $v4 or $v5 or $v6) 
 			{
@@ -543,8 +616,7 @@ class Processdb extends CI_Model{
 		}
 	}
 	//---------------------------------
-	function insertdb1()
-	{
+	function insertdb1(){
 		
 		if($this->input->post('empid') =='')
 		{
@@ -594,20 +666,44 @@ class Processdb extends CI_Model{
 						'emp_religion'  => $this->input->post('reli'),
 						'emp_sex'  		=> $this->input->post('sex'),
 						'emp_marital_status'  	=> $this->input->post('ms'),
+						'img_source'	=> $img,
 						'emp_blood'		=> $this->input->post('bgroup'),
-						'img_source'	=> $img
+						'no_child'		=> $this->input->post('no_child'),
+						'education'		=> $this->input->post('education'),
+						'spouse_name'		=> $this->input->post('spouse_name'),
+
+						'pre_vill'		=> $this->input->post('pre_vill'),
+						'pre_district'	=> $this->input->post('pre_district'),
+						'pre_upazila'	=> $this->input->post('pre_upazila'),
+						'pre_post'		=> $this->input->post('pre_post'),
+						'per_vill'		=> $this->input->post('per_vill'),
+						'per_district'	=> $this->input->post('per_district'),
+						'per_upazila'	=> $this->input->post('per_upazila'),
+						'per_post'		=> $this->input->post('per_post'),
+						'nomi_name'		=> $this->input->post('nomi_name'),
+						'nomi_vill'		=> $this->input->post('nomi_vill'),
+						'nomi_district'	=> $this->input->post('nomi_district'),
+						'nomi_upazila'	=> $this->input->post('nomi_upazila'),
+						'nomi_post'		=> $this->input->post('nomi_post'),
+						'nomi_relation'	=> $this->input->post('nomi_relation'),
+						'exp_factory'	=> $this->input->post('exp_factory'),
+						'duration'	=> $this->input->post('duration'),
+						'exp_designation'	=> $this->input->post('exp_designation'),
+						'nid'			=> $this->input->post('nid'),
+						'personal_phone'	=> $this->input->post('personal_phone'),
+						'emergency_phone'	=> $this->input->post('emergency_phone'),
 						);
 						
 			$this->db->insert('pr_emp_per_info', $data);
 			//	print_r($data);
 						//echo "<br/>";
 						
-			$adddata = array(
-						'emp_id'		=> $this->input->post('empid'),
-						'emp_pre_add'  	=> $this->input->post('padd'),
-						'emp_par_add'  	=> $this->input->post('fadd')
-						);
-			$this->db->insert('pr_emp_add', $adddata) ;
+			// $adddata = array(
+			// 			'emp_id'		=> $this->input->post('empid'),
+			// 			'emp_pre_add'  	=> $this->input->post('padd'),
+			// 			'emp_par_add'  	=> $this->input->post('fadd')
+			// 			);
+			// $this->db->insert('pr_emp_add', $adddata) ;
 			//print_r($adddata);
 						//echo "<br/>";
 			$ejd = $this->input->post('ejd');
@@ -615,6 +711,7 @@ class Processdb extends CI_Model{
 					
 			$data2 = array(
 						'emp_id'			=> $this->input->post('empid'),
+						'proxi_id'			=> $this->input->post('idcard'),
 						'emp_dept_id'  		=> $this->input->post('dept'),
 						'emp_sec_id' 		=> $this->input->post('sec'),
 						'emp_line_id' 		=> $this->input->post('line'),
@@ -625,6 +722,9 @@ class Processdb extends CI_Model{
 						'emp_cat_id'  		=> $this->input->post('empstat'),
 						'emp_shift'  		=> $this->input->post('empshift'),
 						'gross_sal'  		=> $this->input->post('text8'),
+						'com_gross_sal'     => $this->input->post('com_gross_sal'),
+						'account'           => $this->input->post('account'),
+						'work_type'  		=> $this->input->post('work_type'),
 						'ot_entitle'  		=> $this->input->post('otentitle'),
 						'transport'  		=> $this->input->post('transport'),
 						'lunch'  			=> $this->input->post('lunch'),
@@ -1466,155 +1566,175 @@ return $alldata = "$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$d
 
 //-----------------------------------
 
-	function com_info_search1($emp_id)
-	{
-		
-		
-		
-		//$emp_id = $this->input->post('empid');
-
-		$this->db->select('pr_emp_com_info.emp_id as emp_id,pr_id_proxi.proxi_id as proxi_id,pr_dept.dept_name as dept_name,pr_section.sec_name as sec_name,pr_line_num.line_name as line_name,pr_designation.desig_name as desig_name, pr_emp_operation.ope_name as ope_name, pr_emp_position.posi_name as posi_name, pr_grade.gr_name as gr_name,pr_emp_status.stat_type as stat_type, pr_emp_com_info.gross_sal as gross_sal, pr_emp_com_info.emp_join_date as emp_join_date,pr_emp_com_info.ot_entitle as ot_entitle,pr_emp_com_info.transport as transport,pr_emp_com_info.lunch as lunch,pr_emp_com_info.att_bonus as att_bonus, pr_emp_com_info.salary_draw as salary_draw, pr_emp_com_info.salary_type as salary_type, pr_emp_shift.shift_name as shift_name');
-		//$this->db->select('pr_emp_com_info.emp_id as emp_id,pr_id_proxi.proxi_id as proxi_id,pr_dept.dept_name as dept_name,pr_section.sec_name as sec_name,pr_line_num.line_name as line_name,pr_designation.desig_name as desig_name');
-		$this->db->from('pr_emp_com_info');
-		$this->db->from('pr_id_proxi');
-		$this->db->from('pr_dept');
-		$this->db->from('pr_section');
-		$this->db->from('pr_line_num');
-		$this->db->from('pr_designation');
-		$this->db->from('pr_emp_operation');
-		$this->db->from('pr_emp_position');
-		$this->db->from('pr_grade');
-		$this->db->from('pr_emp_status');
-		$this->db->from('pr_emp_shift');
-		$where = "pr_emp_com_info.emp_id = '$emp_id'  and pr_emp_com_info.emp_id = pr_id_proxi.emp_id and pr_emp_com_info.emp_dept_id = pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and pr_emp_com_info.emp_desi_id = pr_designation.desig_id and pr_emp_com_info.emp_operation_id = pr_emp_operation.ope_id and pr_emp_com_info.emp_position_id = pr_emp_position.posi_id and pr_emp_com_info.emp_sal_gra_id = pr_grade.gr_id and pr_emp_com_info.emp_cat_id = pr_emp_status.stat_id and pr_emp_shift.shift_id = pr_emp_com_info.emp_shift";
-	//$where = "pr_emp_com_info.emp_id = '$emp_id'  and pr_emp_com_info.emp_id = pr_id_proxi.emp_id and pr_emp_com_info.emp_dept_id = pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and pr_emp_com_info.emp_desi_id = pr_designation.desig_id";	
-		$this->db->where($where);
-		$query = $this->db->get();
-		
-		//echo $this->db->last_query();
-		//print_r($query->result());
-		$this->db->select('*');
-		$this->db->where('emp_id',$emp_id);
-		$query1 = $this->db->get('pr_emp_com_info');
-		//echo $query->num_rows();
-		
-		if($query1->num_rows() > 0 )
-		{
-			foreach ($query->result() as $row)
-			{
-				$ejd = $row->emp_join_date;
-				$ejd = date("d-m-Y", strtotime($ejd)); 
-				
-				$data = array(
-						'emp_id'		=> $row->emp_id,
-						'proxi_id'  	=> $row->proxi_id,
-						'dept_name'  	=> $row->dept_name,
-						'sec_name' 		=> $row->sec_name,
-						'line_name' 	=> $row->line_name,
-						'desig_name'  	=> $row->desig_name,
-						'ope_name'  	=> $row->ope_name,
-						'posi_name'  	=> $row->posi_name,
-						'gr_name'  		=> $row->gr_name,
-						'stat_type'  	=> $row->stat_type,
-						'shift_name'  	=> $row->shift_name,
-						'gross_sal'  	=> $row->gross_sal,
-						'ot_entitle'  	=> $row->ot_entitle,
-						'transport'  	=> $row->transport,
-						'lunch'  		=> $row->lunch,
-						'att_bonus'  	=> $row->att_bonus,
-						'emp_join_date'	=> $ejd,
-						'salary_draw'	=> $row->salary_draw,
-						'salary_type'	=> $row->salary_type
-				);
-				 
-			}
-			//return $data;
-			//print_r($data);
-			
-			//GET DEPARTMENT ID BY EMP ID
-			$this->db->select('emp_dept_id');
-			$this->db->where('emp_id',$emp_id);
-			$query2 = $this->db->get('pr_emp_com_info');
-			$row = $query2->row();
-			$dept_id = $row->emp_dept_id;
-   			//END
-			
-			
-			$com_info = implode('=*=', $data);
-			
-			//echo $com_info;
-			
-			$this->db->select('pr_emp_com_info.emp_id as empid,pr_emp_add.*,pr_emp_edu.* ,pr_emp_per_info.*,pr_emp_skill.*');
-			$this->db->from('pr_emp_com_info');
-			$this->db->from('pr_emp_add');
-			$this->db->from('pr_emp_edu');
-			$this->db->from('pr_emp_per_info');
-			$this->db->from('pr_emp_skill');
-			$where = "pr_emp_com_info.emp_id = '$emp_id' and pr_emp_com_info.emp_id =pr_emp_add.emp_id and pr_emp_com_info.emp_id  = pr_emp_edu.emp_id and pr_emp_com_info.emp_id = pr_emp_per_info.emp_id and pr_emp_com_info.emp_id = pr_emp_skill.emp_id";
-		
-			$this->db->where($where);
-			$query4 = $this->db->get();
-			foreach ($query4->result() as $row)
-			{
-				$emp_dob = $row->emp_dob;
-				$emp_dob = date("d-m-Y", strtotime($emp_dob)); 
-				
-				$data2 = array(
-						'emp_id'				=> $row->emp_id,
-						'emp_pre_add'  			=> $row->emp_pre_add,
-						'emp_par_add'  			=> $row->emp_par_add,
-						
-						
-						'emp_degree' 			=> $row->emp_degree,
-						'emp_pass_yr'  			=> $row->emp_pass_yr,
-						'emp_ins'  				=> $row->emp_ins,
-						
-						'emp_skill'  			=> $row->emp_skill,
-						'emp_yr_skill'  		=> $row->emp_yr_skill,
-						'emp_com_name'  		=> $row->emp_com_name,
-						
-						
-						'emp_full_name'  		=> $row->emp_full_name,
-						'emp_fname'  			=> $row->emp_fname,
-						'emp_mname'  			=> $row->emp_mname,
-						'emp_dob'  				=> $emp_dob,
-						'emp_religion'  		=> $row->emp_religion,
-						'emp_sex'  				=> $row->emp_sex,
-						'emp_marital_status'  	=> $row->emp_marital_status,
-						'emp_blood'  			=> $row->emp_blood ,
-						'img_source'  			=> $row->img_source,
-						'bangla_nam'  		    => $row->bangla_nam,
-						'id_skill'  			=> $row->id
-						
-				);
-				 
-			}
-			
-			$other_info = implode('=*=', $data2);
-		//print_r($data2);
-				
-			$dept_id_name = $this->dept();	
-			$sec_id_name = $this->dept_search($dept_id);
-			$line_id_name = $this->section_search();
-			$desig_id_name = $this->desig_search($dept_id);
-			$operation_id_name = $this->operation();
-			$position_id_name = $this->position();
-			$salg_id_name = $this->grade_search();
-			$empstat_id_name = $this->empstat_search();
-			$attbonus_id_name = $this->attbonus_search();
-			$shift_id_name = $this->shift_search();
-			
-			
-return $alldata = "$other_info-*-$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$desig_id_name-*-$operation_id_name-*-$position_id_name-*-$salg_id_name-*-$empstat_id_name-*-$shift_id_name-*-$attbonus_id_name";
-			
-			//echo json_encode($data);
-		}
-		else
-		{
-			echo "Employee ID does not exist";
-		}
+function com_info_search1($emp_id)
+{
 	
+	
+	
+	//$emp_id = $this->input->post('empid');
+
+	$this->db->select('pr_emp_com_info.emp_id as emp_id,pr_emp_com_info.work_type as work_type,pr_emp_com_info.proxi_id as proxi_id,pr_dept.dept_name as dept_name,pr_section.sec_name as sec_name,pr_line_num.line_name as line_name,pr_designation.desig_name as desig_name, pr_emp_operation.ope_name as ope_name, pr_emp_position.posi_name as posi_name, pr_grade.gr_name as gr_name,pr_emp_status.stat_type as stat_type, pr_emp_com_info.gross_sal as gross_sal,pr_emp_com_info.com_gross_sal as com_gross_sal, pr_emp_com_info.emp_join_date as emp_join_date,pr_emp_com_info.ot_entitle as ot_entitle,pr_emp_com_info.transport as transport,pr_emp_com_info.lunch as lunch,pr_emp_com_info.att_bonus as att_bonus, pr_emp_com_info.salary_draw as salary_draw, pr_emp_com_info.salary_type as salary_type, pr_emp_shift.shift_name as shift_name, pr_emp_com_info.account');
+	//$this->db->select('pr_emp_com_info.emp_id as emp_id,pr_id_proxi.proxi_id as proxi_id,pr_dept.dept_name as dept_name,pr_section.sec_name as sec_name,pr_line_num.line_name as line_name,pr_designation.desig_name as desig_name');
+	$this->db->from('pr_emp_com_info');
+	// $this->db->from('pr_id_proxi');
+	$this->db->from('pr_dept');
+	$this->db->from('pr_section');
+	$this->db->from('pr_line_num');
+	$this->db->from('pr_designation');
+	$this->db->from('pr_emp_operation');
+	$this->db->from('pr_emp_position');
+	$this->db->from('pr_grade');
+	$this->db->from('pr_emp_status');
+	$this->db->from('pr_emp_shift');
+	$where = "pr_emp_com_info.emp_id = '$emp_id' and pr_emp_com_info.emp_dept_id = pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and pr_emp_com_info.emp_desi_id = pr_designation.desig_id and pr_emp_com_info.emp_operation_id = pr_emp_operation.ope_id and pr_emp_com_info.emp_position_id = pr_emp_position.posi_id and pr_emp_com_info.emp_sal_gra_id = pr_grade.gr_id and pr_emp_com_info.emp_cat_id = pr_emp_status.stat_id and pr_emp_shift.shift_id = pr_emp_com_info.emp_shift";
+	//$where = "pr_emp_com_info.emp_id = '$emp_id'  and pr_emp_com_info.emp_id = pr_id_proxi.emp_id and pr_emp_com_info.emp_dept_id = 	pr_dept.dept_id and pr_emp_com_info.emp_sec_id = pr_section.sec_id and pr_emp_com_info.emp_line_id = pr_line_num.line_id and 	pr_emp_com_info.emp_desi_id = pr_designation.desig_id";	
+	$this->db->where($where);
+	$query = $this->db->get();
+	
+	//echo $this->db->last_query();
+	// echo "<pte>";print_r($query->result());exit;
+	$this->db->select('*');
+	$this->db->where('emp_id',$emp_id);
+	$query1 = $this->db->get('pr_emp_com_info');
+	//echo $query->num_rows();
+	
+	if($query1->num_rows() > 0 )
+	{
+		foreach ($query->result() as $row)
+		{
+			// dd($row);
+			$ejd = $row->emp_join_date;
+			$ejd = date("d-m-Y", strtotime($ejd)); 
+			
+			$data = array(
+					'emp_id'		=> $row->emp_id,
+					'proxi_id'  	=> $row->proxi_id,
+					'dept_name'  	=> $row->dept_name,
+					'sec_name' 		=> $row->sec_name,
+					'line_name' 	=> $row->line_name,
+					'desig_name'  	=> $row->desig_name,
+					'ope_name'  	=> $row->ope_name,
+					'posi_name'  	=> $row->posi_name,
+					'gr_name'  		=> $row->gr_name,
+					'stat_type'  	=> $row->stat_type,
+					'shift_name'  	=> $row->shift_name,
+					'gross_sal'  	=> $row->gross_sal,
+					'com_gross_sal' => $row->com_gross_sal,
+					'account'  		=> $row->account,
+					'work_type'  	=> $row->work_type,
+					'ot_entitle'  	=> $row->ot_entitle,
+					'transport'  	=> $row->transport,
+					'lunch'  		=> $row->lunch,
+					'att_bonus'  	=> $row->att_bonus,
+					'emp_join_date'	=> $ejd,
+					'salary_draw'	=> $row->salary_draw,
+					'salary_type'	=> $row->salary_type
+			);
+			 
+		}
+		//return $data;
+		// dd($data);
+		
+		//GET DEPARTMENT ID BY EMP ID
+		$this->db->select('emp_dept_id');
+		$this->db->where('emp_id',$emp_id);
+		$query2 = $this->db->get('pr_emp_com_info');
+		$row = $query2->row();
+		$dept_id = $row->emp_dept_id;
+		   //END
+		
+		
+		$com_info = implode('=*=', $data);
+		
+		//echo $com_info;
+		
+		$this->db->select('pr_emp_com_info.emp_id as empid,pr_emp_com_info.proxi_id as proxi_id,pr_emp_per_info.*');
+		$this->db->from('pr_emp_com_info');
+		$this->db->from('pr_emp_per_info');
+		$where = "pr_emp_com_info.emp_id = '$emp_id' and pr_emp_com_info.emp_id = pr_emp_per_info.emp_id";
+	
+		$this->db->where($where);
+		$query4 = $this->db->get();
+		foreach ($query4->result() as $row)
+		{
+			$emp_dob = $row->emp_dob;
+			$emp_dob = date("d-m-Y", strtotime($emp_dob)); 
+			
+			$data2 = array(
+				'emp_full_name'  		=> $row->emp_full_name,
+				'bangla_nam'  		    => $row->bangla_nam,
+				'emp_fname'  			=> $row->emp_fname,
+				'emp_mname'  			=> $row->emp_mname,
+				'spouse_name'  			=> $row->spouse_name,
+				'no_child'  			=> $row->no_child,
+				'emp_dob'  				=> $emp_dob,
+				'img_source'  			=> $row->img_source,
+				'emp_religion'  		=> $row->emp_religion,
+				'emp_sex'  				=> $row->emp_sex,
+				'emp_marital_status'  	=> $row->emp_marital_status,
+				'emp_blood'  			=> $row->emp_blood ,
+				'education' 			=> $row->education,
+				'exp_factory'  			=> $row->exp_factory,
+				'duration'  			=> $row->duration,
+				'exp_designation'  		=> $row->exp_designation,
+				'emp_id'				=> $row->emp_id,
+				'proxi_id'				=> $row->proxi_id,
+				'pre_vill'				=> $row->pre_vill,
+				'pre_district'			=> $row->pre_district,
+				'pre_upazila'			=> $row->pre_upazila,
+				'pre_post'				=> $row->pre_post,
+				'per_vill'				=> $row->per_vill,
+				'per_district'			=> $row->per_district,
+				'per_upazila'			=> $row->per_upazila,
+				'per_post'				=> $row->per_post,
+				'nomi_vill'				=> $row->nomi_vill,
+				'nomi_district'			=> $row->nomi_district,
+				'nomi_upazila'			=> $row->nomi_upazila,
+				'nomi_post'				=> $row->nomi_post,
+				'nomi_name'				=> $row->nomi_name,
+				'nomi_relation'			=> $row->nomi_relation,
+				'nid'					=> $row->nid,
+				'personal_phone'		=> $row->personal_phone,
+				'emergency_phone'		=> $row->emergency_phone,
+				'm_name_bn' 			=> $row->m_name_bn,
+				'f_name_bn' 			=> $row->f_name_bn,
+				'spouse_name_bn' 		=> $row->spouse_name_bn,
+				'edu_bn' 				=> $row->edu_bn,
+				'pre_vill_bn' 			=> $row->pre_vill_bn,
+				'per_vill_bn' 			=> $row->per_vill_bn,
+				'nomi_name_bn' 			=> $row->nomi_name_bn,
+				'nomi_vill_bn' 			=> $row->nomi_vill_bn,
+				
+				
+					
+			);
+			 
+		}
+		
+		$other_info = implode('=*=', $data2);
+		// echo "<pre>"; print_r($data2);exit;
+			
+		$dept_id_name 		= $this->dept();	
+		$sec_id_name 		= $this->dept_search($dept_id);
+		$line_id_name 		= $this->section_search();
+		$desig_id_name 		= $this->desig_search($dept_id);
+		$operation_id_name 	= $this->operation();
+		$position_id_name 	= $this->position();
+		$salg_id_name 		= $this->grade_search();
+		$empstat_id_name 	= $this->empstat_search();
+		$attbonus_id_name 	= $this->attbonus_search();
+		$shift_id_name 		= $this->shift_search();
+		
+		
+		return $alldata = "$other_info-*-$com_info-*-$dept_id_name-*-$sec_id_name-*-$line_id_name-*-$desig_id_name-*-$operation_id_name-*-$position_id_name-*-$salg_id_name-*-$empstat_id_name-*-$shift_id_name-*-$attbonus_id_name";
+					
+		//echo json_encode($data);
 	}
+	else{
+		echo "Employee ID does not exist";
+	}
+
+}
 	
 //---------------------------
 	function com_incre_prom_search()

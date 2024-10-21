@@ -3,17 +3,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>MSH Payroll Reports</title>
-
+	
 	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>themes/redmond/jquery-ui-1.8.2.custom.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>themes/ui.jqgrid.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>css/calendar.css" />
-
+		
 	<script src="<?php echo base_url(); ?>js/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo base_url(); ?>js/i18n/grid.locale-en.js" type="text/javascript"></script>
 	<script src="<?php echo base_url(); ?>js/jquery.jqGrid.min.js" type="text/javascript"></script>
 	<script src="<?php echo base_url(); ?>js/grid_content.js" type="text/javascript"></script>
 	<script src="<?php echo base_url(); ?>js/calendar_eu.js" type="text/javascript"></script>
-
+	
 
 </head>
 <body bgcolor="#ECE9D8">
@@ -34,11 +34,11 @@
 		// input name
 		'controlname': 'firstdate'
 	});
-
+	
 	// individual template parameters can be modified via the calendar variable
 	o_cal.a_tpl.yearscroll = false;
 	o_cal.a_tpl.weekstart = 6;
-
+	
 	</script>
 </td>
 <td>TO Second Date</td><td>:</td><td> <input type="text" name="seconddate" id="seconddate" style="width:100px;"/></td>
@@ -50,11 +50,11 @@
 		// input name
 		'controlname': 'seconddate'
 	});
-
+	
 	// individual template parameters can be modified via the calendar variable
 	o_cal.a_tpl.yearscroll = false;
 	o_cal.a_tpl.weekstart = 6;
-
+	
 	</script>
 </td>
 </tr>
@@ -70,7 +70,7 @@
 <fieldset style='width:95%;'><legend><font size='+1'><b>Category Options</b></font></legend>
 <table>
 <tr>
-<td>Start</td><td>:</td><td><select name='grid_start' id='grid_start' style="width:250px;" onchange='grid_get_all_data()' /><option value='Select'>Select</option><option selected value='all'>ALL</option></select></td>
+<td>Start</td><td>:</td><td><select name='grid_start' id='grid_start' style="width:250px;" onchange='grid_get_all_data()' /><option value='Select'>Select</option><option value='all'>ALL</option></select></td>
 <td>Dept. </td><td>:</td><td><select id='grid_dept' name='grid_dept' style="width:250px;" onChange="grid_all_search()"><option value=''></option></select></td>
 </tr>
 <tr><td>Section </td><td>:</td><td><select id='grid_section' name='grid_section' style="width:250px;" onChange="grid_all_search()"><option value=''></option></select></td>
@@ -213,48 +213,35 @@ if(!in_array(10,$acl))
 
 
 <script>
-
-
-document.addEventListener("DOMContentLoaded", function() {
-	grid_get_all_data()
-
-});
-
-
-
-
-
-
-
 	var grid_actual_job_card_window; // Declare a variable outside the function to store the window reference
 
 	function grid_actual_job_card(){
-		var firstdate = document.getElementById('firstdate').value;
+		var firstdate = document.getElementById('firstdate').value;    
 		if(firstdate == ''){
 			alert("Please select First date");
 			return;
 		}
-		var seconddate = document.getElementById('seconddate').value;
+		var seconddate = document.getElementById('seconddate').value;    
 		if(seconddate == ''){
 			alert("Please select Second date");
 			return;
 		}
-
+		
 		var grid_start = document.getElementById('grid_start').value;
 		if(grid_start == 'Select'){
 			alert("Please select Category options");
 			return;
 		}
-
+		
 		$grid  = $("#list1");
 		var id_array = $grid.getGridParam('selarrrow');
 		var spl = (id_array.join('xxx'));
-
+		
 		if(spl == ''){
 			alert("Please select Employee ID");
 			return;
 		}
-
+		
 		var hostname = window.location.hostname;
 		var url =  "http://" + hostname + "/erp_target_net/index.php/grid_con/grid_actual_job_card/" + firstdate + "/" + seconddate + "/" + spl;
 
@@ -263,8 +250,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		} else {
 			grid_actual_job_card_window.location.href = url;
 		}
-
-		grid_actual_job_card_window.moveTo(0,0);
+		
+		grid_actual_job_card_window.moveTo(0,0);    
 		grid_actual_job_card_window.focus(); // Bring the window to focus
 	}
 
