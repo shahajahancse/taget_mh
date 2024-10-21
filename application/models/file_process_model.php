@@ -111,7 +111,6 @@ class File_process_model extends CI_Model{
 			}
 			$lines = file($file_name);
 			$out = array();
-			$data=array();
 			foreach(array_values($lines)  as $k=>$line) {
 				if($k==0){
 					continue;
@@ -121,15 +120,14 @@ class File_process_model extends CI_Model{
 				if(!empty($len)){
 					$log = preg_split('/\s+/', trim($line));
 
-					// echo "<pre>";print_r($log);
-					// exit;
+					// echo "<pre>";print_r($log);exit;
 					// $log = explode(' ',$log);
 
 					$prox_no = $log[0];
 					$date = $log[1];
 					$time = $log[2];
 					$format = $log[3];
-					$device_id = 0;
+					$device_id = $log[4];
 
 					if(in_array($prox_no, $proxi)){
 						
@@ -141,7 +139,6 @@ class File_process_model extends CI_Model{
 						$num_rows1 = mysql_num_rows($result1);
 
 						if($num_rows1 == 0 ){
-							// dd('kohi he');
 							$data = array(
 								'device_id' => ($device_id == 0 || $device_id =='')? 33:$device_id,
 								'proxi_id' 	=> $prox_no,
@@ -153,10 +150,6 @@ class File_process_model extends CI_Model{
 				}
 				
 			}
-			// dd($data);
-			// $this->db->insert_batch($att_table , $data);
-
-
 			echo "File fetched successfully";
 		}else{
 			echo "Please upload file first";

@@ -420,10 +420,10 @@ function grid_daily_present_report()
 
 	var queryString="firstdate="+firstdate+"&status="+status+"&spl="+spl;
 	 hostname = window.location.hostname;
- pathname = window.location.pathname;
+  pathname = window.location.pathname;
  var folder_name = pathname.split("/");
  folder = folder_name[1];
-	url =  "http://"+hostname+"/"+folder+"/index.php/grid_con/grid_daily_report/";
+	url = "http://"+hostname+"/"+folder+"/index.php/grid_con/grid_daily_report/";
 
 
     ajaxRequest.open("POST", url, true);

@@ -52,6 +52,11 @@ function empty_pi(){
 	document.getElementById('mallow').value = "";
 	document.getElementById('ejd').value = "";
 
+	document.getElementById('cgsal').value = "";
+	document.getElementById('cbsal').value = "";
+	document.getElementById('chrent').value = "";
+	document.getElementById('cmallow').value = "";
+
 }
  
  function empty_edu_skill(){
@@ -106,7 +111,7 @@ var ajaxRequest;  // The variable that makes Ajax possible!
  
 var img = document.com_per_info.source.value;
 hostname = window.location.hostname;
-document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 document.image.height = 200;
 document.image.width = 150;
 
@@ -1388,7 +1393,7 @@ ajaxRequest.onreadystatechange = function(){
 		document.getElementById('fadd').value = personalinfo[12];
 		
 		hostname = window.location.hostname;
-		document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 200;
 		document.image.width = 150;
 	
@@ -1827,6 +1832,7 @@ function com_info_insert(){
 	var empstat = document.getElementById('empstat').value;
 	var empshift = document.getElementById('empshift').value;
 	var gsal = document.getElementById('gsal').value;
+	var cgsal = document.getElementById('cgsal').value;
 	var otentitle = document.getElementById('otentitle').value;
 	var transport = document.getElementById('transport').value;
 	var lunch = document.getElementById('lunch').value;
@@ -1913,7 +1919,7 @@ if(saltype=='Select' || saltype==''){
 	
 	
 	 
-	var queryString="com_empid="+com_empid+"&idcard="+idcard+"&dept="+dept+"&sec="+sec+"&line="+line+"&desig="+desig+"&operation="+operation+"&position="+position+"&salg="+salg+"&empstat="+empstat+"&empshift="+empshift+"&gsal="+gsal+"&otentitle="+otentitle+"&transport="+transport+"&lunch="+lunch+"&attbonus="+attbonus+"&ejd="+ejd+"&saldraw="+saldraw+"&saltype="+saltype;
+	var queryString="com_empid="+com_empid+"&idcard="+idcard+"&dept="+dept+"&sec="+sec+"&line="+line+"&desig="+desig+"&operation="+operation+"&position="+position+"&salg="+salg+"&empstat="+empstat+"&empshift="+empshift+"&gsal="+gsal+"&cgsal="+cgsal+"&otentitle="+otentitle+"&transport="+transport+"&lunch="+lunch+"&attbonus="+attbonus+"&ejd="+ejd+"&saldraw="+saldraw+"&saltype="+saltype;
 	//alert(desig);
 	ajaxRequest.open("POST", "com_info_insert/", true);
  	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -1980,6 +1986,7 @@ function com_info_edit(){
 	var empstat = document.getElementById('empstat').value;
 	var empshift = document.getElementById('empshift').value;
 	var gsal = document.getElementById('gsal').value;
+	var cgsal = document.getElementById('cgsal').value;
 	var otentitle = document.getElementById('otentitle').value;
 	var transport = document.getElementById('transport').value;
 	var lunch = document.getElementById('lunch').value;
@@ -2063,7 +2070,7 @@ if(saltype=='Select' || saltype==''){
 	 return;
 	}
 	
-	var queryString="com_empid="+com_empid+"&idcard="+idcard+"&dept="+dept+"&sec="+sec+"&line="+line+"&desig="+desig+"&operation="+operation+"&position="+position+"&salg="+salg+"&empstat="+empstat+"&empshift="+empshift+"&gsal="+gsal+"&otentitle="+otentitle+"&transport="+transport+"&lunch="+lunch+"&attbonus="+attbonus+"&ejd="+ejd+"&saldraw="+saldraw+"&saltype="+saltype;
+	var queryString="com_empid="+com_empid+"&idcard="+idcard+"&dept="+dept+"&sec="+sec+"&line="+line+"&desig="+desig+"&operation="+operation+"&position="+position+"&salg="+salg+"&empstat="+empstat+"&empshift="+empshift+"&gsal="+gsal+"&cgsal="+cgsal+"&otentitle="+otentitle+"&transport="+transport+"&lunch="+lunch+"&attbonus="+attbonus+"&ejd="+ejd+"&saldraw="+saldraw+"&saltype="+saltype;
 	//alert(queryString);
 	ajaxRequest.open("POST", "com_info_edit/", true);
  	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -2151,6 +2158,7 @@ function basic_sal_cal(){
    }
  }
  	var gsal = document.getElementById('gsal').value;
+
  
 	//==================================BGMEA Salary Rule===================================
 		/*var bsal = (gsal * 60) / 100;
@@ -2175,15 +2183,81 @@ function basic_sal_cal(){
 		//==================================LOCAL Salary Rule===================================
 		
 		//==================================New Salary Rule===================================
-		var mallow = 600;
+		var mallow = 750;
 		document.getElementById('mallow').value = mallow;
 		
-		var bsal = Math.round((gsal - 1850) / 1.5);
+		var bsal = Math.round((gsal - 2450) / 1.5);
 		document.getElementById('bsal').value = bsal;
 			
-		var hrent = Math.round((gsal - 1850) - bsal);
+		var hrent = Math.round((gsal - 2450) - bsal);
 		//alert(hrent)
 		document.getElementById('hrent').value = hrent;
+ 		var food = 1250;
+		document.getElementById('food').value = food;
+		var transport = 450;
+		document.getElementById('convence').value = transport;
+		//==================================New Salary Rule===================================
+}
+
+function basic_sal_call(){
+ var ajaxRequest;  // The variable that makes Ajax possible!
+	
+ try{
+   // Opera 8.0+, Firefox, Safari
+   ajaxRequest = new XMLHttpRequest();
+ }catch (e){
+   // Internet Explorer Browsers
+   try{
+      ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+   }catch (e) {
+      try{
+         ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+      }catch (e){
+         // Something went wrong
+         alert("Your browser broke!");
+         return false;
+      }
+   }
+ }
+ 	var cgsal = document.getElementById('cgsal').value;
+ 
+	//==================================BGMEA Salary Rule===================================
+		/*var bsal = (gsal * 60) / 100;
+		document.getElementById('bsal').value = bsal;
+			
+		var hrent = (gsal * 30) / 100;
+		document.getElementById('hrent').value = hrent;
+		
+		var mallow = (gsal * 10) / 100;
+		document.getElementById('mallow').value = mallow;*/
+		//==================================BGMEA Salary Rule===================================
+		
+		//==================================LOCAL Salary Rule===================================
+		/*var mallow = 200;
+		document.getElementById('mallow').value = mallow;
+		
+		var bsal = Math.round((gsal - mallow) / 140 * 100);
+		document.getElementById('bsal').value = bsal;
+			
+		var hrent = Math.round((bsal * 40) / 100);
+		document.getElementById('hrent').value = hrent;*/
+		//==================================LOCAL Salary Rule===================================
+		
+		//==================================New Salary Rule===================================
+		var cmallow = 750;
+		document.getElementById('cmallow').value = cmallow;
+		
+		var cbsal = Math.round((cgsal - 2450) / 1.5);
+		document.getElementById('cbsal').value = cbsal;
+			
+		var chrent = Math.round((cgsal - 2450) - cbsal);
+		//alert(hrent)
+		document.getElementById('chrent').value = chrent;
+
+		var food = 1250;
+		document.getElementById('cfood').value = food;
+		var transport = 450;
+		document.getElementById('cconvence').value = transport;
 		//==================================New Salary Rule===================================
 }
 
@@ -2278,7 +2352,7 @@ function com_info_Search1()
 
  var queryString="empid="+empid;
  hostname = window.location.hostname;
- var url = "http://"+hostname+"/erp_time/index.php/emp_info_con/com_info_search1/";
+ var url = "http://"+hostname+"/taget_mh/index.php/emp_info_con/com_info_search1/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -2302,54 +2376,53 @@ ajaxRequest.onreadystatechange = function(){
 		alldata = resp.split("-*-");
 		//alert(alldata);
 		otherinfo= alldata[0].split("=*=") ;
-		//alert(otherinfo);
-		//alert(otherinfo[1]);
-		document.cominfo.empid.value = otherinfo[0];
-		document.cominfo.padd.value = otherinfo[1];
-		document.cominfo.fadd.value = otherinfo[2];
-		//alert(otherinfo[3]);
-		document.cominfo.emp_last_dg.value = otherinfo[3];
-		document.cominfo.pass_year.value = otherinfo[4];
-		document.cominfo.edu_insti.value = otherinfo[5];
-		document.cominfo.skill_dept.value = otherinfo[6];
-		document.cominfo.skill_year.value = otherinfo[7];
-		document.cominfo.skill_com_na.value = otherinfo[8];
-		document.cominfo.name.value = otherinfo[9];
-		document.cominfo.fname.value = otherinfo[10];
-		document.cominfo.mname.value = otherinfo[11];
-		document.cominfo.dob.value = otherinfo[12];
-		//alert(otherinfo[13]);
-		document.cominfo.reli.value = otherinfo[13];
-		document.cominfo.sex.value = otherinfo[14];
-		document.cominfo.ms.value = otherinfo[15];
-		document.cominfo.bgroup.value = otherinfo[16];
-		var img = otherinfo[17];
+		console.log(otherinfo);
+		document.cominfo.name.value = otherinfo[0];
+		document.cominfo.bname.value = otherinfo[1];
+
+		document.cominfo.mname.value = otherinfo[2];
+		document.cominfo.fname.value = otherinfo[3];
+		document.cominfo.spouse_name.value = otherinfo[4];
+		document.cominfo.no_child.value = otherinfo[5];
+		document.cominfo.dob.value = otherinfo[6];
+		var img = otherinfo[7];
 		hostname = window.location.hostname;
-		document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 150;
 		document.image.width = 130;
-		
-		document.cominfo.bname.value = otherinfo[18];
-		document.cominfo.id_skill.value    = otherinfo[19];
-	
-		
-				
+		document.cominfo.reli.value 			= otherinfo[8];
+		document.cominfo.sex.value 				= otherinfo[9];
+		document.cominfo.ms.value 				= otherinfo[10];
+		document.cominfo.bgroup.value 			= otherinfo[11];
+		document.cominfo.education.value 		= otherinfo[12];
+		document.cominfo.exp_factory.value 		= otherinfo[13];
+		document.cominfo.duration.value 		= otherinfo[14];
+		document.cominfo.exp_designation.value  = otherinfo[15];
+		document.cominfo.pre_vill.value 		= otherinfo[18];
+		document.cominfo.pre_district.value 	= otherinfo[19];
+		document.cominfo.pre_upazila.value 		= otherinfo[20];
+		document.cominfo.pre_post.value 		= otherinfo[21];
+		document.cominfo.per_vill.value 		= otherinfo[22];
+		document.cominfo.per_district.value 	= otherinfo[23];
+		document.cominfo.per_upazila.value 		= otherinfo[24];
+		document.cominfo.per_post.value 		= otherinfo[25];
+		document.cominfo.nomi_vill.value 		= otherinfo[26];
+		document.cominfo.nomi_district.value 	= otherinfo[27];
+		document.cominfo.nomi_upazila.value	 	= otherinfo[28];
+		document.cominfo.nomi_post.value 		= otherinfo[29];
+		document.cominfo.nomi_name.value 		= otherinfo[30];
+		document.cominfo.nomi_relation.value 	= otherinfo[31];
+		document.cominfo.nid.value 	= otherinfo[32];
+		document.cominfo.personal_phone.value 	= otherinfo[33];
+		document.cominfo.emergency_phone.value 	= otherinfo[34];
+
 		com_info = alldata[1].split("=*=");
-		//alert(com_info);
-		
-		
+
+		console.log(com_info);
+		document.cominfo.empid.value = com_info[0];
 		document.cominfo.idcard.value = com_info[1];
-		
-		//document.cominfo.section.value = com_info[];
-		
-		//dept_id_name = alldata[2].split("===");
-		//dept_id = dept_id_name[0].split("=*=");
-		//dept_name = dept_id_name[1].split("=*=");
-		//document.cominfo.dept.options.length=0;
-		//for (i=0; i<dept_id.length; i++){
-		//	document.cominfo.dept.options[i]=new Option(dept_name[i],dept_id[i], false, true);
-		//	}
-		
+		document.cominfo.cgsal.value = com_info[12];
+		document.cominfo.account.value = com_info[13];
 		
 		
 		dept_id_name = alldata[2].split("===");
@@ -2365,7 +2438,6 @@ ajaxRequest.onreadystatechange = function(){
 			document.cominfo.dept.options[i]=new Option(dept_name[i],dept_id[i], false, false);
 		}
 		
-		//alert(com_info[3]);
 		
 		
 		sec_id_name = alldata[3].split("===");
@@ -2613,6 +2685,9 @@ ajaxRequest.onreadystatechange = function(){
 		//alert(com_info[11]) ;
 		document.getElementById('gsal').value = com_info[11];
 		var gsal = com_info[11];
+		document.getElementById('cgsal').value = com_info[12];
+		var cgsal = com_info[12];
+
 		//alert(com_info[11]);
 		//==================================BGMEA Salary Rule===================================
 		/*var bsal = (gsal * 60) / 100;
@@ -2626,14 +2701,38 @@ ajaxRequest.onreadystatechange = function(){
 		//==================================BGMEA Salary Rule===================================
 		
 		//==================================LOCAL Salary Rule===================================
-		var mallow = 650;
+		var mallow = 750;
 		document.getElementById('mallow').value = mallow;
+
+		var cmallow = 750;
+		document.getElementById('cmallow').value = cmallow;
 		
 		var bsal = Math.round((gsal - mallow) / 150 * 100);
 		document.getElementById('bsal').value = bsal;
+
+		var cbsal = Math.round((cgsal - mallow) / 150 * 100);
+		document.getElementById('cbsal').value = cbsal;
 			
 		var hrent = Math.round((bsal * 50) / 100);
 		document.getElementById('hrent').value = hrent;
+
+		var chrent = Math.round((cbsal * 50) / 100);
+		document.getElementById('chrent').value = chrent;
+
+
+		var food = 1250;
+		document.getElementById('food').value = food;
+		var transport = 450;
+		document.getElementById('convence').value = transport;
+
+ 		var cfood = 1250;
+		document.getElementById('cfood').value = cfood;
+		var transport = 450;
+		document.getElementById('cconvence').value = transport;
+
+
+
+
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{
@@ -2679,7 +2778,7 @@ function com_info_next_Search1()
 
  var queryString="id_skill="+id_skill;
  hostname = window.location.hostname;
- var url = "http://"+hostname+"/erp_time/index.php/emp_info_con/com_info_next_Search1/";
+ var url = "http://"+hostname+"/taget_mh/index.php/emp_info_con/com_info_next_Search1/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -2726,7 +2825,7 @@ ajaxRequest.onreadystatechange = function(){
 		document.cominfo.bgroup.value = otherinfo[16];
 		var img = otherinfo[17];
 		hostname = window.location.hostname;
-		document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 150;
 		document.image.width = 130;
 		
@@ -3027,7 +3126,7 @@ ajaxRequest.onreadystatechange = function(){
 		//==================================BGMEA Salary Rule===================================
 		
 		//==================================LOCAL Salary Rule===================================
-		var mallow = 650;
+		var mallow = 750;
 		document.getElementById('mallow').value = mallow;
 		
 		var bsal = Math.round((gsal - mallow) / 150 * 100);
@@ -3035,6 +3134,27 @@ ajaxRequest.onreadystatechange = function(){
 			
 		var hrent = Math.round((bsal * 50) / 100);
 		document.getElementById('hrent').value = hrent;
+
+
+		var cmallow = 750;
+		document.getElementById('cmallow').value = cmallow;
+		
+		var cbsal = Math.round((cgsal - cmallow) / 150 * 100);
+		document.getElementById('cbsal').value = cbsal;
+			
+		var chrent = Math.round((cbsal * 50) / 100);
+		document.getElementById('chrent').value = chrent;
+
+
+		var food = 1250;
+		document.getElementById('food').value = food;
+		var transport = 450;
+		document.getElementById('convence').value = transport;
+
+ 		var cfood = 1250;
+		document.getElementById('cfood').value = cfood;
+		var transport = 450;
+		document.getElementById('cconvence').value = transport;
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{
@@ -3081,7 +3201,7 @@ function com_info_prev_Search1()
 
  var queryString="id_skill="+id_skill;
  hostname = window.location.hostname;
- var url = "http://"+hostname+"/erp_time/index.php/emp_info_con/com_info_prev_Search1/";
+ var url = "http://"+hostname+"/taget_mh/index.php/emp_info_con/com_info_prev_Search1/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -3128,7 +3248,7 @@ ajaxRequest.onreadystatechange = function(){
 		document.cominfo.bgroup.value = otherinfo[16];
 		var img = otherinfo[17];
 		hostname = window.location.hostname;
-		document.image.src = "http://"+hostname+"/erp_time/uploads/photo/"+img;
+		document.image.src = "http://"+hostname+"/taget_mh/uploads/photo/"+img;
 		document.image.height = 150;
 		document.image.width = 130;
 		
@@ -3416,6 +3536,8 @@ ajaxRequest.onreadystatechange = function(){
 		//alert(com_info[11]) ;
 		document.getElementById('gsal').value = com_info[11];
 		var gsal = com_info[11];
+		document.getElementById('cgsal').value = com_info[12];
+		var cgsal = com_info[12];
 		//alert(com_info[11]);
 		//==================================BGMEA Salary Rule===================================
 		/*var bsal = (gsal * 60) / 100;
@@ -3429,7 +3551,7 @@ ajaxRequest.onreadystatechange = function(){
 		//==================================BGMEA Salary Rule===================================
 		
 		//==================================LOCAL Salary Rule===================================
-		var mallow = 650;
+		var mallow = 750;
 		document.getElementById('mallow').value = mallow;
 		
 		var bsal = Math.round((gsal - mallow) / 150 * 100);
@@ -3437,6 +3559,28 @@ ajaxRequest.onreadystatechange = function(){
 			
 		var hrent = Math.round((bsal * 50) / 100);
 		document.getElementById('hrent').value = hrent;
+
+
+
+		var cmallow = 750;
+		document.getElementById('cmallow').value = cmallow;
+		
+		var cbsal = Math.round((cgsal - cmallow) / 150 * 100);
+		document.getElementById('cbsal').value = cbsal;
+			
+		var chrent = Math.round((cbsal * 50) / 100);
+		document.getElementById('chrent').value = chrent;
+
+
+				var food = 1250;
+		document.getElementById('food').value = food;
+		var transport = 450;
+		document.getElementById('convence').value = transport;
+
+ 		var cfood = 1250;
+		document.getElementById('cfood').value = cfood;
+		var transport = 450;
+		document.getElementById('cconvence').value = transport;
 		//==================================LOCAL Salary Rule===================================
 		if(com_info[9] == 'Resign')
 		{
@@ -6872,7 +7016,7 @@ function attendance_process()
 if(okyes==false) return;
 	  $("#loader").show();
 	hostname = window.location.hostname;
-	url =  "http://"+hostname+"/erp_time/index.php/attn_process_con/attn_process/";
+	url =  "http://"+hostname+"/taget_mh/index.php/attn_process_con/attn_process/";
 
 	var queryString="p_start_date="+p_start_date;
 	
@@ -6914,7 +7058,7 @@ month= document.getElementById('report_month_sal').value;
 year= document.getElementById('report_year_sal').value;
 process_check = i;
 	hostname = window.location.hostname;
-	url =  "http://"+hostname+"/erp_time/index.php/salary_process_con/salary_process/";
+	url =  "http://"+hostname+"/taget_mh/index.php/salary_process_con/salary_process/";
 	var queryString="year="+year+"&month="+month+"&process_check="+process_check;
 	
 	ajaxRequest.open("POST",url, true);
@@ -6957,7 +7101,7 @@ process_check = i;
 //alert(month);
 
 	hostname = window.location.hostname;
-	url =  "http://"+hostname+"/erp_time/index.php/production_process_con/production_salary_process/";
+	url =  "http://"+hostname+"/taget_mh/index.php/production_process_con/production_salary_process/";
 	var queryString="year="+year+"&month="+month+"&process_check="+process_check;
 	
 	ajaxRequest.open("POST",url, true);
@@ -7318,7 +7462,7 @@ var ajaxRequest;  // The variable that makes Ajax possible!
 var queryString="empid_leave="+empid_leave+"&start_leave_date="+start_leave_date+"&end_leave_date="+end_leave_date+"&leave_type="+leave_type;
 
 hostname = window.location.hostname;
-url =  "http://"+hostname+"/erp_time/index.php/entry_system_con/save_leave_co/";
+url =  "http://"+hostname+"/taget_mh/index.php/entry_system_con/save_leave_co/";
  
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -7430,7 +7574,7 @@ function search_year()
 	return;
  }
 hostname = window.location.hostname;
-url =  "http://"+hostname+"/erp_time/index.php/entry_system_con/leave_transaction_co/";
+url =  "http://"+hostname+"/taget_mh/index.php/entry_system_con/leave_transaction_co/";
 
  var queryString="empid="+empid+"&year="+year; 
  ajaxRequest.open("POST", url, true);
@@ -7954,7 +8098,7 @@ var ajaxRequest;  // The variable that makes Ajax possible!
  
 
 hostname = window.location.hostname;
-url =  "http://"+hostname+"/erp_time/index.php/entry_system_con/advance_loan_insert/";
+url =  "http://"+hostname+"/taget_mh/index.php/entry_system_con/advance_loan_insert/";
 var queryString="emp_id="+emp_id+"&loan_amt="+loan_amt+"&pay_amt="+pay_amt+"&loan_date="+loan_date;
 
  ajaxRequest.open("POST",url, true);
@@ -8277,7 +8421,7 @@ function find_style_winding()
   var article_name 	= document.getElementById('article_no').value;
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/winding_con/find_style_name_winding/";
+ url =  "http://"+hostname+"/taget_mh/index.php/winding_con/find_style_name_winding/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8344,7 +8488,7 @@ function find_style_knitting()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/knitting_con/find_style_name_knitting/";
+ url =  "http://"+hostname+"/taget_mh/index.php/knitting_con/find_style_name_knitting/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8394,7 +8538,7 @@ function find_style_linking()
   var queryString="article_name="+article_name;
  //alert(queryString);
  hostname = window.location.hostname;
- url =  "http://"+hostname+"/erp_time/index.php/linking_con/find_style_name_linking/";
+ url =  "http://"+hostname+"/taget_mh/index.php/linking_con/find_style_name_linking/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8443,7 +8587,7 @@ function find_style_trimming()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/trimming_con/find_style_name_trimming/";
+ url =  "http://"+hostname+"/taget_mh/index.php/trimming_con/find_style_name_trimming/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8491,7 +8635,7 @@ function find_style_mending()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/mending_con/find_style_name_mending/";
+ url =  "http://"+hostname+"/taget_mh/index.php/mending_con/find_style_name_mending/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8539,7 +8683,7 @@ function find_style_zipper()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/zipper_con/find_style_name_zipper/";
+ url =  "http://"+hostname+"/taget_mh/index.php/zipper_con/find_style_name_zipper/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8587,7 +8731,7 @@ function find_style_iron()
 	  }
   var queryString="article_name="+article_name;
  //alert(queryString);
- url =  "http://"+hostname+"/erp_time/index.php/iron_con/find_style_name_iron/";
+ url =  "http://"+hostname+"/taget_mh/index.php/iron_con/find_style_name_iron/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -8653,7 +8797,7 @@ function price_code_save_winding()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price+"&style_type="+style_type;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/price_code_winding_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/price_code_winding_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8722,7 +8866,7 @@ function price_code_save_mending()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/price_code_mending_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/price_code_mending_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8790,7 +8934,7 @@ function price_code_save_zipper()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/price_code_zipper_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/price_code_zipper_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8853,7 +8997,7 @@ function price_code_save_iron()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/price_code_iron_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/price_code_iron_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8914,7 +9058,7 @@ function price_code_save_trimming()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/trimming_con/price_code_trimming_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/trimming_con/price_code_trimming_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -8980,7 +9124,7 @@ function price_code_knitting_save()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/knitting_con/price_code_knitting_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/knitting_con/price_code_knitting_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9037,7 +9181,7 @@ function show_table_winding()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/show_table_winding/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/show_table_winding/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9096,7 +9240,7 @@ function show_table_mending()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/show_table_mending/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/show_table_mending/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9146,7 +9290,7 @@ function show_table_zipper()
 	style_name =   document.getElementById('style_name').value ;
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/show_table_zipper/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/show_table_zipper/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9196,7 +9340,7 @@ function show_table_iron()
 	style_name =   document.getElementById('style_name').value ;
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/show_table_iron/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/show_table_iron/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9254,7 +9398,7 @@ function show_table_trimming()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/trimming_con/show_table_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/trimming_con/show_table_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9315,7 +9459,7 @@ function show_table_knitting()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/knitting_con/show_table_knitting/" ;
+    url="http://"+hostname+"/taget_mh/index.php/knitting_con/show_table_knitting/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9363,7 +9507,7 @@ function price_code_edit_mending(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/style_type_price_edit_mending/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/style_type_price_edit_mending/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9406,7 +9550,7 @@ function price_code_edit_winding(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/style_type_perice_edit_winding/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/style_type_perice_edit_winding/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9452,7 +9596,7 @@ function price_code_edit_zipper(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/style_type_price_edit_zipper/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/style_type_price_edit_zipper/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9496,7 +9640,7 @@ function price_code_edit_iron(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/style_type_price_edit_iron/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/style_type_price_edit_iron/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9540,7 +9684,7 @@ function price_code_edit_trimming(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/product_con/style_type_perice_edit_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/product_con/style_type_perice_edit_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9590,7 +9734,7 @@ function price_code_edit_knitting(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/knitting_con/style_type_price_edit_knitting/" ;
+    url="http://"+hostname+"/taget_mh/index.php/knitting_con/style_type_price_edit_knitting/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9633,7 +9777,7 @@ function price_code_edit_trimming(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/trimming_con/style_type_price_edit_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/trimming_con/style_type_price_edit_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9681,7 +9825,7 @@ function price_code_delete_mending(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/price_code_delete_mending/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/price_code_delete_mending/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9728,7 +9872,7 @@ function price_code_delete_winding(i)
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
  
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/price_code_delete_winding/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/price_code_delete_winding/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9775,7 +9919,7 @@ function price_code_delete_zipper(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/price_code_delete_zipper/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/price_code_delete_zipper/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9822,7 +9966,7 @@ function price_code_delete_iron(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/price_code_delete_iron/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/price_code_delete_iron/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9871,7 +10015,7 @@ function price_code_delete_trimming(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/product_con/style_type_perice_delete_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/product_con/style_type_perice_delete_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9916,7 +10060,7 @@ function price_code_delete_knitting(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name ;
 
-	url="http://"+hostname+"/erp_time/index.php/knitting_con/price_code_delete_knitting/" ;
+	url="http://"+hostname+"/taget_mh/index.php/knitting_con/price_code_delete_knitting/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -9960,7 +10104,7 @@ function price_code_delete_trimming(i)
 	
 	var queryString="i="+i+"&article_name="+article_name+"&style_name="+style_name ;
 
-	url="http://"+hostname+"/erp_time/index.php/trimming_con/price_code_delete_trimming/" ;
+	url="http://"+hostname+"/taget_mh/index.php/trimming_con/price_code_delete_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10006,7 +10150,7 @@ function price_code_update_mending(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/mending_con/price_code_update_mending/" ;
+    url="http://"+hostname+"/taget_mh/index.php/mending_con/price_code_update_mending/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10054,7 +10198,7 @@ function price_code_update_winding(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/winding_con/price_code_update_winding/" ;
+    url="http://"+hostname+"/taget_mh/index.php/winding_con/price_code_update_winding/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10104,7 +10248,7 @@ function price_code_update_zipper(i)
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/zipper_con/price_code_update_zipper/" ;
+    url="http://"+hostname+"/taget_mh/index.php/zipper_con/price_code_update_zipper/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10154,7 +10298,7 @@ function price_code_update_iron(i)
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/iron_con/price_code_update_iron/" ;
+    url="http://"+hostname+"/taget_mh/index.php/iron_con/price_code_update_iron/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10200,7 +10344,7 @@ function price_code_update_trimming(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/product_con/style_type_perice_update_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/product_con/style_type_perice_update_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10252,7 +10396,7 @@ function price_code_update_knitting(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/knitting_con/price_code_update_knitting/" ;
+    url="http://"+hostname+"/taget_mh/index.php/knitting_con/price_code_update_knitting/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10300,7 +10444,7 @@ function price_code_update_trimming(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/trimming_con/price_code_update_trimming/" ;
+    url="http://"+hostname+"/taget_mh/index.php/trimming_con/price_code_update_trimming/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10362,7 +10506,7 @@ function price_code_save_linking()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name+"&style_type_id="+style_type_id+"&style_price="+style_price;
 //	alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/linking_con/price_code_linking_save/" ;
+    url="http://"+hostname+"/taget_mh/index.php/linking_con/price_code_linking_save/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10407,7 +10551,7 @@ function price_code_linking_edit(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/linking_con/style_type_price_linking_edit/" ;
+    url="http://"+hostname+"/taget_mh/index.php/linking_con/style_type_price_linking_edit/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10457,7 +10601,7 @@ function price_code_linking_update(i)
 	
 	var queryString="i="+i+"&get_style_price="+get_style_price+"&article_name="+article_name+"&style_name="+style_name ;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/linking_con/style_type_price_linking_update/" ;
+    url="http://"+hostname+"/taget_mh/index.php/linking_con/style_type_price_linking_update/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10503,7 +10647,7 @@ function price_code_linking_delete(i)
  
  var queryString="i="+i;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/product_con/style_type_perice_linking_delete/" ;
+    url="http://"+hostname+"/taget_mh/index.php/product_con/style_type_perice_linking_delete/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10563,7 +10707,7 @@ function show_table_linking()
 
 	var queryString="article_name="+article_name+"&style_name="+style_name;
 	//alert(queryString);
-    url="http://"+hostname+"/erp_time/index.php/linking_con/show_table_linking_co/" ;
+    url="http://"+hostname+"/taget_mh/index.php/linking_con/show_table_linking_co/" ;
 	ajaxRequest.open("POST" ,url , true);
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.send(queryString);
@@ -10630,7 +10774,7 @@ var ajaxRequest;  // The variable that makes Ajax possible!
  var queryString="article_no="+article_no+"&style_no="+style_no+"&buyername="+buyername+"&style_dept="+style_dept+"&gauge="+gauge+"&sending_date="+sending_date+"&comment_date="+comment_date+"&making_by="+making_by+"&in_house_date="+in_house_date+"&status="+status+"&type_of_sample="+type_of_sample;
  //alert(queryString);
  hostname = window.location.hostname;
-	url =  "http://"+hostname+"/erp_time/index.php/product_con/bdt_save_co/";
+	url =  "http://"+hostname+"/taget_mh/index.php/product_con/bdt_save_co/";
 	ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -10678,7 +10822,7 @@ function com_incre_prom_search()
 
  var queryString="empid="+empid;
  hostname = window.location.hostname;
- var url = "http://"+hostname+"/erp_time/index.php/emp_increment_con/com_incre_prom_search/";
+ var url = "http://"+hostname+"/taget_mh/index.php/emp_increment_con/com_incre_prom_search/";
  ajaxRequest.open("POST", url, true);
  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
  ajaxRequest.send(queryString);
@@ -10865,5 +11009,48 @@ function clear_data_incre_prom(){
 	document.getElementById('hrent').value = "";
 	document.getElementById('mallow').value = "";
 	
+}
+
+
+function fetch_data(){
+	var ajaxRequest;  
+	try{
+		ajaxRequest = new XMLHttpRequest();
+	}catch (e){
+		try{
+			ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+		}catch (e) {
+			try{
+				ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+			}catch (e){
+				return false;
+			}
+		}
+	}
+ 	p_start_date= document.getElementById('p_start_date').value;
+	if(p_start_date ==''){
+		alert('Please select date');
+		return ;
+	}
+ 
+ 	// var okyes;
+ 	// okyes=confirm('Are you want to fetch data?');
+	// if(okyes==false) return;
+	$("#loader").show();
+	hostname = window.location.hostname;
+	url =  "http://"+hostname+"/taget_mh/index.php/attn_process_con/fetch_data/";
+
+	var queryString="p_start_date="+p_start_date;
+	
+	ajaxRequest.open("POST", url, true);
+	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	ajaxRequest.send(queryString);
+	ajaxRequest.onreadystatechange = function(){
+		if(ajaxRequest.readyState == 4){
+			var resp = ajaxRequest.responseText;
+			$("#loader").hide();
+			alert(resp);
+		}
+	}
 }
 

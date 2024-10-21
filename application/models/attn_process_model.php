@@ -1,20 +1,28 @@
 <?php
 class Attn_process_model extends CI_Model{
-	
-	
+
+
 	function __construct()
 	{
 		parent::__construct();
-		
+
 		/* Standard Libraries */
 		$this->load->model('file_process_model');
 	}
-	
+
 	function attn_process($process_date)
 	{
+		// check roster shift and auto chage this (if true this)
+		$date = date("Y-m-d",strtotime($process_date));
+		$change_shift = $this->db->where('start_date',$date)->where('status',1)->get('pr_emp_roster_shift')->row();
+		if (!empty($change_shift)) {
+			$this->change_shift_roster($change_shift);
+		}
+		// $this->change_shift_roster($change_shift);
+
 		//DECLARE ARRAY FOR DATABASE INSERT/UPDATE
-		$result 	= array();
-		
+		$result = array();
+
 		//MAKE YEAR,MONTH,DAY FROM INPUT DATE
 		$first_y	= date('Y', strtotime($process_date));
 		$first_m	= date('m', strtotime($process_date));
@@ -35,34 +43,33 @@ class Attn_process_model extends CI_Model{
 		// exit($holiday);
 		//MONTHLY ATTENDANCE TABLE EXISTANCE CHECK
 		$monthly_attendance_table_existance_check = $this->monthly_attendance_table_existance_check($process_date);
-		
-		//IF THE CONDITION IS FALSE THE WHOSE PROCESS WILL STOP AND SHOW THIS MESSAGE						
+
+		//IF THE CONDITION IS FALSE THE WHOSE PROCESS WILL STOP AND SHOW THIS MESSAGE
 		// if ($monthly_attendance_table_existance_check == false )
 		// {
 		//  	return "Selected month does not exist and change your process month";
 		// }
-		
+
 		//MAKE ATTEANDANCE TABLE NAME MONTHLY
 		$att_table 	= $this->make_attendance_table_name_monthly($process_date);
-		// $this->change_shift_roster($change_shift);
 
 		//GET ALL EMPLOYEE INCLUDING REGULER,NEW,RESIGN,LEFT,PROMOTED
-		$all_employee = $this->get_all_employee();  
+		$all_employee = $this->get_all_employee();
 		// echo "<pre>";print_r($all_employee->result());exit;
-		
-		//===================================================	
-		$year_month = date("Y-m", mktime(0, 0, 0, $first_m, 1, $first_y)); 
+
+		//===================================================
+		$year_month = date("Y-m", mktime(0, 0, 0, $first_m, 1, $first_y));
 		$year_month = $year_month."-00";
 		//===================================================
 		$i = 0; $j = 0;
-		foreach ($all_employee->result() as $rows){	
+		foreach ($all_employee->result() as $rows){
 			$emp_id			= $rows->emp_id;
 			$proxi_id			= $rows->proxi_id;
 			//PROCESS ELIGIBILITY CHECK AFTER JOINING AND BEFORE RESIGN OR LEFT
 			$joining_check 	= $this->check_joining($emp_id, $process_date);
 			$resign_check 	= $this->check_resign($emp_id, $process_date);
 			$left_check 	= $this->check_left($emp_id, $process_date);
-			
+
 			//IF ANY CONDITION IS FALSE THEN ID WILL NOT GO TO THE CORE PROCESS
 			if($joining_check == false or $resign_check == false or $left_check == false)
 			{
@@ -72,25 +79,25 @@ class Attn_process_model extends CI_Model{
 				$i++;
 			}
 			else
-			{	
-			$j++;	
-				
+			{
+				$j++;
+
 				//GET CURRENT SHIFT INFORMATION
 				$shift_duty = $rows->shift_duty;
-				
+
 				//WEEKEND CHECK FOR SPECIFIC ID: RETURN TRUE OR FALSE
 				$weekend 	= $this->check_weekend($emp_id, $process_date);
-				
+
 				// $machine_data = $this->insert_monthly_machine_data_to_temp_table($emp_id, $process_date);
-						
-			//===================================================	
-			$temp_table = "att_".date('Y_m',strtotime($process_date));
-			$temp_table = strtolower($temp_table);
-			//===================================================	
-			
-			//CREATE A ROW INTO pr_attn_monthly TABLE IF NOT EXIST
-			$this->create_row_for_attendance_monthly($emp_id, $process_date);
-			
+
+				//===================================================
+				$temp_table = "att_".date('Y_m',strtotime($process_date));
+				$temp_table = strtolower($temp_table);
+				//===================================================
+
+				//CREATE A ROW INTO pr_attn_monthly TABLE IF NOT EXIST
+				$this->create_row_for_attendance_monthly($emp_id, $process_date);
+
 				$ot_hour = 0;
 				//sleep(1);
 				$date_field='.date_time';
@@ -110,17 +117,15 @@ class Attn_process_model extends CI_Model{
 				$this->db->where("trim(substr($select,1,10)) = '$date1' ");
 				$this->db->where("trim(substr($select,11,14)) BETWEEN '$start_time' and '$end_time'");
 				$query = $this->db->get();
-				// dd($query);
 				// echo $this->db->last_query() ;exit;
-					// echo "<pre>";print_r($result[$emp_id]);exit;
-				
+
 				if($query->num_rows() == 0)
 				{
 					$this->db->select("leave_type");
 					$this->db->where("emp_id",$emp_id);
 					$this->db->where("start_date",$process_date);
 					$query = $this->db->get("pr_leave_trans");
-						
+
 					if($query->num_rows() > 0)
 					{
 						$result[$emp_id] = "L";
@@ -133,7 +138,7 @@ class Attn_process_model extends CI_Model{
 					{
 						//echo "<td>   H   </td>";
 						$result[$emp_id] = "H";
-						
+
 						$hhh = array( $date => $result[$emp_id]);
 						$this->db->where("emp_id",$emp_id);
 						$this->db->where("att_month",$year_month);
@@ -142,7 +147,7 @@ class Attn_process_model extends CI_Model{
 					elseif ($process_date == $weekend)
 					{
 						//echo "<td>   W   </td>";
-						$result[$emp_id] = "W"; 
+						$result[$emp_id] = "W";
 						$www = array( $date => $result[$emp_id]);
 						$this->db->where("emp_id",$emp_id);
 						$this->db->where("att_month",$year_month);
@@ -150,36 +155,29 @@ class Attn_process_model extends CI_Model{
 					}
 					else
 					{
-						
-						//echo "<td>   A   </td>";
-						
+
 						$result[$emp_id] = "A";
-						
+
 						$aaa = array( $date => $result[$emp_id]);
 						$this->db->where("emp_id",$emp_id);
 						$this->db->where("att_month",$year_month);
 						$this->db->update("pr_attn_monthly",$aaa);
 					}
-						
-				}
-				else{
+					} else {
 						if ($process_date == $weekend){
 							$result[$emp_id] = "W";
 							$www = array( $date => $result[$emp_id]);
 							$this->db->where("emp_id",$emp_id);
 							$this->db->where("att_month",$year_month);
 							$this->db->update("pr_attn_monthly",$www);
-						}
-						elseif ($process_date == $holiday){
+						} elseif ($process_date == $holiday){
 							$result[$emp_id] = "H";
-							
+
 							$hhh = array( $date => $result[$emp_id]);
 							$this->db->where("emp_id",$emp_id);
 							$this->db->where("att_month",$year_month);
 							$this->db->update("pr_attn_monthly",$hhh);
-						}
-						else
-						{					
+						} else {
 							$this->db->select("leave_type");
 							$this->db->where("emp_id",$emp_id);
 							$this->db->where("start_date",$process_date);
@@ -202,71 +200,66 @@ class Attn_process_model extends CI_Model{
 							}
 						}
 					}
-				//}
-				
-				if ($process_date == $weekend || $process_date == $holiday )
-				{
-					//=============================Extra OT Calculation=============================
-						$weekend_eot_calculation = $this->weekend_holday_eot_calculation($emp_id, $att_date);
-					//=============================Extra OT Calculation=============================
-					
-					
-					
-				}
-				else{
-			//=====================No Working Day===================	
-			if($result[$emp_id]=="P")
-			{
-				$no_work_day = $this->get_no_work_day($emp_id,$att_date);
+
+					if ($process_date == $weekend || $process_date == $holiday )
+					{
+						//=============================Extra OT Calculation=============================
+							$weekend_eot_calculation = $this->weekend_holday_eot_calculation($emp_id, $att_date);
+						//=============================Extra OT Calculation=============================
+					} else {
+						//=====================No Working Day===================
+						if($result[$emp_id]=="P")
+						{
+							$no_work_day = $this->get_no_work_day($emp_id,$att_date);
+						}
+						//===========================OT CALCULATION=============================================
+						//echo $emp_id."=>";
+						$ot_hour_calcultation = $this->ot_hour_calcultation($emp_id, $att_date);
+
+						//echo "<br>";
+						if($ot_hour_calcultation["ot_hour"] !='')
+						{
+							if($ot_hour_calcultation["ot_hour"] > 2)
+							{
+								$extra_ot_hour = $ot_hour_calcultation["ot_hour"] - 2 ;
+								$ot_hour_calcultation["ot_hour"] = 2;
+
+								//echo "EMP***EX-OT=$extra_ot_hour----------";
+
+							}
+							else
+							{
+								$extra_ot_hour = 0;
+							}
+						}
+						else
+						{
+							$ot_hour_calcultation["ot_hour"] = 0;
+							$extra_ot_hour = 0;
+						}
+
+						$insert_ot_hour = $this->insert_ot_hour($emp_id, $att_date, $ot_hour_calcultation);
+						if($extra_ot_hour >= 0){
+							$insert_extra_ot_hour = $this->insert_extra_ot_hour($emp_id, $att_date, $extra_ot_hour);
+						}
+						$insert_deduction_hour = $this->deduction_hour_process($emp_id,$att_date);
+						//===========================OT CALCULATION=============================================
+					}
 			}
-		//===========================OT CALCULATION=============================================
-				//echo $emp_id."=>";
-				$ot_hour_calcultation = $this->ot_hour_calcultation($emp_id, $att_date,$proxi_id);
-				// dd($ot_hour_calcultation);
-				//echo "<br>";
-				if($ot_hour_calcultation["ot_hour"] !='')
-				{
-					if($ot_hour_calcultation["ot_hour"] > 2)
-					{
-						$extra_ot_hour = $ot_hour_calcultation["ot_hour"] - 2 ;
-						$ot_hour_calcultation["ot_hour"] = 2;
-						
-						//echo "EMP***EX-OT=$extra_ot_hour----------";
-						
-					}
-					else
-					{
-						$extra_ot_hour = 0;
-					}
-				}
-				else
-				{
-					$ot_hour_calcultation["ot_hour"] = 0;
-					$extra_ot_hour = 0;
-				}
-								
-				$insert_ot_hour = $this->insert_ot_hour($emp_id, $att_date, $ot_hour_calcultation);
-				if($extra_ot_hour >= 0){
-					$insert_extra_ot_hour = $this->insert_extra_ot_hour($emp_id, $att_date, $extra_ot_hour);
-				}
-				$insert_deduction_hour = $this->deduction_hour_process($emp_id,$att_date);
-					//===========================OT CALCULATION=============================================	
-				}
-		}
 		}
 		return $result;
-	
 	}
 
+	// check roster shift and chage it
 	function change_shift_roster($roster = null)
 	{
 		if (empty($roster)) {
 			return false;
 		}
-        $id = $roster->id;
-        $duration = $roster->duration;
-        $start_date = $roster->start_date;
-        $shift_id = explode(',', $roster->shift_id);
+        $id => $roster->id;
+        $duration => $roster->duration;
+        $start_date => $roster->start_date;
+        $shift_id => explode(',', $roster->shift_id);
 		$day_shift = $shift_id[0];
 		$night_shift = $shift_id[1];
 
@@ -312,6 +305,8 @@ class Attn_process_model extends CI_Model{
 		return true;
 	}
 	// end roster shift
+
+
 	function get_no_work_day($emp_id,$att_date)
 	{
 		$no_work_day = $this->db->where('emp_id',$emp_id)->where('date',$att_date)->get('pd_production_logs')->num_rows();
@@ -341,8 +336,8 @@ class Attn_process_model extends CI_Model{
 		{
 			return true;
 		}
-		
-		
+
+
 		$this->db->select("resign_date");
 		$this->db->where('emp_id',$emp_id);
 		$query = $this->db->get("pr_emp_resign_history");
@@ -352,11 +347,11 @@ class Attn_process_model extends CI_Model{
 			return true;
 		}
 	}
-	
+
 	function insert_extra_ot_hour($emp_id, $att_date, $extra_ot_hour)
 	{
 		$eot_leasure_hour = $this->get_setup_attributes(2);
-		
+
 		/*if($emp_id =='AD0084')
 		{
 			echo "$emp_id => leasure: $eot_leasure_hour, EOT: $extra_ot_hour ========";
@@ -373,49 +368,49 @@ class Attn_process_model extends CI_Model{
 			$out_time = $row->out_time;
 			$shift_id = $row->shift_id;
 			//$ot_start = $this->get_shift_out_time($shift_id);
-				
+
 			$emp_shift = $this->emp_shift_check_process($emp_id, $att_date);
 			$schedule = $this->schedule_check($emp_shift);
-			
+
 			$ot_start				=  $schedule[0]["ot_start"];
-			$ot_minute_to_one_hour	=  $schedule[0]["ot_minute_to_one_hour"]; 
-			
+			$ot_minute_to_one_hour	=  $schedule[0]["ot_minute_to_one_hour"];
+
 			$in_time = $ot_start;
-				
+
 			$new_in_time = date("h:i:s A", strtotime($in_time));
 			$date_in_time = $att_date." ".$new_in_time;
 			//echo $new_shift_out_time;
 			$mdm_new_in_time = date("A", strtotime($new_in_time));
-			
-			
+
+
 			$new_out_time = date("h:i:s A", strtotime($out_time));
-			
+
 			$mdm_new_out_time = date("A", strtotime($new_out_time));
-			
-			
+
+
 			if($mdm_new_in_time == $mdm_new_out_time)
 			{
 				$date_out_time = $att_date." ".$new_out_time;
-				
+
 			}
 			else
 			{
-				 $att_date_new = strtotime(date("Y-m-d", strtotime($att_date)) . " +1 day");
-				 $newdate = date ('Y-m-d' , $att_date_new );
-				 $date_out_time = $newdate." ".$new_out_time;
+				$att_date_new = strtotime(date("Y-m-d", strtotime($att_date)) . " +1 day");
+				$newdate = date ('Y-m-d' , $att_date_new );
+				$date_out_time = $newdate." ".$new_out_time;
 			}
-			
+
 			$date1 = new DateTime($date_out_time);
 			$date2 = new DateTime($date_in_time);
 			$interval = $date1->diff($date2);
 			$hour    =  $interval->h;
 			$minutes =  $interval->i;
-			
+
 			if($ot_minute_to_one_hour <= $minutes)
 			{
 				$hour = $hour + 1;
 			}
-				
+
 			if($hour >= $eot_leasure_hour)
 			{
 				$extra_ot_hour = $extra_ot_hour - 1;
@@ -426,7 +421,7 @@ class Attn_process_model extends CI_Model{
 			}
 
 			//echo $extra_ot_hour;
-			
+
 			$data = array(
 						"extra_ot_hour" => $extra_ot_hour
 						);
@@ -436,7 +431,7 @@ class Attn_process_model extends CI_Model{
 			//echo $this->db->last_query();
 		}
 	}
-	
+
 	function weekend_holday_eot_calculation($emp_id, $date){
 		$holiday_allowance_check = 0;
 		$table = "att_".date('Y_m',strtotime($date));
@@ -452,19 +447,19 @@ class Attn_process_model extends CI_Model{
 		$query1 = $this->db->get();
 		$row1 = $query1->row();
 		$ot_status  = $row1->ot_entitle;
-		
+
 		$in_time = '';
 		$out_time = '';
-		
+
 		$emp_shift = $this->emp_shift_check($emp_id, $date);
-				
+
 		$this->db->select("shift_id");
 		$this->db->from("pr_emp_shift_schedule");
 		$this->db->where("sh_type", $emp_shift);
 		$query = $this->db->get();
 		$row = $query->row();
 		$shift_id = $row->shift_id;
-		
+
 		$this->db->select("shift_id");
 		$this->db->from("pr_emp_shift");
 		$this->db->where("shift_duty", $shift_id);
@@ -472,13 +467,13 @@ class Attn_process_model extends CI_Model{
 		$row = $query->row();
 		$shift_duty = $row->shift_id;
 		$schedule = $this->schedule_check($emp_shift);
-		$start_time		=  $schedule[0]["in_start"]; 
-		$late_time 		=  $schedule[0]["late_start"]; 
+		$start_time		=  $schedule[0]["in_start"];
+		$late_time 		=  $schedule[0]["late_start"];
 		$end_time   	=  $schedule[0]["in_end"];
 		$out_start_time	=  $schedule[0]["out_start"];
 		$ot_start_time	=  $schedule[0]["ot_start"];
-		$out_end_time	=  $schedule[0]["out_end"];	
-				
+		$out_end_time	=  $schedule[0]["out_end"];
+
 		$hour = trim(substr($out_start_time,0,2));
 		$minute = trim(substr($out_start_time,3,2));
 		$sec = trim(substr($out_start_time,6,2));
@@ -494,12 +489,12 @@ class Attn_process_model extends CI_Model{
 		}else{
 			$in_date = $date;
 		}
-		
+
 		$hour = trim(substr($out_end_time,0,2));
 		$minute = trim(substr($out_end_time,3,2));
 		$sec = trim(substr($out_end_time,6,2));
 		$am_pm = date("A", mktime($hour, $minute, $sec, 0, 0, 0));
-		
+
 		$out_date = $date;
 		if($am_pm == "AM"){
 			$now = strtotime($out_date);
@@ -510,13 +505,13 @@ class Attn_process_model extends CI_Model{
 		else{
 			$out_date = $date;
 		}
-		
-		
+
+
 			$in_time  = $this->time_check_in($date, $start_time, $end_time, $table);
 			$in_time_date=  $date." ".$in_time;
 			$out_start_time = "$in_date $out_start_time";
 			$out_end_time = "$out_date $out_end_time";
-			
+
 			$out_time_date = $this->time_check_out2($out_start_time, $out_end_time, $table);
 			$workoff_eot_out_date = trim(substr($out_time_date,0,10));
 			$out_time = trim(substr($out_time_date,11,19));
@@ -527,11 +522,11 @@ class Attn_process_model extends CI_Model{
 		}
 		else
 		{
-			$weekend_holiday_eot_hour = $this->hour_difference($in_time_date, $out_time_date, $emp_id, $date);	
-			$workoff_eot_lunch_deduct_time 	= $this->get_setup_attributes(7);		
+			$weekend_holiday_eot_hour = $this->hour_difference($in_time_date, $out_time_date, $emp_id, $date);
+			$workoff_eot_lunch_deduct_time 	= $this->get_setup_attributes(7);
 			$workoff_eot_lunch_deduct_time 	= "$in_date $workoff_eot_lunch_deduct_time";
 			$workoff_eot_out_time 			= "$workoff_eot_out_date $out_time";
-			
+
 			if($workoff_eot_lunch_deduct_time <= $workoff_eot_out_time){
 				$weekend_holiday_eot_hour = $weekend_holiday_eot_hour - 1;
 			}else{
@@ -539,10 +534,10 @@ class Attn_process_model extends CI_Model{
 			}
 			//====================================Holiday Aloowance============================
 			$holiday_allowance_check = 1;
-		}	
-		
-		if($ot_status == 1)	{ $weekend_holiday_eot_hour = 0;}	
-		
+		}
+
+		if($ot_status == 1)	{ $weekend_holiday_eot_hour = 0;}
+
 		$this->db->select();
 		$this->db->where("emp_id", $emp_id);
 		$this->db->where("shift_log_date", $date);
@@ -556,7 +551,7 @@ class Attn_process_model extends CI_Model{
 						'extra_ot_hour' => $weekend_holiday_eot_hour,
 						'deduction_hour' => 0,
 						'late_status' => 0,
-						'holiday_allowance'=>$holiday_allowance_check 
+						'holiday_allowance'=>$holiday_allowance_check
 						);
 			$this->db->where('shift_log_date', $date);
 			$this->db->where('emp_id', $emp_id);
@@ -565,7 +560,7 @@ class Attn_process_model extends CI_Model{
 		}
 		else
 		{
-			
+
 			$data = array(
 						'emp_id' => $emp_id,
 						'in_time' => $in_time,
@@ -590,25 +585,25 @@ class Attn_process_model extends CI_Model{
 		$schedule = $schedule;
 		$table = "temp_$emp_id";
 		$table = strtolower($table);
-				
+
 		$this->db->select("pr_emp_com_info.ot_entitle");
 		$this->db->from("pr_emp_com_info");
 		$this->db->where("pr_emp_com_info.emp_id = '$emp_id'");
 		$query1 = $this->db->get();
 		$row1 = $query1->row();
 		$ot_status  = $row1->ot_entitle;
-		
+
 		if( $ot_status == 0 )
 		{
 			if($schedule == "Night")
 			{
-//==================NIGHT SHIFT CALCULATION============================				
+				//==================NIGHT SHIFT CALCULATION============================
 				$ot_start = "13:45:00";
 				$ot_end = "20:15:00";
-				
+
 				$in_time = '';
 				$out_time = '';
-				
+
 				$in_time_original = $this->time_check_in($date, $ot_start, $ot_end, $table);
 				if($in_time_original !='')
 				{
@@ -631,7 +626,7 @@ class Attn_process_model extends CI_Model{
 				{
 					$out_time_original ='';
 				}
-					
+
 				if($in_time_original == $out_time_original )
 				{
 					$total_ot_hour = 0;
@@ -651,8 +646,8 @@ class Attn_process_model extends CI_Model{
 					{
 						$in_time = "15:00:00";
 					}
-									
-					
+
+
 					if($out_time > "19:40:00")
 					{
 						$out_time = "20:00:00";
@@ -665,11 +660,11 @@ class Attn_process_model extends CI_Model{
 					{
 						$out_time = "18:00:00";
 					}
-					
+
 					$ot_hour = round($out_time - $in_time);
 					$total_ot_hour = $ot_hour;
 				}
-				
+
 				$this->db->select("");
 				$this->db->where("emp_id", $emp_id);
 				$this->db->where("ot_date", $original_date);
@@ -677,11 +672,11 @@ class Attn_process_model extends CI_Model{
 				if($query->num_rows() > 0)
 				{
 					$data = array(
-					'ot_hour' 		=> $total_ot_hour,	
+					'ot_hour' 		=> $total_ot_hour,
 					'afternoon_in_time' => $in_time_original,
 					'afternoon_out_time'=> $out_time_original
 					);
-					
+
 					$this->db->where("emp_id", $emp_id);
 					$this->db->where("ot_date", $original_date);
 					$this->db->update("pr_extra_ot", $data);
@@ -693,22 +688,22 @@ class Attn_process_model extends CI_Model{
 					'ot_date' => $original_date,
 					'ot_hour' => $total_ot_hour,
 					'afternoon_in_time' => $in_time_original,
-					'afternoon_out_time'=> $out_time_original		
+					'afternoon_out_time'=> $out_time_original
 					);
 					$this->db->insert("pr_extra_ot", $data);
-					
+
 				}
-//==================NIGHT SHIFT CALCULATION END============================				
+				//==================NIGHT SHIFT CALCULATION END============================
 			}
 			elseif($schedule == "Day")
 			{
-//==================DAY SHIFT CALCULATION============================			
+				//==================DAY SHIFT CALCULATION============================
 				$ot_start = "07:45:00";
 				$ot_end = "14:15:00";
-				
+
 				$in_time = '';
 				$out_time = '';
-				
+
 				$in_time_original_first = $this->time_check_in($date, $ot_start, $ot_end, $table);
 				$out_time_original_first = $this->time_check_out($date, $ot_start, $ot_end, $table);
 				$in_time = $in_time_original_first;
@@ -724,8 +719,8 @@ class Attn_process_model extends CI_Model{
 					$out_time_original_first = '';
 				}
 				$out_time = $out_time_original_first;
-				
-				
+
+
 				if($in_time_original_first == $out_time_original_first)
 				{
 					$total_ot_hour_first = 0;
@@ -745,36 +740,36 @@ class Attn_process_model extends CI_Model{
 						$in_time = "08:00:00";
 					}
 					//echo $in_time;
-					
-					
-					
+
+
+
 					if($out_time > "13:40:00")
 					{
 						$out_time = "14:00:00";
 					}
-					
-					
+
+
 					//echo "<br>OUT==".$out_time = "19:50:00";
 					$total_ot_hour_first = round($out_time - $in_time);
 				}
-					
+
 				$ot_start = "19:45:00";
 				$ot_end = "20:15:00";
-				
+
 				$in_time_original_second = $this->time_check_in($date, $ot_start, $ot_end, $table);
-				
+
 				$in_time = $in_time_original_second;
-				
+
 				$ot_start = "04:45:00";
 				$ot_end = "08:15:00";
-				
+
 				$now = strtotime($date);
 				$datestr = strtotime("+1 day",$now);
 				$out_date = date("Y-m-d", $datestr);
 				$out_date = $out_date;
-						
+
 				$out_time_original_second = $this->time_check_out($out_date, $ot_start, $ot_end, $table);
-				
+
 				if($out_time_original_second !='')
 				{
 					$hour = trim(substr($out_time_original_second,11,2));
@@ -787,7 +782,7 @@ class Attn_process_model extends CI_Model{
 				{
 					$out_time ='';
 				}
-				if($in_time_original_second == $out_time_original_second ) 
+				if($in_time_original_second == $out_time_original_second )
 				{
 					$total_ot_hour_second = 0;
 				}
@@ -797,10 +792,10 @@ class Attn_process_model extends CI_Model{
 				}
 				else
 				{
-				
-				
-				
-				
+
+
+
+
 				if($in_time > "19:45:00")
 				{
 					$in_time = "20:00:00";
@@ -810,9 +805,9 @@ class Attn_process_model extends CI_Model{
 					$in_time = "20:00:00";
 				}
 				$in_date_time = "$date $in_time";
-				
-				
-				
+
+
+
 				if($out_time > "07:40:00")
 				{
 					$out_time = "08:00:00";
@@ -829,22 +824,22 @@ class Attn_process_model extends CI_Model{
 				{
 					$out_time = "05:00:00";
 				}
-				
-				
-				
+
+
+
 				$out_date_time = "$out_date $out_time";
 				//$total_ot_hour_second = round($in_time - $out_time - 1);
-				
+
 				$total_ot_hour_second = $this->hour_difference($in_date_time, $out_date_time,$emp_id, $date);
-				
-				
-				
-				
+
+
+
+
 			}
-			
+
 			$total_ot_hour_day = $total_ot_hour_first + $total_ot_hour_second;
 			//echo "EMP=$emp_id=>IN=$in_time_original_second=OUT=$out_time_original_second=OT= $total_ot_hour_day****";
-			
+
 			$this->db->select("");
 			$this->db->where("emp_id", $emp_id);
 			$this->db->where("ot_date", $original_date);
@@ -856,9 +851,9 @@ class Attn_process_model extends CI_Model{
 				'morning_in_time' 	=> $in_time_original_first,
 				'morning_out_time' 	=> $out_time_original_first,
 				'night_in_time' 	=> $in_time_original_second,
-				'night_out_time' 	=>	$out_time_original_second	
+				'night_out_time' 	=>	$out_time_original_second
 				);
-				
+
 				$this->db->where("emp_id", $emp_id);
 				$this->db->where("ot_date", $original_date);
 				$this->db->update("pr_extra_ot", $data);
@@ -872,10 +867,10 @@ class Attn_process_model extends CI_Model{
 				'morning_in_time' 	=> $in_time_original_first,
 				'morning_out_time' 	=> $out_time_original_first,
 				'night_in_time' 	=> $in_time_original_second,
-				'night_out_time' 	=>	$out_time_original_second				
+				'night_out_time' 	=>	$out_time_original_second
 				);
 				$this->db->insert("pr_extra_ot", $data);
-			
+
 			}
 //==================DAY SHIFT CALCULATION END============================
 		}
@@ -886,7 +881,7 @@ class Attn_process_model extends CI_Model{
 			$ot_end = "23:59:00";
 			$in_time = '';
 			$out_time = '';
-					
+
 			$in_time_original_general = $this->time_check_in($original_date, $ot_start, $ot_end, $table);
 			if($in_time_original_general !='')
 			{
@@ -896,10 +891,10 @@ class Attn_process_model extends CI_Model{
 			{
 				$in_time ='';
 			}
-			
-			
+
+
 			$out_time_original_general = $this->time_check_out($original_date, $ot_start, $ot_end, $table);
-				
+
 			if($out_time_original_general !='')
 			{
 				$hour = trim(substr($out_time_original_general,11,2));
@@ -912,21 +907,21 @@ class Attn_process_model extends CI_Model{
 			{
 				$out_time ='';
 			}
-			
+
 				if($in_time_original_general == $out_time_original_general)
 				{
 					$total_ot_hour_general = 0;
 				}
 				elseif($in_time_original_general =='' or $out_time_original_general =='')
 				{
-				
+
 				}
 				else
 				{
-				
+
 				$out_time = $out_time_original_general;
-				
-				
+
+
 				if($in_time > "10:40:00")
 				{
 					$in_time = "11:00:00";
@@ -951,9 +946,9 @@ class Attn_process_model extends CI_Model{
 				{
 					$in_time = "06:00:00";
 				}
-				
+
 				$in_date_time = "$original_date $in_time";
-				
+
 				if($out_time > "23:40:00")
 				{
 					$out_time = "24:00:00";
@@ -1002,17 +997,17 @@ class Attn_process_model extends CI_Model{
 				{
 					$out_time = "13:00:00";
 				}
-				
-				
-				
-				
+
+
+
+
 				$out_date_time = "$original_date $out_time";
-				
+
 				$in_hour = substr($in_date_time, 11, 2);
 				$out_hour = substr($out_date_time, 11, 2);
 				$total_ot_hour_general = ($out_hour - $in_hour);
-				
-				
+
+
 		}
 		//echo "emp=$emp_id=".$total_ot_hour_general;
 		//echo "=>IN=$in_time<>OUT=$out_time****";
@@ -1023,11 +1018,11 @@ class Attn_process_model extends CI_Model{
 				if($query->num_rows() > 0)
 				{
 					$data = array(
-					'ot_hour' 			=> $total_ot_hour_general,	
+					'ot_hour' 			=> $total_ot_hour_general,
 					'morning_in_time' 	=> $in_time_original_general,
 					'morning_out_time' 	=> $out_time_original_general
 					);
-					
+
 					$this->db->where("emp_id", $emp_id);
 					$this->db->where("ot_date", $original_date);
 					$this->db->update("pr_extra_ot", $data);
@@ -1039,12 +1034,12 @@ class Attn_process_model extends CI_Model{
 					'ot_date' 			=> $original_date,
 					'ot_hour' 			=> $total_ot_hour_general,
 					'morning_in_time' 	=> $in_time_original_general,
-					'morning_out_time' 	=> $out_time_original_general		
+					'morning_out_time' 	=> $out_time_original_general
 					);
 					$this->db->insert("pr_extra_ot", $data);
-					
-				}		
-//==================GENERAL SHIFT CALCULATION END============================			
+
+				}
+//==================GENERAL SHIFT CALCULATION END============================
 		}
 	}
 	else
@@ -1053,7 +1048,7 @@ class Attn_process_model extends CI_Model{
 		$ot_end = "23:59:00";
 		$in_time = '';
 		$out_time = '';
-					
+
 			$in_time_original_general = $this->time_check_in($original_date, $ot_start, $ot_end, $table);
 			if($in_time_original_general !='')
 			{
@@ -1063,10 +1058,10 @@ class Attn_process_model extends CI_Model{
 			{
 				$in_time ='';
 			}
-			
-			
+
+
 			$out_time_original_general = $this->time_check_out($original_date, $ot_start, $ot_end, $table);
-				
+
 			if($out_time_original_general !='')
 			{
 				$hour = trim(substr($out_time_original_general,11,2));
@@ -1079,7 +1074,7 @@ class Attn_process_model extends CI_Model{
 			{
 				$out_time ='';
 			}
-			
+
 				if($in_time_original_general == $out_time_original_general )
 				{
 					$total_ot_hour_general = 0;
@@ -1090,10 +1085,10 @@ class Attn_process_model extends CI_Model{
 				}
 				else
 				{
-				
+
 				$out_time = $out_time_original_general;
-				
-				
+
+
 				if($in_time > "10:40:00")
 				{
 					$in_time = "11:00:00";
@@ -1118,9 +1113,9 @@ class Attn_process_model extends CI_Model{
 				{
 					$in_time = "06:00:00";
 				}
-				
+
 				$in_date_time = "$original_date $in_time";
-				
+
 				if($out_time > "23:40:00")
 				{
 					$out_time = "24:00:00";
@@ -1169,17 +1164,17 @@ class Attn_process_model extends CI_Model{
 				{
 					$out_time = "13:00:00";
 				}
-				
-				
-				
-				
+
+
+
+
 				$out_date_time = "$original_date $out_time";
-				
+
 				$in_hour = substr($in_date_time, 11, 2);
 				$out_hour = substr($out_date_time, 11, 2);
 				$total_ot_hour_general = ($out_hour - $in_hour);
 		}
-		
+
 		$this->db->select("");
 		$this->db->where("emp_id", $emp_id);
 		$this->db->where("ot_date", $original_date);
@@ -1187,11 +1182,11 @@ class Attn_process_model extends CI_Model{
 		if($query->num_rows() > 0)
 		{
 			$data = array(
-			'ot_hour' 			=> $total_ot_hour_general,	
+			'ot_hour' 			=> $total_ot_hour_general,
 			'morning_in_time' 	=> $in_time_original_general,
 			'morning_out_time' 	=> $out_time_original_general
 			);
-			
+
 			$this->db->where("emp_id", $emp_id);
 			$this->db->where("ot_date", $original_date);
 			$this->db->update("pr_extra_ot", $data);
@@ -1203,28 +1198,28 @@ class Attn_process_model extends CI_Model{
 			'ot_date' 			=> $original_date,
 			'ot_hour' 			=> $total_ot_hour_general,
 			'morning_in_time' 	=> $in_time_original_general,
-			'morning_out_time' 	=> $out_time_original_general		
+			'morning_out_time' 	=> $out_time_original_general
 			);
 		$this->db->insert("pr_extra_ot", $data);
-		}		
-	}		
-	
+		}
 	}
-	
+
+	}
+
 	function hour_difference($start_date_time, $end_date_time, $emp_id, $date)
 	{
 		$start_date_time= strtotime("$start_date_time");
 		$end_date_time 	= strtotime("$end_date_time");
 		$elapsed 		= $end_date_time - $start_date_time;
 		$elapsed_hour 	= floor($elapsed / 3600);
-		$elapsed 		-= 3600 * floor($elapsed / 3600);    
+		$elapsed 		-= 3600 * floor($elapsed / 3600);
 		$elapsed_min 		= floor($elapsed / 60);
-		
+
 		$emp_shift 	= $this->emp_shift_check($emp_id, $date);
 		$schedule 	= $this->schedule_check($emp_shift);
 		//print_r($schedule);
-		$ot_minutes		=  $schedule[0]["ot_minute_to_one_hour"]; 
-				
+		$ot_minutes		=  $schedule[0]["ot_minute_to_one_hour"];
+
 		if($elapsed_min >= $ot_minutes)
 		{
 			$elapsed_hour = $elapsed_hour + 1;
@@ -1242,10 +1237,10 @@ class Attn_process_model extends CI_Model{
    	    echo floor($elapsed / 60);
  	    $elapsed -= 60 * floor($elapsed / 60);
     	echo ' minutes, and'. $elapsed.' seconds ago.';*/
-				
+
 		return $elapsed_hour;
 	}
-	
+
 	function check_weekend($emp_id, $att_date)
 	{
 		$this->db->select("emp_id");
@@ -1263,46 +1258,46 @@ class Attn_process_model extends CI_Model{
 			return false;
 		}
 	}
-		
-	function ot_hour_calcultation($emp_id, $date,$proxi_id)
+
+	function ot_hour_calcultation($emp_id, $date)
 	{
 		$table = "att_".date('Y_m',strtotime($date));
 		// $table = "temp_$emp_id";
 		$table = strtolower($table);
-		
+
 		$present_count = 0;
 		$absent_count = 0;
 		$leave_count = 0;
 		$ot_count = 0;
 		$late_count = 0;
-		
+
 		$this->db->select("pr_emp_com_info.ot_entitle");
 		$this->db->from("pr_emp_com_info");
 		$this->db->where("pr_emp_com_info.emp_id = '$emp_id'");
 		$query1 = $this->db->get();
 		$row1 = $query1->row();
 		$ot_status  = $row1->ot_entitle;
-		
+
 		$in_time = '';
 		$out_time = '';
-		
+
 		$emp_shift = $this->emp_shift_check($emp_id, $date);
-				
+
 		$this->db->select("shift_id");
 		$this->db->from("pr_emp_shift_schedule");
 		$this->db->where("sh_type", $emp_shift);
 		$query = $this->db->get();
 		$row = $query->row();
-			
+
 		$schedule = $this->schedule_check($emp_shift);
-		// print_r($schedule);
-		$start_time		=  $schedule[0]["in_start"]; 
-		$late_time 		=  $schedule[0]["late_start"]; 
+		//print_r($schedule);
+		$start_time		=  $schedule[0]["in_start"];
+		$late_time 		=  $schedule[0]["late_start"];
 		$end_time   	=  $schedule[0]["in_end"];
 		$out_start_time	=  $schedule[0]["out_start"];
 		$ot_start_time	=  $schedule[0]["ot_start"];
-		$out_end_time	=  $schedule[0]["out_end"];	
-				
+		$out_end_time	=  $schedule[0]["out_end"];
+
 		$hour = trim(substr($out_start_time,0,2));
 		$minute = trim(substr($out_start_time,3,2));
 		$sec = trim(substr($out_start_time,6,2));
@@ -1310,7 +1305,6 @@ class Attn_process_model extends CI_Model{
 		$am_pm = date("A", mktime($hour, $minute, $sec, 0, 0, 0));
 		$in_date = $date;
 		$ot_start_time = "$in_date $ot_start_time";
-		// dd($ot_start_time);
 		if($am_pm == "AM")
 		{
 			//echo $am_pm;
@@ -1323,12 +1317,12 @@ class Attn_process_model extends CI_Model{
 		{
 			$in_date = $date;
 		}
-		
+
 		$hour = trim(substr($out_end_time,0,2));
 		$minute = trim(substr($out_end_time,3,2));
 		$sec = trim(substr($out_end_time,6,2));
 		$am_pm = date("A", mktime($hour, $minute, $sec, 0, 0, 0));
-		// dd($am_pm);
+
 		$out_date = $date;
 		if($am_pm == "AM")
 		{
@@ -1341,22 +1335,21 @@ class Attn_process_model extends CI_Model{
 		else
 		{
 			$out_date = $date;
-		}	
-		
+		}
+
 		$present_check = $this->present_check($date, $emp_id);
-		// dd($present_check);
 		if( $present_check == true)
-		{	
-			$in_time  = $this->time_check_in($date, $start_time, $end_time, $table,$proxi_id);
-			// dd($in_time);
+		{
+			$in_time  = $this->time_check_in($date, $start_time, $end_time, $table);
+
 			$out_start_time = "$in_date $out_start_time";
 			$out_end_time = "$out_date $out_end_time";
-			
-			$out_time = $this->time_check_out2($date,$out_start_time, $out_end_time, $table,$proxi_id);
+
+			$out_time = $this->time_check_out2($out_start_time, $out_end_time, $table);
 			/*if($emp_id =='FI0428')
 			{
 				echo "IN:$in_time# OS:$out_start_time# OE:$out_end_time# OUT:$out_time";
-				//echo $this->db->last_query();	
+				//echo $this->db->last_query();
 			}*/
 		}
 		else
@@ -1377,7 +1370,7 @@ class Attn_process_model extends CI_Model{
 		{
 			$in_time_format='';
 		}
-		
+
 		if($out_time !='')
 		{
 			$hour = trim(substr($out_time,11,2));
@@ -1390,28 +1383,28 @@ class Attn_process_model extends CI_Model{
 		{
 			$out_time_format='';
 		}
-		
+
 		$ot_hour='';
 		if($in_time !='' and $out_time !='')
 		{
 			if($ot_status == 0)
 			{
 				$in_date_time = $out_start_time;
-								
+
 				$ot_hour = $this->hour_difference($ot_start_time, $out_time, $emp_id, $date);
-				
+
 				/*if($emp_id =='SO0877')
 				{
 					echo "empId: $emp_id=IN=>$in_date_time****OUT=>$out_time===$out_date****OT===>$ot_hour";
 				}*/
-				
+
 			}
 			else
 			{
 				$ot_hour = 0;
 			}
 		}
-			
+
 		if($out_time !='')
 		{
 			$hour = trim(substr($out_time,11,2));
@@ -1419,31 +1412,31 @@ class Attn_process_model extends CI_Model{
 			$sec = trim(substr($out_time,17,2));
 			$out_time = date("H:i:s", mktime($hour, $minute, $sec, 0, 0, 0));
 		}
-				
+
 		$data["in_time"] = $in_time;
 		$data["out_time"] = $out_time;
 		$data["ot_hour"] = $ot_hour;
 		//echo "EMP:$emp_id";
 		//print_r($data);
 		return $data;
-		
-	
+
+
 	}
-	
+
 	function insert_ot_hour($emp_id, $date, $ot_hour_calcultation)
 	{
 		//echo "EMP: $emp_id";
-		// print_r($ot_hour_calcultation);exit;
+		//print_r($ot_hour_calcultation);
 		$emp_shift = $this->emp_shift_check($emp_id, $date);
-		
+
 		$schedule = $this->schedule_check($emp_shift);
 		// print_r($schedule);exit;
-		$start_time		=  $schedule[0]["in_start"]; 
-		$late_time 		=  $schedule[0]["late_start"]; 
+		$start_time		=  $schedule[0]["in_start"];
+		$late_time 		=  $schedule[0]["late_start"];
 		$end_time   	=  $schedule[0]["in_end"];
 		$out_start_time	=  $schedule[0]["out_start"];
-		$out_end_time	=  $schedule[0]["out_end"];	
-		
+		$out_end_time	=  $schedule[0]["out_end"];
+
 		if($ot_hour_calcultation["in_time"] == '')
 		{
 			$in_time = '';
@@ -1452,7 +1445,7 @@ class Attn_process_model extends CI_Model{
 		{
 			$in_time = $ot_hour_calcultation["in_time"];
 		}
-		
+
 		if($ot_hour_calcultation["out_time"] == '')
 		{
 			$out_time = '';
@@ -1469,7 +1462,7 @@ class Attn_process_model extends CI_Model{
 		{
 			$ot_hour = $ot_hour_calcultation["ot_hour"];
 		}
-		
+
 		$this->db->select();
 		$this->db->where("emp_id", $emp_id);
 		$this->db->where("shift_log_date", $date);
@@ -1484,10 +1477,10 @@ class Attn_process_model extends CI_Model{
 			{
 				$late_status = 0;
 			}
-			
+
 			//===================Night Allowance Check===================
 				$night_allowance_check = $this->get_night_allowance_check($out_time);
-			
+
 			//echo $no_work_day."///";
 			$data = array(
 						"in_time" => $in_time,
@@ -1496,8 +1489,7 @@ class Attn_process_model extends CI_Model{
 						"late_status" => $late_status,
 						"night_allowance" => $night_allowance_check
 						);
-					// dd($data);
-					// exit;
+					//print_r($data);
 					//echo "LATE: ".$late_time;
 			$this->db->where("emp_id", $emp_id);
 			$this->db->where("shift_log_date", $date);
@@ -1529,7 +1521,7 @@ class Attn_process_model extends CI_Model{
 			return false;
 		}
 	}
-	
+
 	function emp_shift_check_process($emp_id, $att_date)
 	{
 		$this->db->select("shift_id, shift_duty");
@@ -1537,14 +1529,14 @@ class Attn_process_model extends CI_Model{
 		$this->db->where("emp_id", $emp_id);
 		$this->db->where("shift_log_date", $att_date);
 		$query = $this->db->get();
-		
+
 		if($query->num_rows() > 0 )
 		{
 			foreach($query->result() as $row)
 			{
 				$shift_duty = $row->shift_duty;
 			}
-			
+
 			$this->db->select("sh_type");
 			$this->db->from("pr_emp_shift_schedule");
 			$this->db->where("shift_id", $shift_duty);
@@ -1566,18 +1558,18 @@ class Attn_process_model extends CI_Model{
 				$shift_id = $rows->shift_id;
 				$shift_duty = $rows->shift_duty;
 			}
-			
+
 			$data = array(
 							'emp_id' 		 => $emp_id,
 							'shift_id' 		 => $shift_id,
 							'shift_duty' 	 => $shift_duty,
 							'shift_log_date' => $att_date
-			
+
 			);
-			
+
 			$this->db->insert("pr_emp_shift_log", $data);
-			
-			
+
+
 			$this->db->select("pr_emp_shift_schedule.sh_type");
 			$this->db->from("pr_emp_shift_schedule");
 			$this->db->from("pr_emp_shift");
@@ -1589,17 +1581,17 @@ class Attn_process_model extends CI_Model{
 			//echo $this->db->last_query();
 			$row = $query->row();
 			return $row->sh_type;
-		
+
 		}
 	}
-	
+
 	function schedule_check($emp_shift)
 	{
 		$this->db->where("sh_type", $emp_shift);
 		$query = $this->db->get("pr_emp_shift_schedule");
 		return $query->result_array();
 	}
-	
+
 	function emp_shift_check($emp_id, $att_date)
 	{
 		$this->db->select("shift_id, shift_duty");
@@ -1607,14 +1599,14 @@ class Attn_process_model extends CI_Model{
 		$this->db->where("emp_id", $emp_id);
 		$this->db->where("shift_log_date", $att_date);
 		$query = $this->db->get();
-		
+
 		if($query->num_rows() > 0 )
 		{
 			foreach($query->result() as $row)
 			{
 				$shift_duty = $row->shift_duty;
 			}
-			
+
 			$this->db->select("sh_type");
 			$this->db->from("pr_emp_shift_schedule");
 			$this->db->where("shift_id", $shift_duty);
@@ -1636,10 +1628,10 @@ class Attn_process_model extends CI_Model{
 			//echo $this->db->last_query();
 			$row = $query->row();
 			return $row->sh_type;
-		
+
 		}
 	}
-	
+
 	function present_check($date, $emp_id)
 	{
 		//echo $date;
@@ -1648,7 +1640,7 @@ class Attn_process_model extends CI_Model{
 		$day   = trim(substr($date,8,2));
 		$date_field = "date_$day";
 		$att_month = $year."_".$month."-00";
-		
+
 		$this->db->select($date_field);
 		$this->db->where("emp_id", $emp_id);
 		$this->db->where("att_month", $att_month);
@@ -1663,30 +1655,25 @@ class Attn_process_model extends CI_Model{
 			return false;
 		}
 	}
-	
-	function time_check_in($date, $start_time, $end_time, $table,$proxi_id)
-	{
-		// exit($start_time);
 
+	function time_check_in($date, $start_time, $end_time, $table)
+	{
+		// exit($table);
 		$this->db->select("date_time");
 		$this->db->where("trim(substr(date_time,1,10)) = '$date'");
-		$this->db->where("proxi_id",$proxi_id);
 		$this->db->where("trim(substr(date_time,11,19)) BETWEEN '$start_time' and '$end_time'");
 		$this->db->order_by("date_time","ASC");
 		$this->db->limit("1");
 		$query = $this->db->get($table);
 		$time ="";
 		foreach ($query->result() as $row)
-		{ 
+		{
 			$time = $row->date_time;
 		}
-		// dd($this->db->last_query());
-		// echo "<pre>";print_r($time);exit;
-
 		$time = trim(substr($time,11,19));
 		return $time;
 	}
-	
+
 	function time_check_out($date, $start_time, $end_time, $table)
 	{
 		$this->db->select("date_time");
@@ -1703,12 +1690,11 @@ class Attn_process_model extends CI_Model{
 		//$time = trim(substr($time,11,19));
 		return $time;
 	}
-	
-	function time_check_out2($date,$start_time, $end_time, $table,$proxi_id)
+
+	function time_check_out2($start_time, $end_time, $table)
 	{
 		$this->db->select("date_time");
-		$this->db->where("trim(substr(date_time,1,10)) = '$date'");
-		$this->db->where("proxi_id",$proxi_id);
+		//$this->db->where("trim(substr(date_time,1,10)) = '$date'");
 		$this->db->where("date_time BETWEEN '$start_time' and '$end_time'");
 		$this->db->order_by("date_time","DESC");
 		$this->db->limit("1");
@@ -1722,34 +1708,34 @@ class Attn_process_model extends CI_Model{
 		//$time = trim(substr($time,11,19));
 		return $time;
 	}
-	
+
 	function earn_leave_process($input_date)
 	{
 		// Start Automatic Earn Leave Entry
 		// ================================
 		$this->earn_automatic_entry();
 		// End Automatic Earn Leave Entry
-		
+
 		$current_date = date("Y-m-d");
 		$date = strtotime(date("Y-m-d", strtotime($current_date)) . " -17 day");
 		$newdate = date('Y-m-d', $date);
-		
+
 		$where="last_update NOT BETWEEN '$newdate' and '$current_date'" ;
 		$this->valid_earn_leave_process($where);
-		
+
 		$year = date('Y');
 		$end_date_year = $year."-12-31";
 		if($current_date == $end_date_year)
 		{
 			$where1="last_update  BETWEEN '$newdate' and '$current_date'" ;
 			$this->valid_earn_leave_process($where1);
-		}	
-		
+		}
+
 		//Start Year change activity
 		//===========================
 		$this->db->select('emp_id,last_update');
 		$query=$this->db->get('pr_leave_earn');
-		
+
 		foreach ($query->result() as $row)
 		{
 			$empid = $row-> emp_id;
@@ -1762,14 +1748,14 @@ class Attn_process_model extends CI_Model{
 			}
 			$max_earn = $this->get_max_earn();
 			$this->max_earn_check($empid,$max_earn);
-		
+
 		}
 		//End Year change activity
 	}
-	
+
 	function earn_automatic_entry()
 	{
-		
+
 		$this->db->select('emp_id,emp_join_date');
 		$this->db->where("emp_cat_id","1");
 		//$this->db->where("emp_id","01010");
@@ -1781,7 +1767,7 @@ class Attn_process_model extends CI_Model{
 			//$join_date ="2011-11-30";
 			//echo $join_date;
 			$earn_join_date =  strtotime(date("Y-m-d", strtotime($join_date)) . " +1 year");
-		 
+
 			$earn_current_date = strtotime(date("Y-m-d"));
 			if($earn_join_date < $earn_current_date)
 			{
@@ -1795,35 +1781,35 @@ class Attn_process_model extends CI_Model{
 					'current_earn_balance' =>"0",
 					"last_update"  => date("Y-m-d")
 					);
-					$this->db->insert('pr_leave_earn', $data);	
+					$this->db->insert('pr_leave_earn', $data);
 				}
 			}
 		}
 	}
-	
+
 	function valid_earn_leave_process($where)
 	{
-		
+
 		$current_date = date("Y-m-d");
 		$this->db->select('*');
 		$this->db->where($where);
 		$query=$this->db->get('pr_leave_earn');
 		foreach ($query->result() as $row)
 		{
-			
+
 			$emid = $row-> emp_id;
 			//echo $emid."***";
 			$last_update = $row-> last_update;
 			$data["emp_id"][] = $emid;
 			$data["last_update"][] = $last_update;
 			if($last_update != $current_date)
-			{			
+			{
 				$result = $this->earn_present_check($emid,$last_update,$current_date);
 			}
 		}
-		
+
 	}
-	
+
 	function earn_present_check($empid,$last_update,$current_date)
 	{
 		//echo "hello";
@@ -1834,26 +1820,26 @@ class Attn_process_model extends CI_Model{
 		$day = $this->get_date_to_date_day_differance($last_update,$current_date);
 		//echo "$empid,$last_update,$current_date, $day";
 		$count = 0;
-		
+
 		for($i=0;$i<=$day;$i++)
 		{
 			//$last_update= "2012-06-01";
 			$date = strtotime(date("Y-m-d", strtotime($last_update)) . " +$i day");
 			$newdate = date('Y-m-d', $date);
-			
+
 			$result = $this->present_check($newdate, $empid);
 			if($result == true)
 			{
 				$count = $count + 1;
 			}
 			//echo $newdate."<br/>";
-			
+
 		}
-		
+
 		//echo $count;
 		if ($count!=0)
 		{
-			
+
 			$count = round(($count/18),2);
 			$this->db->select('current_earn_balance,old_earn_balance');
 			$this->db->where("emp_id", $empid);
@@ -1867,32 +1853,32 @@ class Attn_process_model extends CI_Model{
 			   'last_update'  => date('Y-m-d')
             );
 			$this->db->where("emp_id",$empid);
-			$this->db->update('pr_leave_earn', $data); 
-		}		
-			
+			$this->db->update('pr_leave_earn', $data);
+		}
+
 	}
-	
+
 	function get_date_to_date_day_differance($date1,$date2)
 	{
 		$date_diff 		= strtotime($date2)-strtotime($date1);
 		//DATE TO DATE RULE
 		return $month 	= floor(($date_diff)/60/60/24);
 	}
-	
+
 	function year_change($empid)
 	{
 		//echo $query ->num_rows();
-		
+
 		$this->db->select('*');
 		$this->db->where("emp_id", $empid);
 		$query = $this->db->get('pr_leave_earn');
-		
+
 		foreach ($query->result() as $row)
 		{
 			$old_earn_lv_balance = $row ->old_earn_balance;
 			$current_earn_lv_balance = $row -> current_earn_balance;
 		}
-		
+
 		$old_earn_lv_balance = $old_earn_lv_balance + $current_earn_lv_balance;
 		//echo $old_earn_lv_balance ;
 		$data = array(
@@ -1902,9 +1888,9 @@ class Attn_process_model extends CI_Model{
 		);
 		$this->db->where("emp_id",$empid);
 		$this->db->update('pr_leave_earn', $data);
-	
+
 	}
-	
+
 	function max_earn_check($empid,$max_earn)
 	{
 		$this->db->select('old_earn_balance');
@@ -1914,7 +1900,7 @@ class Attn_process_model extends CI_Model{
 		{
 			$old_earn_balance = $row->old_earn_balance;
 		}
-		
+
 		if($old_earn_balance > $max_earn)
 		{
 			$data = array(
@@ -1924,7 +1910,7 @@ class Attn_process_model extends CI_Model{
 			$this->db->update('pr_leave_earn', $data);
 		}
 	}
-	
+
 	function get_max_earn()
 	{
 		$this->db->select('max_earn');
@@ -1933,7 +1919,7 @@ class Attn_process_model extends CI_Model{
 		$max_earn  = $rows->max_earn ;
 		return $max_earn;
 	}
-	
+
 	function deduction_hour_process($emp_id,$att_date)
 	{
 		//echo $emp_id."***".$att_date;
@@ -1942,31 +1928,31 @@ class Attn_process_model extends CI_Model{
 		$this->db->where("shift_log_date",$att_date);
 		$this->db->where("emp_id",$emp_id);
 		$query = $this->db->get('pr_emp_shift_log');
-	
-		
+
+
 		foreach ($query->result() as $row)
 		{
 			$emp_id = $row->emp_id;
 			$shift_id = $row->shift_id;
 			$out_time = $row->out_time;
 			$shift_out_time = $this->get_shift_out_time($shift_id);
-				
+
 			if($out_time !="00:00:00")
 			{
 				$new_shift_out_time = date("h:i:s A", strtotime($shift_out_time));
 				$date_shift_out_time = $att_date." ".$new_shift_out_time;
 				//echo $new_shift_out_time;
 				$first_shift_out_time=trim(substr($new_shift_out_time,9,2));
-				
+
 				$new_out_time = date("h:i:s A", strtotime($out_time));
-				
+
 				$first_out_time=trim(substr($new_out_time,9,2));
-				
-				
+
+
 				if($first_shift_out_time == $first_out_time)
 				{
 					$date_out_time = $att_date." ".$new_out_time;
-					
+
 				}
 				else
 				{
@@ -1986,16 +1972,16 @@ class Attn_process_model extends CI_Model{
 					{
 						$hour = $hour +1;
 					}
-					
+
 					if($hour > 1) $hour = 3; else $hour = 0;
-					
+
 					$data = array(
 						'deduction_hour' => $hour
 					);
-					
+
 					$this->db->where("emp_id",$emp_id);
 					$this->db->where("shift_log_date",$att_date);
-					$this->db->update('pr_emp_shift_log', $data); 
+					$this->db->update('pr_emp_shift_log', $data);
 					//echo $emp_id."**".$shift_id."***".$out_time."***".$shift_out_time."***".$hour."***".$min."</n>";
 					//echo "fhello";
 				}
@@ -2009,7 +1995,7 @@ class Attn_process_model extends CI_Model{
 					);
 					$this->db->where("emp_id",$emp_id);
 					$this->db->where("shift_log_date",$att_date);
-					$this->db->update('pr_emp_shift_log', $data); 
+					$this->db->update('pr_emp_shift_log', $data);
 				}
 			}
 			else
@@ -2022,7 +2008,7 @@ class Attn_process_model extends CI_Model{
 		}
 
 	}
-	
+
 	function get_shift_out_time($shift_id)
 	{
 		$this->db->select('*');
@@ -2032,7 +2018,7 @@ class Attn_process_model extends CI_Model{
 		$end_time = $rows->ot_start;
 		return $end_time;
 	}
-	
+
 	function get_setup_attributes($setup_id)
 	{
 		$this->db->select('value');
@@ -2042,57 +2028,56 @@ class Attn_process_model extends CI_Model{
 		$setup_value = $rows ->value;
 		return $setup_value;
 	}
-	
+
 	function monthly_attendance_table_existance_check($process_date)
 	{
 		$first_y	= date('Y', strtotime($process_date));
 		$first_m	= date('m', strtotime($process_date));
 		$first_d	= date('d', strtotime($process_date));
-		
+
 		$att_table			= "att_".$first_y."_".$first_m;
 		$date_field			= '.date_time';
 		$prox_id_field		= '.proxi_id';
 		$select				= $att_table.$date_field;
 		$w_table_prox_id	= $att_table.$prox_id_field;
-		
+
 		if (!$this->db->table_exists($att_table) )
 		{
 		 	return false;
 		}
 		else
 		{
-			return true;	
+			return true;
 		}
 	}
-	
+
 	function make_attendance_table_name_monthly($process_date)
 	{
 		$first_y	= date('Y', strtotime($process_date));
 		$first_m	= date('m', strtotime($process_date));
 		$first_d	= date('d', strtotime($process_date));
-		
+
 		return $att_table	= "att_".$first_y."_".$first_m;
 	}
-	
+
 	function get_all_employee()
-	{  
+	{
 		$this->db->select('pr_emp_com_info.proxi_id,pr_emp_per_info.emp_id, pr_emp_per_info.emp_full_name, pr_designation.desig_name, pr_emp_shift.shift_duty');
 		$this->db->from('pr_emp_per_info');
 		$this->db->from('pr_emp_com_info');
 		$this->db->from('pr_designation');
 		$this->db->from('pr_emp_shift');
-		// $this->db->where("pr_emp_per_info.emp_id",'A005');
+		// $this->db->where("pr_emp_per_info.emp_id",'A003');
 		$this->db->where("pr_emp_per_info.emp_id = pr_emp_com_info.emp_id");
 		$this->db->where("pr_emp_com_info.emp_desi_id = pr_designation.desig_id");
 		$this->db->where("pr_emp_com_info.emp_shift = pr_emp_shift.shift_id");
-		$this->db->where("pr_emp_com_info.emp_cat_id ",1);
 		$this->db->order_by("pr_emp_com_info.emp_id");
 		return $query = $this->db->get();
 	}
-	
+
 	function check_joining($id, $att_date)
 	{
-		$this->db->select('emp_id,emp_join_date');	
+		$this->db->select('emp_id,emp_join_date');
 		$this->db->where('emp_id',$id);
 		$this->db->where('emp_join_date <=',$att_date);
 		$query = $this->db->get('pr_emp_com_info');
@@ -2102,10 +2087,10 @@ class Attn_process_model extends CI_Model{
 		else
 		return false;
 	}
-	
+
 	function check_resign($id, $att_date)
 	{
-		$this->db->select('emp_id,resign_date');	
+		$this->db->select('emp_id,resign_date');
 		$this->db->where('emp_id',$id);
 		$this->db->where('resign_date <',$att_date);
 		$query = $this->db->get('pr_emp_resign_history');
@@ -2115,10 +2100,10 @@ class Attn_process_model extends CI_Model{
 		else
 		return false;
 	}
-	
+
 	function check_left($id, $att_date)
 	{
-		$this->db->select('emp_id,left_date');	
+		$this->db->select('emp_id,left_date');
 		$this->db->where('emp_id',$id);
 		$this->db->where('left_date <',$att_date);
 		$query = $this->db->get('pr_emp_left_history');
@@ -2128,14 +2113,14 @@ class Attn_process_model extends CI_Model{
 		else
 		return false;
 	}
-	
+
 	function insert_monthly_machine_data_to_temp_table($emp_id, $process_date)
 	{
 		$temp_table = "temp_$emp_id";
 		$temp_table = strtolower($temp_table);
-		
+
 		$att_table 	= $this->make_attendance_table_name_monthly($process_date);
-		
+
 		$this->db->select();
 		$this->db->from($att_table);
 		$this->db->from('pr_id_proxi');
@@ -2143,7 +2128,7 @@ class Attn_process_model extends CI_Model{
 		$this->db->where("pr_id_proxi.emp_id  = '$emp_id'");
 		$this->db->where("$att_table.date_time  like '$process_date%'");
 		$query = $this->db->get();
-		//echo $this->db->last_query();	
+		//echo $this->db->last_query();
 		foreach($query->result() as $rows)
 		{
 			$this->db->select();
@@ -2159,11 +2144,11 @@ class Attn_process_model extends CI_Model{
 									'proxi_id' => $rows->proxi_id,
 									'date_time' => $rows->date_time
 									);
-				$this->db->insert($temp_table,$temp_data);	
-			}				
-		}	
+				$this->db->insert($temp_table,$temp_data);
+			}
+		}
 	}
-	
+
 	function create_row_for_attendance_monthly($emp_id, $process_date)
 	{
 		$year_month = date('Y-m', strtotime($process_date));
@@ -2180,5 +2165,5 @@ class Attn_process_model extends CI_Model{
 	}
 
 
-	
+
 }

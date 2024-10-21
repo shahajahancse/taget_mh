@@ -288,12 +288,12 @@ class Grid_con extends CI_Controller {
 
 
 		$grid_data = $_POST['spl'];
-		// $str1 = substr($grid_data, 3);
-		$grid_emp_id = explode('xxx', trim($grid_data));
+		$str1 = substr($grid_data, 3);
+		$grid_emp_id = explode('xxx', trim($str1));
 		// dd($grid_emp_id);
 
 		$data["values"] = $this->grid_model->grid_daily_report($year, $month, $date, $status, $grid_emp_id);	
-		// dd($data);
+		
 		$data["year"]			= $year;
 		$data["month"]			= $month;
 		$data["date"]			= $date;
@@ -382,12 +382,10 @@ class Grid_con extends CI_Controller {
 	
 	function grid_daily_out_punch_miss_report()
 	{
-		// $grid_date = $this->uri->segment(3);
-		$grid_date = $_POST['dates'];
-		// dd($grid_date);
+		$grid_date = $this->uri->segment(3);
 		list($date, $month, $year) = explode('-', trim($grid_date));
 		//echo "$date, $month, $year";
-		$grid_data =$grid_date = $_POST['emp_ids'];
+		$grid_data = $this->uri->segment(4);
 		$grid_emp_id = explode('xxx', trim($grid_data));
 				
 		$data["values"] = $this->grid_model->grid_daily_out_punch_miss_report($year, $month, $date, $grid_emp_id);
@@ -416,11 +414,11 @@ class Grid_con extends CI_Controller {
 		//$month= "04";
 		//$date = "18";
 		//$status = "P";
-		$grid_date = $_POST['firstdate'];
+		$grid_date = $this->uri->segment(3);
 		list($date, $month, $year) = explode('-', trim($grid_date));
 		//echo "$date, $month, $year";
 		$status = 'P';
-		$grid_data = $_POST['emp_ids'];
+		$grid_data = $this->uri->segment(4);
 		$grid_emp_id = explode('xxx', trim($grid_data));
 		//print_r($grid_emp_id);
 		$data["values"] = $this->grid_model->grid_daily_out_in_report($year, $month, $date, $status, $grid_emp_id);	
@@ -607,7 +605,7 @@ class Grid_con extends CI_Controller {
 	
 	function grid_id_card()
 	{
-		$grid_data = $_POST['emp_id'];
+		$grid_data = $this->uri->segment(3);
 		$grid_emp_id = explode('xxx', trim($grid_data));
 			
 		$query['values'] = $this->grid_model->grid_id_card($grid_emp_id);
@@ -626,8 +624,7 @@ class Grid_con extends CI_Controller {
 		$grid_data = $this->uri->segment(3);
 		$grid_emp_id = explode('xxx', trim($grid_data));
 			
-		$query['values'] = $this->grid_model->grid_id_card($grid_emp_id);
-		// dd($query['values']->result());
+		$query['values'] = $this->grid_model->grid_id_card_english($grid_emp_id);
 		if(is_string($query['values']))
 		{
 			echo $query['values'];
@@ -958,8 +955,8 @@ class Grid_con extends CI_Controller {
 	function grid_daily_ot()
 	{
 		$this->load->model('common_model');
-		$grid_firstdate = $_POST['firstdate'];
-		$grid_data = $_POST['emp_ids'];
+		$grid_firstdate = $this->uri->segment(3);
+		$grid_data = $this->uri->segment(4);
 		$grid_emp_id = explode('xxx', trim($grid_data));
 		$grid_firstdate  = date("Y-m-d", strtotime($grid_firstdate));
 		
@@ -1069,9 +1066,9 @@ class Grid_con extends CI_Controller {
 	
 	function grid_daily_punch_report()
 	{
-		$grid_firstdate = $_POST['firstdate'];
+		$grid_firstdate = $this->uri->segment(3);
 		
-		$grid_data = $_POST['emp_ids'];
+		$grid_data = $this->uri->segment(4);
 		$grid_emp_id = explode('xxx', trim($grid_data));
 		
 		$grid_firstdate  = date("Y-m", strtotime($grid_firstdate));
